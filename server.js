@@ -1,7 +1,9 @@
 const express = require('express');
-const app = express();
+
 const { port } = require('./config/environment');
 
+//create an express app
+const app = express();
 app.set('view engine', 'ejs');
 app.set('views', `${__dirname}/views`);
 
