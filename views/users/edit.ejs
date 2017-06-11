@@ -1,25 +1,55 @@
-<div class="column">
-  <h1 class="title">Edit</h1>
+<div class="tile is-ancestor ">
 
-  <form method="POST" action="/users/<%= user.id %>" enctype="multipart/form-data">
-    <div class="field">
-      <label class="label" for="username">Name</label>
-      <p class="control">
-        <input class="input" type="text" name="username" id="username" value="<%= user.username %>">
-      </p>
+<div class="tile is-4 is-parent">
+  <%# this empty div is a placeholder used as offset%>
+</div>
+
+
+
+  <div class="tile is-4 is-parent is-vertical">
+    <div class="tile is-child">
+      <h1 class="title">Edit</h1>
+      <hr>
     </div>
-    <div class="field">
-      <label class="label" for="email">Email</label>
-      <p class="control">
-        <input class="input" type="email" name="email" id="email" value="<%= user.email %>">
-      </p>
+    <div class="tile is-child">
+      <form method="POST" action="/users/<%= user.id %>" enctype="multipart/form-data">
+        <div class="field">
+          <label class="label" for="username">Name</label>
+          <p class="control has-icons-left">
+            <input class="input" type="text" name="username" id="username" value="<%= user.username %>">
+            <span class="icon is-small is-left">
+              <i class="fa fa-pencil"></i>
+            </span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="email">Email</label>
+          <p class="control has-icons-left">
+            <input class="input" type="email" name="email" id="email" value="<%= user.email %>">
+            <span class="icon is-small is-left">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="image">Picture</label>
+          <label class="button is-primary" for="image">Choose file</label>
+          <input type="file" name="image" id="image" hidden >
+        </div>
+        <hr/>
+
+        <div class="field">
+          <p class="control">
+              <button class="button is-warning">Update</button>
+          </p>
+
+        </div>
+      </form>
     </div>
-    <div class="field">
-      <label class="label" for="image">Image</label>
-      <label class="button is-primary" for="image">Choose file</label>
-      <input type="file" name="image" id="image" hidden >
-    </div>
-    <button class="button">Update</button>
-  </form>
-  <hr/>
+  </div>
+
+
+
 </div>

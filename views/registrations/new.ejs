@@ -1,32 +1,67 @@
-<div class="column">
-  <h1 class="title">Register</h1>
 
-  <form method="POST" action="/register">
-    <div class="field">
-      <label class="label" for="username">Name</label>
-      <p class="control">
-        <input class="input" type="text" name="username" id="username">
-      </p>
+<%# this empty div is used for off-setting%>
+<div class="tile is-ancestor">
+  <div class="tile is-4 is-parent">
+    <div class="tile is-child">
     </div>
-    <div class="field">
-      <label class="label" for="email">Email</label>
-      <p class="control">
-        <input class="input" type="email" name="email" id="email">
-      </p>
+  </div>
+
+  <div class="tile is-4 is-parent is-vertical ">
+
+    <div class="tile is-child">
+      <h1 class="title">Register your account</h1>
     </div>
-    <div class="field">
-      <label class="label" for="password">Password</label>
-      <p class="control">
-        <input class="input" type="password" name="password" id="password">
-      </p>
+    <hr>
+    <div class="tile is-child">
+      <form method="POST" action="/register">
+        <div class="field">
+          <label class="label" for="username">Name</label>
+          <p class="control has-icons-left">
+            <input class="input" type="text" name="username" id="username" placeholder="Name">
+            <span class="icon is-small is-left">
+              <i class="fa fa-pencil"></i>
+            </span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="email">Email</label>
+          <p class="control has-icons-left">
+            <input class="input" type="email" name="email" id="email" placeholder="Email">
+            <span class="icon is-small is-left">
+              <i class="fa fa-envelope"></i>
+            </span>
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="password">Password</label>
+          <p class="control has-icons-left">
+            <input class="input" type="password" name="password" id="password" placeholder="Password">
+            <span class="icon is-small is-left">
+              <i class="fa fa-lock"></i>
+            </span>
+          </p>
+        </div>
+        <div class="field">
+          <label class="label" for="passwordConfirmation">Password Confirmation</label>
+          <p class="control has-icons-left">
+            <input class="input" type="password" name="passwordConfirmation" id="passwordConfirmation" placeholder="Password Confirmation">
+            <span class="icon is-small is-left">
+              <i class="fa fa-lock"></i>
+            </span>
+          </p>
+        </div>
+      <hr/>
+        <div class="field ">
+          <p class="control ">
+            <button class="button is-primary ">Register</button>
+          </p>
+        </div>
+
+      </form>
+      <hr/>
     </div>
-    <div class="field">
-      <label class="label" for="passwordConfirmation">Password Confirmation</label>
-      <p class="control">
-        <input class="input" type="password" name="passwordConfirmation" id="passwordConfirmation">
-      </p>
-    </div>
-    <button class="button">Register</button>
-  </form>
-  <hr/>
+
+  </div>
 </div>

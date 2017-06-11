@@ -15,8 +15,14 @@ commentSchema.methods.belongsTo = function commentBelongsTo(user) {
   return user.id === this.createdBy.toString();
 };
 
-//create the model
+//create the post model
 const postSchema = new mongoose.Schema({
+  category: {type: String},
+  title: {type: String},
+  price: {type: Number},
+  description: {type: String},
+  location: {type: String},
+  contactInfo: {type: String},
   caption: {type: String},
   image: {type: String},
   stars: {type: Number},
