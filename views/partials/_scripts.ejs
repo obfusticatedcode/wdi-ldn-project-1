@@ -1,0 +1,14 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" charset="utf-8"></script>
+
+<script src="/js/app.js" charset="utf-8"></script>
+
+<script>
+$(() => {
+  var $navToggle = $('.nav-toggle');
+  var $navMenu = $('.nav-menu');
+
+  $navToggle.on('click', () => {
+    $navMenu.toggleClass('is-active');
+  });
+});
+</script>

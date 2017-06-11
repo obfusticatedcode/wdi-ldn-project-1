@@ -1,0 +1,46 @@
+<div class="column">
+  <img src="<%= post.imageSRC %>" alt="<%= post.name %>">
+
+  <h4><%= post.caption %></h4>
+  <p>
+    <h4><%= post.createdBy.username %></h4>
+    <% while(post.stars--) { %> &star; <% } %>
+  </p>
+
+</div>
+
+<%# if the user isAuthenticated and the post has been created by the user allow editing and deleting%>
+  <% if(locals.isAuthenticated ) { %>
+    <form method="POST" action="/posts/<%= post.id %>">
+      <a href="/posts/<%= post.id %>/edit" class="button">Edit</a>
+      <input type="hidden" name="_method" value="DELETE">
+      <button class="button is-danger">Delete</button>
+    </form>
+<% } %>
+
+<%# leaving a comment%>
+<% if(locals.isAuthenticated) { %>
+  <section>
+    <h4>Leave a comment</h4>
+    <form method="POST" action="/posts/<%= post.id %>/comments">
+      <textarea name="content" id="content" placeholder="Comment"></textarea>
+      <button class="button">Leave a comment</button>
+    </form>
+  </section>
+<% } %>
+
+<%# deleting comments%>
+<section>
+  <h4>Comments</h4>
+  <% post.comments.forEach((comment) => { %>
+    <p><%= comment.content %></p>
+    <small><%= comment.createdBy.username %></small>
+
+    <% if(locals.isAuthenticated ) { %>
+      <form method="POST" action="/posts/<%= post.id %>/comments/<%= comment.id %>">
+        <input type="hidden" name="_method" value="DELETE">
+        <button>Delete</button>
+      </form>
+    <% } %>
+  <% }) %>
+</section>

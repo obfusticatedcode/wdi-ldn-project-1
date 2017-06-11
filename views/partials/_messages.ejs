@@ -1,0 +1,13 @@
+<div class="columns">
+  <div class="column">
+    <% if (Object.keys(locals.messages).length !== 0) { %>
+      <div class="notification is-primary">
+        <% for(const type in messages) { %>
+          <div>
+            <h5><%= messages[type] %></h5>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>

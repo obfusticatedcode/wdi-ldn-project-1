@@ -1,0 +1,38 @@
+
+<div class="column">
+  <h1 class="title">Update a picture</h1>
+
+    <form method="POST" action="/posts" enctype="multipart/form-data">
+        <div>
+
+          <div class="field">
+            <label  for="caption">Caption</label>
+          </div>
+
+          <div class="field">
+            <input type="text" name="caption" id="post-caption" required>
+          </div>
+
+          <div class="field">
+            <label  for="image">Image</label>
+          </div>
+
+          <div class="field">
+            <input type="file" name="image" id="image" required>
+          </div>
+
+          <div class="field">
+            <label  for="stars">Stars</label>
+          </div>
+
+          <div class="field">
+            <%# set uppper and lower limit for number of stars%>
+            <input type="number" name="stars" id="stars" min="1" max="5" required>
+          </div>
+
+          <button class="button">Update</button>
+
+        </div>
+    </form>
+
+</div>

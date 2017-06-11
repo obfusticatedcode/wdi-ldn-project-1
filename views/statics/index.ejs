@@ -1,0 +1,8 @@
+
+<div class="column has-text-centered">
+  <% if (locals.isAuthenticated) { %>
+    <h1 class="title">Trade Space</h1>
+  <% } else { %>
+    <h1 class="title"><a href="/login">Login</a> or <a href="/register">Register</a></h1>
+  <% }  %>
+</div>

@@ -1,0 +1,42 @@
+<nav class="nav has-shadow">
+  <div class="nav-left">
+    <a href="/" class="nav-item">
+      <span class="icon"><i class=""></i></span> <span>Trade Space</span>
+    </a>
+    <ul class="nav-item">
+
+      <li class="nav-item">
+        <a href="/posts/new">
+        <span><i class="fa fa-camera fa-3x" aria-hidden="true"></i>Add a post</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/posts">
+        <span><i class="fa fa-picture-o fa-3x" aria-hidden="true"></i>Posts</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <span class="nav-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+  <div class="nav-right nav-menu">
+    <% if(locals.isAuthenticated) { %>
+    <a class="nav-item" href="/users/<%= currentUser.id %>">
+      Profile
+    </a>
+    <a class="nav-item" href="/logout">
+      Logout
+    </a>
+    <% } else { %>
+      <a class="nav-item" href="/register">
+        Register
+      </a>
+      <a class="nav-item" href="/login">
+        Login
+      </a>
+      <% } %>
+  </div>
+</nav>

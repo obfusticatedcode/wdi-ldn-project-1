@@ -1,0 +1,18 @@
+<div class="column">
+  <h1 class="title">Login</h1>
+
+  <form method="POST" action="/login">
+    <div class="field">
+      <label class="label" for="email">Email</label>
+      <input class="input" type="text" name="email" id="email" required>
+    </div>
+    <div class="field">
+      <label class="label" for="password">Password</label>
+      <input class="input" type="password" name="password" id="password" required>
+    </div>
+
+    <button class="button">Login</button>
+  </form>
+  <hr/>
+  <a href="<%= oauth.github.getLoginURL() %>" class="button is-primary"><span class="icon"><i class="fa fa-github"></i></span><span>Login With Github</span></a>
+</div>

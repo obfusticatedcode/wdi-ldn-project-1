@@ -1,0 +1,10 @@
+<div class="column">
+  <h1 class="title">500: Internal Server Error</h1>
+  <h2 class="subtitle"><%= err.message %></h2>
+
+  <% if(locals.err.stack) { %>
+  <pre>
+    <%= err.stack %>
+  </pre>
+  <% } %>
+</div>
