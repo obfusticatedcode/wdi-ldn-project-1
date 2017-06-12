@@ -27,7 +27,7 @@ const postSchema = new mongoose.Schema({
   location: {type: String},
   lat: { type: Number },
   lng: { type: Number },
-  contactInfo: {type: String},
+  email: {type: String, required: true},
   caption: {type: String},
   image: {type: String},
   stars: {type: Number},

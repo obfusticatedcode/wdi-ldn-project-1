@@ -6,7 +6,7 @@ $(() => {
   const $threeWordsLocation = $('#three-words-location');
   const $lat = $('#lat');
   const $lng = $('#lng');
-
+  let currentCountryER = null;
   //tesing JS works
   console.log(`JS is working fine`);
 
@@ -37,6 +37,9 @@ $(() => {
     //infoWindow
     infoWindow = new google.maps.InfoWindow;
 
+    //geoCoder
+    const geocoder = new google.maps.Geocoder;
+
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -46,13 +49,18 @@ $(() => {
         };
 
         infoWindow.setPosition(pos);
+
         infoWindow.setContent('Your current location.');
         infoWindow.open(map);
         map.setCenter(pos);
+        console.log(pos);
         getThreeWords(pos.lat, pos.lng);
+        
+        //trying geoCoder for reverseGeolocation, getting the Country Name
+        geocoder.geocode({'location': pos}, (results) => {
+          console.log(results[0].address_components[6].long_name);
+        });
 
-        // make an ajax request to what3words based on the pos, grab the response, the words, populate the form field using .val()
-        // populate hidden form fields for the lat and lng
       }, function() {
         handleLocationError(true, infoWindow, map.getCenter());
       });
@@ -77,6 +85,9 @@ $(() => {
     infoWindow.open(map);
   }//end of handleLocationError()
 
+
+  // make an ajax request to what3words based on the pos, grab the response, the words, populate the form field using .val()
+  // populate hidden form fields for the lat and lng
   // using ajax to get the three-words-location/string
   function getThreeWords(lat, lng){
     $.ajax({
@@ -85,12 +96,26 @@ $(() => {
 
     })
     .done((response) => {
+
       //updating the location field
       $threeWordsLocation.val(response.words);
       // update the hidden form fields for lat and lng
       $lat.val(lat);
       $lng.val(lng);
-      console.log(response.words);
+
     });
   }
+
+  $.ajax({
+    url: 'http://www.apilayer.net/api/live?access_key=9349182f47c0d493c3853badcdce3cfc',
+    method: 'GET'
+
+  })
+  .done((response) => {
+    console.log(response.quotes);
+    currentCountryER = response.quotes.USDZAR;
+
+  });
+
+
 });//end of JS load
