@@ -1,17 +1,96 @@
-console.log('JS loaded');
+
+/*global google:true*/
 
 $(() => {
-  //testing the API
-  //Returns a section of the 3m x 3m what3words grid for a given area.
-  const settings = {
-    'async': true,
-    'crossDomain': true,
-    'url': 'https://api.what3words.com/v2/grid?bbox=52.208867%2C0.117540%2C52.207988%2C0.116126&key=E0MJL3VQ&format=json',
-    method: 'GET',
-    'headers': {}
-  };
 
-  $.ajax(settings).done((response) => {
-    console.log(response);
-  });
-});
+  const $threeWordsLocation = $('#three-words-location');
+  const $lat = $('#lat');
+  const $lng = $('#lng');
+
+  //tesing JS works
+  console.log(`JS is working fine`);
+
+  //setup the map and infoWindow constiable
+  let map, infoWindow = null;
+
+  if($('#map').length > 0) initMap();
+
+  //testing google maps initialization
+  function initMap() {
+    const lat = $('#map').data('lat');
+    const lng = $('#map').data('lng');
+
+    const latLng = { lat: parseFloat(lat), lng: parseFloat(lng) };
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 14,
+      center: latLng
+
+    });
+
+    google.maps.event.addListener(map, 'dragend', function() {
+      const newLat = map.getCenter().lat();
+      const newLng = map.getCenter().lng();
+      console.log(newLat, newLng);
+      getThreeWords(newLat, newLng);
+    });
+    //infoWindow
+    infoWindow = new google.maps.InfoWindow;
+
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('Your current location.');
+        infoWindow.open(map);
+        map.setCenter(pos);
+        getThreeWords(pos.lat, pos.lng);
+
+        // make an ajax request to what3words based on the pos, grab the response, the words, populate the form field using .val()
+        // populate hidden form fields for the lat and lng
+      }, function() {
+        handleLocationError(true, infoWindow, map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+    //create a marker
+    new google.maps.Marker({
+      position: latLng,
+      map: map
+    });
+
+  }//end of initMap()
+
+  //handleLocationError()
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+      'Error: The Geolocation service failed.' :
+      'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(map);
+  }//end of handleLocationError()
+
+  // using ajax to get the three-words-location/string
+  function getThreeWords(lat, lng){
+    $.ajax({
+      url: `https://api.what3words.com/v2/reverse?coords=${lat},${lng}&display=full&format=json&key=E0MJL3VQ`,
+      method: 'GET'
+
+    })
+    .done((response) => {
+      //updating the location field
+      $threeWordsLocation.val(response.words);
+      // update the hidden form fields for lat and lng
+      $lat.val(lat);
+      $lng.val(lng);
+      console.log(response.words);
+    });
+  }
+});//end of JS load

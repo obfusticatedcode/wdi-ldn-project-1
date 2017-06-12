@@ -72,8 +72,27 @@
             <input class="input" type="number" name="stars" id="stars" min="1" max="5" required>
           </div>
 
-          <hr>
+
+          <%# location/map%>
+
+          <div class="field">
+            <label  for="location">Your location</label>
+          </div>
+
+          <input type="hidden" name="lat" id="lat">
+          <input type="hidden" name="lng" id="lng">
           
+          <%# creating the map%>
+          <div class="field">
+            <div class="map-container">
+              <span class="map-marker"></span>
+              <%# using buckingham palace as base coords%>
+              <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
+            </div>
+            <input class="input" id="three-words-location" type="text" name="location" value="">
+          </div>
+          <hr>
+
           <%# post button%>
           <div class="field">
             <p class="control">
