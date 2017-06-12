@@ -1,6 +1,9 @@
 //grabbing the post model
 const Post = require('../models/post');
 
+// adding categories
+const categories = ['Phones', 'TVs', 'Computers'];
+
 //create route
 function createRoute(req, res, next) {
   //adding user to the post createRoute controller
@@ -31,7 +34,7 @@ function indexRoute(req, res, next) {
 
 //new route
 function newRoute(req, res) {
-  return res.render('posts/new');
+  return res.render('posts/new', { categories });
 }
 
 
@@ -67,7 +70,7 @@ function editRoute(req, res, next) {
 //update route
 function updateRoute(req, res, next) {
   if(req.file) req.body.image = req.file.key;
-  
+
   Post
     .findById(req.params.id)
     .populate('createdBy')

@@ -13,7 +13,9 @@
   <div class="tile is-child">
     <a href="/posts/<%= post.id %>">
     <img src="<%= post.imageSRC %>" alt="<%=  %>">
-    <h3><%= post.caption %></h3>
+    <h3><%= post.title %></h3>
+    <h3><%= post.description %></h3>
+
     </a>
   <p>
       <h4><%= post.createdBy.username %></h4>

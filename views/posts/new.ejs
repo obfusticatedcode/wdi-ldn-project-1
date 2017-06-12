@@ -5,24 +5,52 @@
     </div>
   </div>
 
-<div class="tile is-4 is-parent is-vertical">
-  <h1 class="title">Add a post</h1>
-  <hr>
+  <div class="tile is-4 is-parent is-vertical">
+    <h1 class="title">Add a post</h1>
+    <hr>
     <form method="POST" action="/posts" enctype="multipart/form-data">
-        <div>
+      <div>
 
+        <%# title%>
+        <div class="field">
+          <p class="control">
+            <label  for="title">Title</label>
+          </p>
+        </div>
+
+        <div class="field">
+          <p class="control">
+            <input class="input" type="text" name="title" id="post-title" required>
+
+          </p>
+        </div>
+
+        <%# categories%>
+        <div class="field">
+          <p class="control">
+            <label for="category">Category</label>
+            <select class="input" name="category" id="category">
+              <% categories.forEach((category) => { %>
+                <option><%= category %></option>
+                <% }) %>
+              </select>
+            </p>
+          </div>
+
+          <%# description%>
           <div class="field">
             <p class="control">
-              <label  for="caption">Caption</label>
+              <label  for="description">Description</label>
             </p>
           </div>
 
           <div class="field">
             <p class="control">
-              <input class="input" type="text" name="caption" id="post-caption" required>
+              <textarea class="input" id="post-description" type="text" name="description" placeholder="Add as much information as possible"required></textarea>
             </p>
           </div>
 
+          <%# add picture%>
           <div class="field">
             <label class="label" for="image">Add Picture</label>
             <label class="button is-primary" for="image">Choose file</label>
@@ -34,6 +62,7 @@
             </p>
           </div>
 
+          <%# rating%>
           <div class="field">
             <label  for="stars">Rating</label>
           </div>
@@ -44,13 +73,14 @@
           </div>
 
           <hr>
-
+          
+          <%# post button%>
           <div class="field">
             <p class="control">
               <button class="button is-primary">Post</button>
             </p>
           </div>
         </div>
-    </form>
+      </form>
 
-</div>
+    </div>

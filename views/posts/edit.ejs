@@ -6,11 +6,21 @@
         <div>
 
           <div class="field">
-            <label  for="caption">Caption</label>
+            <label  for="title">Title</label>
           </div>
 
           <div class="field">
-            <input type="text" name="caption" id="post-caption" value="<%= post.caption %>" required>
+            <input type="text" name="title" id="post-title" value="<%= post.title %>" required>
+          </div>
+
+          <div class="field">
+            <label  for="description">Description</label>
+          </div>
+
+          <div class="field">
+            <p class="control">
+              <textarea class="input" id="post-description" type="text" name="description" placeholder="Add as much information as possible" value="<%= post.description %>" required></textarea>
+            </p>
           </div>
 
           <div class="field">
