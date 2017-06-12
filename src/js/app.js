@@ -5,19 +5,24 @@ $(() => {
 
   const $threeWordsLocation = $('#three-words-location');
   const $country = $('#country');
+  const $city = $('#city');
+
   const $lat = $('#lat');
   const $lng = $('#lng');
+  const $currency = $('#currency');
 
 
   //tesing JS works
   console.log(`JS is working fine`);
 
   //setup the map and infoWindow constiable
-  let map, infoWindow, newLat, newLng, localCurrency = null;
+  let map, infoWindow, newLat, newLng = null;
+
+
 
   if($('#map').length > 0) initMap();
 
-  //testing google maps initialization
+  //google maps initialization
   function initMap() {
     const lat = $('#map').data('lat');
     const lng = $('#map').data('lng');
@@ -27,25 +32,17 @@ $(() => {
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: latLng
-
     });
 
     //infoWindow
     infoWindow = new google.maps.InfoWindow;
 
-    //geoCoder
-    const geocoder = new google.maps.Geocoder;
-
     google.maps.event.addListener(map, 'dragend', function() {
-
       newLat = map.getCenter().lat();
       newLng = map.getCenter().lng();
 
-      const newPos = { newLat, newLng};
-      console.log(newPos);
       getThreeWords(newLat, newLng);
-
-
+      geocodeCountry(newLat, newLng);
     });
 
 
@@ -63,13 +60,10 @@ $(() => {
         infoWindow.open(map);
         map.setCenter(pos);
 
+        //update the three words based on lat lng
         getThreeWords(pos.lat, pos.lng);
-
-        //trying geoCoder for reverseGeolocation, getting the Country Name
-        geocoder.geocode({'location': pos}, (results) => {
-          console.log(results[0].address_components[6].long_name);
-          $country.val(results[0].address_components[6].long_name);
-        });
+        //update the currency based on lat lng
+        geocodeCountry(pos.lat, pos.lng);
 
       }, function() {
         handleLocationError(true, infoWindow, map.getCenter());
@@ -112,19 +106,77 @@ $(() => {
       // update the hidden form fields for lat and lng
       $lat.val(lat);
       $lng.val(lng);
+    });
+  }
+
+  //geocode the lat lng and make ajax call to countries API to get country name
+  function geocodeCountry(lat, lng) {
+    $.ajax({
+      url: `http://ws.geonames.org/countryCodeJSON?lat=${lat}&lng=${lng}&username=obfusticatedcode`,
+      method: 'GET'
+    })
+    .done((response) => {
+      const country = response.countryCode;
+      console.log(`This country is ${country}`);
+      getCurrency(country);
+      getCountryName(country);
+      getCityName(country);
+    });
+  }
+
+  //make api call to get currency based on country name then currency
+  function getCurrency(country) {
+    $.ajax({
+      url: `https://restcountries.eu/rest/v2/alpha/${country}`,
+      method: 'GET'
+    })
+    .done((response) => {
+      const currency = response.currencies[0].code;
+      console.log(`The currency in ${country} is: ${currency}`);
+      $currency.val(currency);
+    });
+  }
+
+  //make api call to get the CountryName
+  function getCountryName(country){
+    $.ajax({
+      url: `https://restcountries.eu/rest/v2/alpha/${country}`,
+      method: 'GET'
+    })
+    .done((response) => {
+      const countryName = response.nativeName;
+      $country.val(countryName);
 
     });
   }
 
-  //get the current exchange rate and map it to the Country name
-  $.ajax({
-    url: 'http://www.apilayer.net/api/live?access_key=9349182f47c0d493c3853badcdce3cfc',
-    method: 'GET'
+  //get the CityName
+  function getCityName(country){
+    $.ajax({
+      url: `https://restcountries.eu/rest/v2/alpha/${country}`,
+      method: 'GET'
+    })
+    .done((response) => {
+      const cityName = response;
+      console.log(response);
+      $city.val();
 
-  })
-  .done((response) => {
-    console.log(response.quotes.USDGBP);
-  });
+    });
+  }
+
+
+
+  //get the current exchange rate and map it to the Country name
+  function getExchangeRate() {
+    $.ajax({
+      url: 'http://www.apilayer.net/api/live?access_key=9349182f47c0d493c3853badcdce3cfc',
+      method: 'GET'
+    })
+    .done((response) => {
+      //to be used on post show page
+      console.log(response.quotes);
+    });
+  }
 
 
 });//end of JS load

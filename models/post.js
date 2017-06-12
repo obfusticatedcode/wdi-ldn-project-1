@@ -23,6 +23,7 @@ const postSchema = new mongoose.Schema({
   category: {type: String},
   title: {type: String},
   price: {type: Number},
+  currency: {type: String},
   description: {type: String},
   location: {type: String},
   lat: { type: Number },

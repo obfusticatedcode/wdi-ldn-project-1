@@ -47,7 +47,13 @@
         <div class="field">
           <p class="control">
             <input class="input" type="text" name="price" id="post-price" required>
-            <input type="hidden" name="currency" id="currency">
+          </p>
+        </div>
+
+        <div class="field">
+          <label for="currency">Currency</label>
+          <p class="control">
+            <input class="input" type="text" name="currency" id="currency">
           </p>
         </div>
 
@@ -107,8 +113,13 @@
               <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
             </div>
             <p class="control has-icons-left">
-              
+
               <input class="input" id="three-words-location" type="text" name="location">
+              <span class="icon is-small is-left">
+                <i class="fa fa-location-arrow"></i>
+              </span>
+
+              <input class="input" id="city" type="text" name="city">
               <span class="icon is-small is-left">
                 <i class="fa fa-location-arrow"></i>
               </span>
