@@ -66,6 +66,8 @@ function editRoute(req, res, next) {
 
 //update route
 function updateRoute(req, res, next) {
+  if(req.file) req.body.image = req.file.key;
+  
   Post
     .findById(req.params.id)
     .populate('createdBy')

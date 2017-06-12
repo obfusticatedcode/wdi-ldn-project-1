@@ -1,8 +1,8 @@
 
 <div class="column">
-  <h1 class="title">Update a picture</h1>
+  <h1 class="title">Update your post</h1>
 
-    <form method="POST" action="/posts" enctype="multipart/form-data">
+    <form method="POST" action="/posts/<%= post.id %>" enctype="multipart/form-data">
         <div>
 
           <div class="field">
@@ -10,7 +10,7 @@
           </div>
 
           <div class="field">
-            <input type="text" name="caption" id="post-caption" required>
+            <input type="text" name="caption" id="post-caption" value="<%= post.caption %>" required>
           </div>
 
           <div class="field">
@@ -27,7 +27,7 @@
 
           <div class="field">
             <%# set uppper and lower limit for number of stars%>
-            <input type="number" name="stars" id="stars" min="1" max="5" required>
+            <input type="number" name="stars" id="stars" min="1" max="5" value="<%= post.stars %>" required>
           </div>
 
           <button class="button">Update</button>

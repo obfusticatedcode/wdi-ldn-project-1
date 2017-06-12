@@ -12,6 +12,8 @@ function showRoute(req, res, next) {
 
 }
 
+//edit
+
 function editRoute(req, res, next) {
   User
     .findById(req.params.id)
@@ -23,6 +25,7 @@ function editRoute(req, res, next) {
     .catch(next);
 }
 
+//update
 function updateRoute(req, res, next) {
   if(req.file) req.body.image = req.file.key;
 

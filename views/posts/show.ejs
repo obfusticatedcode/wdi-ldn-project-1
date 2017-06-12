@@ -8,7 +8,10 @@
 
 <div class="tile is-4 is-parent is-vertical">
   <div class="tile is-child">
-    <img src="<%= post.imageSRC %>" alt="<%= post.name %>">
+    <figure class="image">
+        <img src="<%= post.imageSRC %>" alt="<%= post.name %>">
+    </figure>
+
 
     <h4><%= post.caption %></h4>
     <p>
@@ -25,36 +28,38 @@
     <% } %>
   </div>
 
-
-
-  <%# leaving a comment%>
-  <% if(locals.isAuthenticated) { %>
-    <div class="columns">
-      <div class="column">
-        <section>
-          <h4>Add a comment</h4>
-          <form method="POST" action="/posts/<%= post.id %>/comments">
-            <textarea class="input" name="content" id="content" placeholder="Comment"></textarea>
-            <button class="button is-success">Add a comment</button>
-          </form>
-        </section>
+  <div class="tile is-child">
+    <%# leaving a comment%>
+    <% if(locals.isAuthenticated) { %>
+      <div class="columns">
+        <div class="column">
+          <section>
+            <h4>Add a comment</h4>
+            <form method="POST" action="/posts/<%= post.id %>/comments">
+              <textarea class="input" name="content" id="content" placeholder="Comment"></textarea>
+              <button class="button is-success">Add a comment</button>
+            </form>
+          </section>
+        </div>
       </div>
-    </div>
-  <% } %>
+    <% } %>
 
-  <%# deleting comments%>
-  <section>
-    <h4>Comments</h4>
-    <% post.comments.forEach((comment) => { %>
-      <p><%= comment.content %></p>
-      <small><%= comment.createdBy.username %></small>
+    <%# deleting comments%>
+    <section>
+      <h4>Comments</h4>
+      <% post.comments.forEach((comment) => { %>
+        <p><%= comment.content %></p>
+        <small><%= comment.createdBy.username %></small>
 
-      <% if(locals.isAuthenticated ) { %>
-        <form method="POST" action="/posts/<%= post.id %>/comments/<%= comment.id %>">
-          <input type="hidden" name="_method" value="DELETE">
-          <button class="button is-danger">Delete</button>
-        </form>
-      <% } %>
-    <% }) %>
-  </section>
+        <% if(locals.isAuthenticated ) { %>
+          <form method="POST" action="/posts/<%= post.id %>/comments/<%= comment.id %>">
+            <input type="hidden" name="_method" value="DELETE">
+            <button class="button is-danger">Delete</button>
+          </form>
+        <% } %>
+      <% }) %>
+    </section>
+  </div>
+
+
 </div>

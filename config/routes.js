@@ -45,7 +45,7 @@ router.route('/posts/new')
 
 router.route('/posts/:id')
   .get(postsController.show)
-  .put(secureRoute, postsController.update)
+  .post(secureRoute, upload.single('image'), postsController.update)
   .delete(secureRoute, postsController.delete);
 
 router.route('/posts/:id/edit')
