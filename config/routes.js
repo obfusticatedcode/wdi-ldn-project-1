@@ -7,8 +7,8 @@ const oauth = require('../controllers/oauth');
 const secureRoute = require('../lib/secureRoute');
 const upload = require('../lib/upload');
 
+//index
 router.get('/', (req, res) => res.render('statics/index'));
-
 
 
 //users routes

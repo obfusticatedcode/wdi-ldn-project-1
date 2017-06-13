@@ -2,8 +2,14 @@
 /*global google:true*/
 
 $(() => {
-  //tesing JS works
+
+  //let's validate all forms nicely
+  $('form').validate();
+
+  //testing JS works
   console.log(`JS is working fine`);
+
+
 
   const $threeWordsLocation = $('#three-words-location');
   const $country = $('#country');
@@ -69,11 +75,14 @@ $(() => {
       // Browser doesn't support Geolocation
       handleLocationError(false, infoWindow, map.getCenter());
     }
+
     //create a marker
-    new google.maps.Marker({
+    const marker = new google.maps.Marker({
       position: latLng,
       map: map
     });
+
+
 
   }//end of initMap()
 
@@ -114,8 +123,6 @@ $(() => {
     })
     .done((response) => {
       const country = response.countryCode;
-
-      console.log(`This country is ${country}`);
       getCurrency(country);
       getCountryName(country);
 
@@ -182,7 +189,6 @@ $(() => {
     //convert the value into dollars
     //convert the value into the new currency based on location
     const conversionRate = exchangeRates['USD' + currentCurrency];
-    console.log(`${currentCurrency} is the currentCurrency`);
     const priceInDollars = price/conversionRate;
     const convertedPrice = priceInDollars  * exchangeRates['USD' + newCurrency];
     // Update the DOM with the converted price
@@ -201,6 +207,12 @@ $(() => {
 
   });
 
+  //searching
+  $('#search').typeahead({
+    name: 'typeahead',
+    remote: 'http://localhost:3000/search?key=%QUERY',
+    limit: 10
+  });
 
 
 });//end of JS load

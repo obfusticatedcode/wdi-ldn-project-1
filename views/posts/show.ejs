@@ -39,18 +39,26 @@
     <p>
       <h4 id="item-location"><%= post.location %></h4>
     </p>
-    <p>
-      <%# perhaps use a forEach loop to feed a dropdown for currencies%>
-      <h4 id="item-currency"><%= post.currency %></h4>
-    </p>
-    <p>
-      <h4 id="item-price"><%= post.price %></h4>
-    </p>
 
-    <p>
-      <h4  type="text" name="currency" id="currency-label"></h4>
-      <h4 id="converted-price-display"></h4>
-    </p>
+    <div class="field has-addons">
+      <p class="control">
+        <%# perhaps use a forEach loop to feed a dropdown for currencies%>
+        <h4 id="item-currency"><%= post.currency %></h4>
+      </p>
+      <p class="control">
+        <h4 id="item-price"><%= post.price %></h4>
+      </p>
+    </div>
+
+    <div class="field has-addons">
+      <p class="control">
+        <h4  type="text" name="currency" id="currency-label"></h4>
+      </p>
+      <p class="control">
+        <h4 id="converted-price-display"></h4>
+      </p>
+    </div>
+
 
     <p class="has-icons-left">
       <a href="mailto:<%= post.email %>?subject=Hi%21%20<%= post.createdBy.username %>%20I'm%20Interested%20in%20your%20<%= post.title %>%20advert"><h4 class="button email-link" id="item-location">Send the seller,  <%= post.createdBy.username %>, an email.</h4>

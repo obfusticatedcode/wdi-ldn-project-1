@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String },
   image: { type: String },
   password: { type: String },
-  githubId: { type: Number }
+  githubId: { type: Number },
+  instagramId: { type: Number }
 });
 
 userSchema
@@ -32,10 +33,22 @@ userSchema.pre('remove', function removeImage(next) {
 });
 
 // lifecycle hook - mongoose middleware
+//github
 userSchema.pre('validate', function checkPassword(next) {
   if(!this.password && !this.githubId) {
     this.invalidate('password', 'required');
   }
+  if(this.isModified('password') && this.password && this._passwordConfirmation !== this.password){
+    this.invalidate('passwordConfirmation', 'does not match');
+  }
+  next();
+});
+
+//instagram
+userSchema.pre('validate', function checkPassword(next) {
+  if(!this.password && !this.instagramId) {
+    this.invalidate('password', 'required');
+  } 
   if(this.isModified('password') && this.password && this._passwordConfirmation !== this.password){
     this.invalidate('passwordConfirmation', 'does not match');
   }

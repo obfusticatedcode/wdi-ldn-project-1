@@ -40,15 +40,15 @@
             </div>
 
             <div class="field">
-              <label  for="stars">Stars</label>
+              <label   for="stars">Stars</label>
             </div>
 
             <div class="field">
               <%# set uppper and lower limit for number of stars%>
-              <input type="number" name="stars" id="stars" min="1" max="5" value="<%= post.stars %>" required>
+              <input class="input" type="number" name="stars" id="stars" min="1" max="5" value="<%= post.stars %>" required>
             </div>
 
-            <button class="button">Update</button>
+            <button class="button is-warning">Update</button>
 
           </div>
       </form>

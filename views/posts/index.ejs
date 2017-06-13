@@ -1,16 +1,11 @@
 
 
 
-<div class="tile is-ancestor">
+<div class="columns is-multiline">
 
-  <div class="tile is-4 is-parent">
-    <div class="tile is-child">
-    </div>
-  </div>
-  <%# looping through the array of posts from the db on /posts%>
-<div class="tile is-4 is-parent is-vertical">
+
   <% posts.forEach((post) => { %>
-  <div class="tile is-child">
+  <div class="column is-4">
     <a href="/posts/<%= post.id %>">
     <img src="<%= post.imageSRC %>" alt="<%=  %>">
     <h3><%= post.title %></h3>
@@ -18,7 +13,7 @@
     <h3>Location: <%= post.location %></h3>
 
     </a>
-  <p>
+    <p>
       <h4><%= post.createdBy.username %></h4>
       <% while(post.stars--) { %> &star; <% } %>
     </p>
@@ -28,37 +23,6 @@
       <button class="button is-danger">Delete</button>
     </form>
   </div>
-    <% if(locals.isAuthenticated) { %>
-
-  <div class="tile is-child">
-        <section>
-          <h4>Add a comment</h4>
-          <form method="POST" action="/posts/<%= post.id %>/comments">
-            <textarea class="input" name="content" id="content" placeholder="Add a comment"></textarea>
-            <button class="button is-success">Add a comment</button>
-          </form>
-        </section>
-    <% } %>
-    </div>
-
-  <div class="tile is-child">
-    <section>
-      <h4>Comments</h4>
-      <% post.comments.forEach((comment) => { %>
-        <p><%= comment.content %></p>
-        <small><%= comment.createdBy.username %></small>
-
-        <% if(locals.isAuthenticated ) { %>
-          <form method="POST" action="/posts/<%= post.id %>/comments/<%= comment.id %>">
-            <input type="hidden" name="_method" value="DELETE">
-            <button>Delete</button>
-          </form>
-        <% } %>
-      <% }) %>
-    </section>
 
   <% }) %>
-</div>
-</div>
-
 </div>

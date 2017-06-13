@@ -11,8 +11,6 @@ function createRoute(req, res, next) {
 
   if(req.file) req.body.image = req.file.key;
 
-
-
   Post
     .create(req.body)
     .then(() => res.redirect('/posts'))
@@ -24,13 +22,20 @@ function createRoute(req, res, next) {
 
 //home/index route
 function indexRoute(req, res, next) {
+  //testing what's in the request
+  console.log(req.query);
+  const regex = new RegExp(req.query.q, 'i');
+  const categoryQuery = { $or: [{ title: regex }, { description: regex }] };
+
   Post
-    .find()
+    .find(categoryQuery)
     .populate('createdBy')
     .exec()
     .then((posts) => res.render('posts/index', { posts }))
     .catch(next);
 }
+
+
 
 //new route
 function newRoute(req, res) {
