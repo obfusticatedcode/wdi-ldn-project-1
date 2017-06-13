@@ -11,6 +11,8 @@ $(() => {
   const $lng = $('#lng');
   const $currency = $('#currency');
 
+  let exchangeRates = null;
+
 
   //tesing JS works
   console.log(`JS is working fine`);
@@ -133,7 +135,8 @@ $(() => {
     .done((response) => {
       const currency = response.currencies[0].code;
       console.log(`The currency in ${country} is: ${currency}`);
-      $currency.val(currency);
+      $currency.val(currency); // This should happen on posts/new page
+      calculateExchangeRate(currency); // This should happen on post/show page
     });
   }
 
@@ -164,8 +167,37 @@ $(() => {
     .done((response) => {
       //to be used on post show page
       console.log(response.quotes);
+      exchangeRates = response.quotes;
     });
   }
+
+  function calculateExchangeRate(currency) {
+
+    const newCurrency = currency; // Currency to convert to
+    // Update the DOM with the currency you're converting to
+    const currentCurrency = $('#item-currency').text(); // Currency the post was created with
+    const price = $('#item-price').text();
+    const convertedPriceDisplay = $('#converted-price-display');
+
+    const conversionRate = exchangeRates['USD' + currentCurrency];
+    const priceInDollars = price/conversionRate;
+    const convertedPrice = priceInDollars  * exchangeRates['USD' + newCurrency];
+
+    // Update the DOM with the converted price
+    console.log('Converted Price', convertedPrice);
+    convertedPriceDisplay.html(convertedPrice);
+
+    // grab the current currency
+    // grab the value
+    //convert the value into dollars
+    //convert the value into the new currency based on location
+
+    // update the display
+
+
+  }
+
+  getExchangeRate();
 
   //send email to poster
   const $emailLink = $('.email-link');
