@@ -5,7 +5,7 @@ $(() => {
 
   const $threeWordsLocation = $('#three-words-location');
   const $country = $('#country');
-  const $city = $('#city');
+
 
   const $lat = $('#lat');
   const $lng = $('#lng');
@@ -56,7 +56,7 @@ $(() => {
 
         infoWindow.setPosition(pos);
 
-        infoWindow.setContent('Your current location.');
+        infoWindow.setContent(`Your current location.`);
         infoWindow.open(map);
         map.setCenter(pos);
 
@@ -120,7 +120,7 @@ $(() => {
       console.log(`This country is ${country}`);
       getCurrency(country);
       getCountryName(country);
-      getCityName(country);
+
     });
   }
 
@@ -151,18 +151,7 @@ $(() => {
   }
 
   //get the CityName
-  function getCityName(country){
-    $.ajax({
-      url: `https://restcountries.eu/rest/v2/alpha/${country}`,
-      method: 'GET'
-    })
-    .done((response) => {
-      const cityName = response;
-      console.log(response);
-      $city.val();
 
-    });
-  }
 
 
 
@@ -178,5 +167,11 @@ $(() => {
     });
   }
 
+  //send email to poster
+  const $emailLink = $('.email-link');
+  $emailLink.on('click', () => {
+    console.log(`clicked`);
+
+  });
 
 });//end of JS load

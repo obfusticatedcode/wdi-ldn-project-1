@@ -23,7 +23,7 @@
       <% while(post.stars--) { %> &star; <% } %>
     </p>
     <form method="POST" action="/posts/<%= post.id %>">
-      <a href="/posts/<%= post.id %>/edit" class="button">Edit</a>
+      <a href="/posts/<%= post.id %>/edit" class="button is-warning">Edit</a>
       <input type="hidden" name="_method" value="DELETE">
       <button class="button is-danger">Delete</button>
     </form>

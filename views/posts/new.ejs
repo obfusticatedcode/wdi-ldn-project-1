@@ -1,9 +1,29 @@
-<%# this empty div is used for off-setting%>
+
 <div class="tile is-ancestor">
-  <div class="tile is-4 is-parent">
+
+  <%# this empty div is used for off-setting%>
+  <div class="tile is-2 is-parent">
     <div class="tile is-child">
+
     </div>
   </div>
+
+  <div class="tile is-4 is-parent is-vertical">
+    <h1 class="title">Map</h1>
+    <hr>
+    <%# creating the map%>
+    <div class="tile is-child">
+
+      <div class="map-container">
+        <span class="map-marker"></span>
+        <%# using buckingham palace as base coords%>
+        <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
+      </div>
+    </div>
+
+  </div>
+
+
 
   <div class="tile is-4 is-parent is-vertical">
     <h1 class="title">Add a post</h1>
@@ -47,17 +67,9 @@
         <div class="field">
           <p class="control">
             <input class="input" type="text" name="price" id="post-price" required>
+            <input type="hidden" name="currency" id="currency">
           </p>
         </div>
-
-        <div class="field">
-          <label for="currency">Currency</label>
-          <p class="control">
-            <input class="input" type="text" name="currency" id="currency">
-          </p>
-        </div>
-
-
 
           <%# description%>
           <div class="field">
@@ -105,21 +117,12 @@
             <input type="hidden" name="lng" id="lng">
           </p>
 
-          <%# creating the map%>
+          <%# values the map%>
           <div class="field">
-            <div class="map-container">
-              <span class="map-marker"></span>
-              <%# using buckingham palace as base coords%>
-              <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
-            </div>
+
             <p class="control has-icons-left">
 
               <input class="input" id="three-words-location" type="text" name="location">
-              <span class="icon is-small is-left">
-                <i class="fa fa-location-arrow"></i>
-              </span>
-
-              <input class="input" id="city" type="text" name="city">
               <span class="icon is-small is-left">
                 <i class="fa fa-location-arrow"></i>
               </span>

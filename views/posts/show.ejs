@@ -1,12 +1,33 @@
 
 <%# this empty div is used for off-setting%>
 <div class="tile is-ancestor">
-  <div class="tile is-4 is-parent">
+  <div class="tile is-2 is-parent">
     <div class="tile is-child">
+      <h1 class="title"><%= post.category %></h1>
+    </div>
+  </div>
+
+  <div class="tile is-4 is-parent is-vertical">
+    <h1 class="title">Map</h1>
+    <hr>
+    <div class="tile is-child">
+      <%# adding in the map to take the 3 words location and show it on the map%>
+      <div class="field">
+        <div class="map-container">
+          <span class="map-marker"></span>
+          <%# using buckingham palace as base coords%>
+          <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
+        </div>
+        <input class="input" id="three-words-location" type="text" name="location" value="">
+        <hr>
+        <p>Some buying advice</p>
+      </div>
     </div>
   </div>
 
 <div class="tile is-4 is-parent is-vertical">
+  <h1 class="title">Details</h1>
+  <hr>
   <div class="tile is-child">
     <figure class="image">
         <img src="<%= post.imageSRC %>" alt="<%= post.name %>">
@@ -16,30 +37,36 @@
     <h4><%= post.title %></h4>
     <h4><%= post.description %></h4>
 
-    <%# adding in the map to take the 3 words location and show it on the map%>
-    <div class="field">
-      <div class="map-container">
-        <span class="map-marker"></span>
-        <%# using buckingham palace as base coords%>
-        <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
-      </div>
-      <input class="input" id="three-words-location" type="text" name="location" value="">
-    </div>
-    <h4 id="item-location"><%= post.location %></h4>
+
+    <p>
+      <h4 id="item-location"><%= post.location %></h4>
+    </p>
+    <p>
+      <h4 id="item-currency"><%= post.currency %></h4>
+    </p>
+    <p>
+      <h4 id="item-price"><%= post.price %></h4>
+    </p>
+    <p >
+      <a href="mailto:<%= post.email %>?subject=Hi%21%20<%= post.createdBy.username %>%20I'm%20Interested%20in%20your%20<%= post.title %>%20advert"><h4 class="button email-link" id="item-location">Send the seller, <%= post.createdBy.username %> an email</h4></a>
+    </p>
 
     <p>
       <h4><%= post.createdBy.username %></h4>
       <% while(post.stars--) { %> &star; <% } %>
     </p>
+
     <%# if the user isAuthenticated and the post has been created by the user allow editing and deleting%>
       <% if(locals.isAuthenticated ) { %>
         <form method="POST" action="/posts/<%= post.id %>">
-          <a href="/posts/<%= post.id %>/edit" class="button">Edit</a>
+          <a href="/posts/<%= post.id %>/edit" class="button is-warning">Edit</a>
           <input type="hidden" name="_method" value="DELETE">
           <button class="button is-danger">Delete</button>
         </form>
     <% } %>
   </div>
+
+
 
   <div class="tile is-child">
     <%# leaving a comment%>

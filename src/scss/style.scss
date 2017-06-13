@@ -1,5 +1,33 @@
+// VARIABLES
+$black: hsl(0, 0%, 4%);
+
+$grey-darker: hsl(0, 0%, 21%);
+
+$grey-dark: hsl(0, 0%, 29%);
+
+$grey:	hsl(0, 0%, 48%);
+
+$grey-light:	hsl(0, 0%, 71%);
+
+$orange	:hsl(14, 100%, 53%);
+
+$yellow	:hsl(48, 100%, 67%);
+
+$green	:hsl(141, 71%, 48%);
+
+$turquoise	:hsl(171, 100%, 41%);
+
+$blue	:hsl(217, 71%, 53%);
+
+$purple	:hsl(271, 100%, 71%);
+
+$red	:hsl(348, 100%, 61%);
+
+
+
 body {
-  background-color: red;
+  background-color: $grey-light;
+
 }
 
 
@@ -31,10 +59,20 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: red;
+    background-color: $red;
     border-radius: 50%;
     height: 15px;
     width: 15px;
-    z-index: 100;
+    z-index: 10;
   }
 }
+
+
+
+// google fonts
+// font-family: 'Poiret One', cursive;
+// font-family: 'Roboto', sans-serif;
+// font-family: 'Raleway', sans-serif;
+// font-family: 'Source Sans Pro', sans-serif;
+// font-family: 'Yanone Kaffeesatz', sans-serif;
+// font-family: 'Roboto', sans-serif;
