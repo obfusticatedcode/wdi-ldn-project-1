@@ -175,26 +175,20 @@ $(() => {
 
     const newCurrency = currency; // Currency to convert to
     // Update the DOM with the currency you're converting to
+    // grab the current
+    // grab the value
     const currentCurrency = $('#item-currency').text(); // Currency the post was created with
     const price = $('#item-price').text();
     const convertedPriceDisplay = $('#converted-price-display');
-
-    const conversionRate = exchangeRates['USD' + currentCurrency];
-    const priceInDollars = price/conversionRate;
-    const convertedPrice = priceInDollars  * exchangeRates['USD' + newCurrency];
-
-    // Update the DOM with the converted price
-    console.log('Converted Price', convertedPrice);
-    convertedPriceDisplay.html(convertedPrice);
-
-    // grab the current currency
-    // grab the value
     //convert the value into dollars
     //convert the value into the new currency based on location
-
+    const conversionRate = exchangeRates['USD' + currentCurrency];
+    console.log(currentCurrency);
+    const priceInDollars = price/conversionRate;
+    const convertedPrice = priceInDollars  * exchangeRates['USD' + newCurrency];
+    // Update the DOM with the converted price
     // update the display
-
-
+    convertedPriceDisplay.html(convertedPrice.toFixed(0));
   }
 
   getExchangeRate();
