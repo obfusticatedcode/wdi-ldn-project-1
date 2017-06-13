@@ -2,6 +2,8 @@
 /*global google:true*/
 
 $(() => {
+  //tesing JS works
+  console.log(`JS is working fine`);
 
   const $threeWordsLocation = $('#three-words-location');
   const $country = $('#country');
@@ -10,16 +12,9 @@ $(() => {
   const $lat = $('#lat');
   const $lng = $('#lng');
   const $currency = $('#currency');
-
-  let exchangeRates = null;
-
-
-  //tesing JS works
-  console.log(`JS is working fine`);
-
+  const $currencylabel = $('#currency-label');
   //setup the map and infoWindow constiable
-  let map, infoWindow, newLat, newLng = null;
-
+  let map, infoWindow, newLat, newLng , exchangeRates = null;
 
 
   if($('#map').length > 0) initMap();
@@ -119,6 +114,7 @@ $(() => {
     })
     .done((response) => {
       const country = response.countryCode;
+
       console.log(`This country is ${country}`);
       getCurrency(country);
       getCountryName(country);
@@ -134,8 +130,11 @@ $(() => {
     })
     .done((response) => {
       const currency = response.currencies[0].code;
+      const currencyName = response.currencies[0].name;
       console.log(`The currency in ${country} is: ${currency}`);
-      $currency.val(currency); // This should happen on posts/new page
+      $currency.val(`${currency}`); // This should happen on posts/new page
+      $currencylabel.text(`${currency}, ${currencyName}`);//This should happen on the posts/show page
+
       calculateExchangeRate(currency); // This should happen on post/show page
     });
   }
@@ -166,7 +165,7 @@ $(() => {
     })
     .done((response) => {
       //to be used on post show page
-      console.log(response.quotes);
+      console.log(response);
       exchangeRates = response.quotes;
     });
   }
@@ -183,14 +182,16 @@ $(() => {
     //convert the value into dollars
     //convert the value into the new currency based on location
     const conversionRate = exchangeRates['USD' + currentCurrency];
-    console.log(currentCurrency);
+    console.log(`${currentCurrency} is the currentCurrency`);
     const priceInDollars = price/conversionRate;
     const convertedPrice = priceInDollars  * exchangeRates['USD' + newCurrency];
     // Update the DOM with the converted price
     // update the display
     convertedPriceDisplay.html(convertedPrice.toFixed(0));
+
   }
 
+  //getting the exchangeRates from the currencylayer API
   getExchangeRate();
 
   //send email to poster
@@ -199,5 +200,7 @@ $(() => {
     console.log(`clicked`);
 
   });
+
+
 
 });//end of JS load

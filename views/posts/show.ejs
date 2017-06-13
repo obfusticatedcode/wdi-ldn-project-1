@@ -36,8 +36,6 @@
 
     <h4><%= post.title %></h4>
     <h4><%= post.description %></h4>
-
-
     <p>
       <h4 id="item-location"><%= post.location %></h4>
     </p>
@@ -48,11 +46,14 @@
     <p>
       <h4 id="item-price"><%= post.price %></h4>
     </p>
+
     <p>
+      <h4  type="text" name="currency" id="currency-label"></h4>
       <h4 id="converted-price-display"></h4>
     </p>
+
     <p class="has-icons-left">
-      <a href="mailto:<%= post.email %>?subject=Hi%21%20<%= post.createdBy.username %>%20I'm%20Interested%20in%20your%20<%= post.title %>%20advert"><h4 class="button email-link" id="item-location">Send the seller, <%= post.createdBy.username %> an email</h4>
+      <a href="mailto:<%= post.email %>?subject=Hi%21%20<%= post.createdBy.username %>%20I'm%20Interested%20in%20your%20<%= post.title %>%20advert"><h4 class="button email-link" id="item-location">Send the seller,  <%= post.createdBy.username %>, an email.</h4>
         <span class="icon is-small is-left">
           <i class="fa fa-paper-plane"></i>
         </span>
