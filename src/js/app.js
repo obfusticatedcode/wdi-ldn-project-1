@@ -1,4 +1,3 @@
-
 /* global google:true */
 
 $(() => {
@@ -19,6 +18,7 @@ $(() => {
   const $currencylabel = $('#currency-label');
   const lat = $('#map').data('lat'); // lat and lng of current post (show page)
   const lng = $('#map').data('lng');
+  let userLocation = null;
 
   //setup the map and infoWindow constiable
   let map, infoWindow, newLat, newLng , exchangeRates = null;
@@ -45,23 +45,24 @@ $(() => {
 
     //mapping route
     directionsDisplay.setMap(map);
-    const lat1 = 30.0;
-    const lng1 = 40.3;
-    const origin = (`${lat},${lng}`);
-    console.log(origin);
-    const destination = (`${lat1},${lng1}`);
-    console.log(destination);
+
 
     //mapping route
     //add eventListener to the item location
     $('#item-location').on('click', (event) => {
+      const lat1 = userLocation.lat;
+      const lng1 = userLocation.lng;
+      const origin = (`${lat},${lng}`);
+      console.log(origin);
+      const destination = (`${lat1},${lng1}`);
+      console.log(destination);
       //testing
       console.log(`clicking works on the item-location`);
       $(event.target).mouseover().css('background-color', 'yellow');
-      displayRoute(directionsService);
+      displayRoute(directionsService, origin, destination);
     });
 
-    function displayRoute(directionsService){
+    function displayRoute(directionsService, origin, destination){
       //mapping route
       directionsService.route({
         origin: origin,
@@ -75,16 +76,9 @@ $(() => {
           const summaryPanel = $('#directions-panel');
           // For each route, display summary information.
           for (let i = 0; i < route.legs.length; i++) {
-            const routeSegment = i + 1;
-            summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
-            '</b><br>';
             const travelDistance = (route.legs[i].distance.text);
-            summaryPanel.append(`<p>${travelDistance}</p>`);
-
-            console.log(travelDistance);
-            summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
-            summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-            summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+            const startAddress = (route.legs[i].start_address);
+            summaryPanel.append(`<p>${travelDistance} away at ${startAddress}</p>`);
           }
         } else {
           console.log('Directions request failed due to ' + status);
@@ -113,8 +107,10 @@ $(() => {
           lng: position.coords.longitude
         };
 
+        userLocation = pos;
+
         infoWindow.setPosition(pos);
-        infoWindow.setContent(`Your current location.`);
+        infoWindow.setContent('Your current location.');
         infoWindow.open(map);
         map.setCenter(pos);
 
