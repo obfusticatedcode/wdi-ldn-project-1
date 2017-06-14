@@ -57,6 +57,32 @@ $(() => {
       //testing
       console.log(`clicking works on the item-location`);
       $(event.target).mouseover().css('background-color', 'yellow');
+      
+      //mapping route
+      directionsService.route({
+        origin: origin,
+        destination: destination,
+        travelMode: 'DRIVING'
+      }, function(response, status) {
+        console.log(response);
+        if (status === 'OK') {
+          directionsDisplay.setDirections(response);
+          const route = response.routes[0];
+          const summaryPanel = $('directions-panel');
+          summaryPanel.innerHTML = '';
+          // For each route, display summary information.
+          for (let i = 0; i < route.legs.length; i++) {
+            const routeSegment = i + 1;
+            summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+            '</b><br>';
+            summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+            summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+            summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+          }
+        } else {
+          console.log('Directions request failed due to ' + status);
+        }
+      });
 
     });
 
@@ -66,31 +92,7 @@ $(() => {
     const destination = (`${userLat}, ${userLng}`);
     console.log(destination);
 
-    //mapping route
-    directionsService.route({
-      origin: origin,
-      destination: destination,
-      travelMode: 'DRIVING'
-    }, function(response, status) {
-      console.log(response);
-      if (status === 'OK') {
-        directionsDisplay.setDirections(response);
-        const route = response.routes[0];
-        const summaryPanel = $('directions-panel');
-        summaryPanel.innerHTML = '';
-        // For each route, display summary information.
-        for (let i = 0; i < route.legs.length; i++) {
-          const routeSegment = i + 1;
-          summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
-          '</b><br>';
-          summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
-          summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-          summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
-        }
-      } else {
-        console.log('Directions request failed due to ' + status);
-      }
-    });
+
 
 
     //infoWindow
