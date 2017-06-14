@@ -78,9 +78,9 @@ $(() => {
             const routeSegment = i + 1;
             summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
             '</b><br>';
+            const travelDistance = (route.legs[i].distance.text);
             summaryPanel.append(`<p>${travelDistance}</p>`);
 
-            const travelDistance = (route.legs[i].distance.text);
             console.log(travelDistance);
             summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
             summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
