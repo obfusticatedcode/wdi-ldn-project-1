@@ -1,5 +1,5 @@
 
-/* globals google:true */
+/* global google:true */
 
 $(() => {
 
@@ -9,8 +9,6 @@ $(() => {
   //testing JS works
   console.log(`JS is working fine`);
 
-
-
   const $threeWordsLocation = $('#three-words-location');
   const $country = $('#country');
 
@@ -19,6 +17,14 @@ $(() => {
   const $lng = $('#lng');
   const $currency = $('#currency');
   const $currencylabel = $('#currency-label');
+  const lat = $('#map').data('lat'); // lat and lng of current post (show page)
+  const lng = $('#map').data('lng');
+  let userLat = null;
+  let userLng = null;
+
+
+
+
   //setup the map and infoWindow constiable
   let map, infoWindow, newLat, newLng , exchangeRates = null;
 
@@ -27,9 +33,14 @@ $(() => {
 
   //google maps initialization
   function initMap() {
-    const lat = $('#map').data('lat');
-    const lng = $('#map').data('lng');
 
+    //mapping route
+    const directionsService = new google.maps.DirectionsService;
+    const directionsDisplay = new google.maps.DirectionsRenderer;
+
+    //find the current location origin and then
+    //find the destination where the item is posted.
+    console.log(userLat, userLng);
     const latLng = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -37,13 +48,57 @@ $(() => {
       center: latLng
     });
 
+    //mapping route
+    directionsDisplay.setMap(map);
+
+    //mapping route
+    //add eventListener to the item location
+    $('#item-location').on('click', (event) => {
+      //testing
+      console.log(`clicking works on the item-location`);
+      $(event.target).mouseover().css('background-color', 'yellow');
+
+    });
+
+
+    const origin = (`${lat}, ${lng}`);
+    console.log(origin);
+    const destination = (`${userLat}, ${userLng}`);
+    console.log(destination);
+
+    //mapping route
+    directionsService.route({
+      origin: origin,
+      destination: destination,
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      console.log(response);
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+        const route = response.routes[0];
+        const summaryPanel = $('directions-panel');
+        summaryPanel.innerHTML = '';
+        // For each route, display summary information.
+        for (let i = 0; i < route.legs.length; i++) {
+          const routeSegment = i + 1;
+          summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+          '</b><br>';
+          summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+          summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+          summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+        }
+      } else {
+        console.log('Directions request failed due to ' + status);
+      }
+    });
+
+
     //infoWindow
     infoWindow = new google.maps.InfoWindow;
 
     google.maps.event.addListener(map, 'dragend', function() {
       newLat = map.getCenter().lat();
       newLng = map.getCenter().lng();
-
       getThreeWords(newLat, newLng);
       geocodeCountry(newLat, newLng);
     });
@@ -57,8 +112,10 @@ $(() => {
           lng: position.coords.longitude
         };
 
-        infoWindow.setPosition(pos);
+        userLat = pos.lat;
+        userLng = pos.lng;
 
+        infoWindow.setPosition(pos);
         infoWindow.setContent(`Your current location.`);
         infoWindow.open(map);
         map.setCenter(pos);
@@ -159,8 +216,6 @@ $(() => {
     });
   }
 
-  //get the CityName
-
 
 
 
@@ -214,10 +269,10 @@ $(() => {
     limit: 10
   });
 
-//using select 2
+//using select 2 for the categories dropdown
   function chooseCategory(){
     $('select').select2();
-    const categories = [{ id: 0, text: 'Electronics'}, { id: 1, text: 'Food' }, { id: 2, text: 'Furniture' }, { id: 3, text: 'Hardware' }, { id: 4, text: 'Health and beauty' }];
+    const categories = [{ id: 'Electronics', text: 'Electronics'}, { id: 'Food', text: 'Food' }, { id: 'Furniture', text: 'Furniture' }, { id: 'Hardware', text: 'Hardware' }, { id: 'Health and beauty', text: 'Health and beauty' }];
 
     $('#category').select2({
       placeholder: 'Choose a category',

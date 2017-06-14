@@ -16,7 +16,7 @@
         <div class="map-container">
           <span class="map-marker"></span>
           <%# using buckingham palace as base coords%>
-          <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
+          <div class="" id="map" data-lat="<%= post.lat %>" data-lng="<%= post.lng %>"></div>
         </div>
         <input class="input" id="three-words-location" type="text" name="location" value="">
         <hr>
@@ -37,7 +37,14 @@
     <h4><%= post.title %></h4>
     <h4><%= post.description %></h4>
     <p>
+
+      <%# submit location%>
       <h4 id="item-location"><%= post.location %></h4>
+
+      <%# using the lat and lng to process the distance%>
+      <div id="directions-panel"></div>
+
+
     </p>
 
     <div class="field has-addons">
