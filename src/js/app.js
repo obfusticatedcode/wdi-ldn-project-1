@@ -25,6 +25,7 @@ $(() => {
 
 
 
+
   //setup the map and infoWindow constiable
   let map, infoWindow, newLat, newLng , exchangeRates = null;
 
@@ -40,7 +41,7 @@ $(() => {
 
     //find the current location origin and then
     //find the destination where the item is posted.
-    console.log(userLat, userLng);
+
     const latLng = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -50,6 +51,12 @@ $(() => {
 
     //mapping route
     directionsDisplay.setMap(map);
+    const lat1 = 30.0;
+    const lng1 = 40.3;
+    const origin = (`${lat},${lng}`);
+    console.log(origin);
+    const destination = (`${lat1},${lng1}`);
+    console.log(destination);
 
     //mapping route
     //add eventListener to the item location
@@ -57,7 +64,10 @@ $(() => {
       //testing
       console.log(`clicking works on the item-location`);
       $(event.target).mouseover().css('background-color', 'yellow');
-      
+      displayRoute(directionsService);
+    });
+
+    function displayRoute(directionsService){
       //mapping route
       directionsService.route({
         origin: origin,
@@ -84,13 +94,10 @@ $(() => {
         }
       });
 
-    });
+    }
 
 
-    const origin = (`${lat}, ${lng}`);
-    console.log(origin);
-    const destination = (`${userLat}, ${userLng}`);
-    console.log(destination);
+
 
 
 
@@ -117,6 +124,7 @@ $(() => {
         userLat = pos.lat;
         userLng = pos.lng;
 
+
         infoWindow.setPosition(pos);
         infoWindow.setContent(`Your current location.`);
         infoWindow.open(map);
@@ -142,8 +150,8 @@ $(() => {
     });
 
 
-
   }//end of initMap()
+
 
   //handleLocationError()
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -197,7 +205,6 @@ $(() => {
     .done((response) => {
       const currency = response.currencies[0].code;
       const currencyName = response.currencies[0].name;
-      console.log(`The currency in ${country} is: ${currency}`);
       $currency.val(`${currency}`); // This should happen on posts/new page
       $currencylabel.text(`${currency}, ${currencyName}`);//This should happen on the posts/show page
 
@@ -228,8 +235,6 @@ $(() => {
       method: 'GET'
     })
     .done((response) => {
-      //to be used on post show page
-      console.log(response);
       exchangeRates = response.quotes;
     });
   }
@@ -256,13 +261,6 @@ $(() => {
 
   //getting the exchangeRates from the currencylayer API
   getExchangeRate();
-
-  //send email to poster
-  const $emailLink = $('.email-link');
-  $emailLink.on('click', () => {
-    console.log(`clicked`);
-
-  });
 
   //searching
   $('#search').typeahead({
