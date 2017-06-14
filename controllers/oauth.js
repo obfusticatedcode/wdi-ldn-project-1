@@ -91,6 +91,47 @@ function instagram (req, res, next) {
   .catch(next);
 }
 
+//facebook
+function facebook (req, res, next) {
+  console.log('query', req.query);
+  return rp({
+    method: 'POST',
+    url: config.facebook.accessTokenUrl,
+    form: {
+      client_id: config.facebook.clientId,
+      client_secret: config.facebook.clientSecret,
+      grant_type: 'authorization_code',
+      redirect_uri: config.facebook.redirectUri,
+      code: req.query.code
+    },
+    json: true
+  })
+  .then((token) => {
+    console.log('token', token);
+    return User
+    .findOne({ $or: [{ email: token.user.email }, { facebookId: token.user.id }] })
+    .then((user) => {
+      if(!user) {
+        user = new User({
+          username: token.user.username,
+          image: token.user.profile_picture
+        });
+      }
+
+      user.facebookId = token.user.id;
+      return user.save();
+    });
+  })
+  .then((user) => {
+    req.session.userId = user.id;
+    req.session.isAuthenticated = true;
+
+    req.flash('info', `Welcome back, ${user.username}!`);
+    res.redirect(`/users/${user.id}`);
+  })
+  .catch(next);
+}
+
 module.exports = {
-  github, instagram
+  github, instagram, facebook
 };
