@@ -1,5 +1,5 @@
 
-/*global google:true*/
+/* globals google:true */
 
 $(() => {
 
@@ -213,6 +213,28 @@ $(() => {
     remote: 'http://localhost:3000/search?key=%QUERY',
     limit: 10
   });
+
+//using select 2
+  function chooseCategory(){
+    $('select').select2();
+    const categories = [{ id: 0, text: 'Electronics'}, { id: 1, text: 'Food' }, { id: 2, text: 'Furniture' }, { id: 3, text: 'Hardware' }, { id: 4, text: 'Health and beauty' }];
+
+    $('#category').select2({
+      placeholder: 'Choose a category',
+      allowClear: true,
+      data: categories
+
+    });
+
+  }
+
+  chooseCategory();
+
+
+
+
+
+
 
 
 

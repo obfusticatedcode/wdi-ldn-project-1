@@ -2,7 +2,7 @@
 const Post = require('../models/post');
 
 // adding categories
-const categories = ['phones', 'TVs', 'Computers'];
+const categories = [];
 
 //create route
 function createRoute(req, res, next) {
