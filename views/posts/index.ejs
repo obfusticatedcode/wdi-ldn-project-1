@@ -14,7 +14,7 @@
 
     </a>
     <p>
-      <h4><%= post.createdBy.username %></h4>
+    
       <% while(post.stars--) { %> &star; <% } %>
     </p>
     <form method="POST" action="/posts/<%= post.id %>">

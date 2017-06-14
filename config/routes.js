@@ -34,8 +34,7 @@ router.route('/logout')
 router.route('/oauth/instagram')
   .get(oauth.instagram);
 
-router.route('/oauth/facebook')
-  .get(oauth.instagram);
+
 
 router.route('/oauth/github')
   .get(oauth.github);

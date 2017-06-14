@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const s3 = require('../lib/s3');
 
+
 const userSchema = new mongoose.Schema({
   firstname: {type: String},
   lastname: {type: String},
@@ -10,8 +11,8 @@ const userSchema = new mongoose.Schema({
   image: { type: String },
   password: { type: String },
   githubId: { type: Number },
-  instagramId: { type: Number },
-  facebookId: { type: Number }
+  instagramId: { type: Number }
+
 });
 
 userSchema
@@ -33,10 +34,15 @@ userSchema.pre('remove', function removeImage(next) {
   s3.deleteObject({ Key: this.image }, next);
 });
 
+//pre remove hook
+userSchema.pre('remove', function removeUserPosts(next) {
+  this.model('Post').remove({ createdBy: this.id }, next);
+});
+
 // lifecycle hook - mongoose middleware
 //github and instagram
 userSchema.pre('validate', function checkPassword(next) {
-  if((!this.password && !this.githubId) && (!this.password && !this.instagramId && (!this.password && !this.facebookId)) ) {
+  if((!this.password && !this.githubId) && (!this.password && !this.instagramId)) {
     this.invalidate('password', 'required');
   }
   if(this.isModified('password') && this.password && this._passwordConfirmation !== this.password){
@@ -58,5 +64,7 @@ userSchema.pre('save', function checkPassword(next) {
 userSchema.methods.validatePassword = function validatePassword(password) {
   return bcrypt.compareSync(password, this.password);
 };
+
+
 
 module.exports = mongoose.model('User', userSchema);

@@ -25,21 +25,7 @@ const instagram = {
   }
 };
 
-// Your app must initiate a redirect to an endpoint which will display the login dialog
-const facebook = {
-
-  loginUrl: 'https://www.facebook.com/v2.9/dialog/oauth',
-  accessTokenUrl: ' https://graph.facebook.com/v2.9/oauth/access_token?',
-  redirectUri: 'http://localhost:8000/oauth/facebook',
-  clientId: process.env.FACEBOOK_APP_ID,
-  clientSecret: process.env.FACEBOOK_APP_SECRET,
-  responseCode: 'code',
-  getLoginURL() {
-    return `${this.loginUrl}?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&response_type=${this.responseCode}`;
-  }
-};
-
 
 module.exports = {
-  github, instagram, facebook
+  github, instagram
 };

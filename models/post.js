@@ -60,4 +60,4 @@ postSchema.pre('remove', function removeImage(next){
 });
 
 //export the model
-module.exports = mongoose.model('post', postSchema);
+module.exports = mongoose.model('Post', postSchema);

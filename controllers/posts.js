@@ -22,7 +22,7 @@ function createRoute(req, res, next) {
 
 //home/index route
 function indexRoute(req, res, next) {
-  //testing what's in the request
+  //searching feature
   console.log(req.query);
   const regex = new RegExp(req.query.q, 'i');
   const categoryQuery = { $or: [{ title: regex }, { description: regex }] };
