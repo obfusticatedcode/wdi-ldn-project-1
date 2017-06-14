@@ -19,12 +19,6 @@ $(() => {
   const $currencylabel = $('#currency-label');
   const lat = $('#map').data('lat'); // lat and lng of current post (show page)
   const lng = $('#map').data('lng');
-  let userLat = null;
-  let userLng = null;
-
-
-
-
 
   //setup the map and infoWindow constiable
   let map, infoWindow, newLat, newLng , exchangeRates = null;
@@ -78,13 +72,16 @@ $(() => {
         if (status === 'OK') {
           directionsDisplay.setDirections(response);
           const route = response.routes[0];
-          const summaryPanel = $('directions-panel');
-          summaryPanel.innerHTML = '';
+          const summaryPanel = $('#directions-panel');
           // For each route, display summary information.
           for (let i = 0; i < route.legs.length; i++) {
             const routeSegment = i + 1;
             summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
             '</b><br>';
+            summaryPanel.append(`<p>${travelDistance}</p>`);
+
+            const travelDistance = (route.legs[i].distance.text);
+            console.log(travelDistance);
             summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
             summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
             summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
@@ -95,11 +92,6 @@ $(() => {
       });
 
     }
-
-
-
-
-
 
 
     //infoWindow
@@ -120,10 +112,6 @@ $(() => {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-
-        userLat = pos.lat;
-        userLng = pos.lng;
-
 
         infoWindow.setPosition(pos);
         infoWindow.setContent(`Your current location.`);
@@ -284,12 +272,6 @@ $(() => {
   }
 
   chooseCategory();
-
-
-
-
-
-
 
 
 
