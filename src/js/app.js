@@ -77,7 +77,7 @@ $(() => {
     }
 
     //create a marker
-    const marker = new google.maps.Marker({
+    new google.maps.Marker({
       position: latLng,
       map: map
     });
@@ -213,6 +213,7 @@ $(() => {
     remote: 'http://localhost:3000/search?key=%QUERY',
     limit: 10
   });
+
 
 
 });//end of JS load
