@@ -82,6 +82,54 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
+// the toggle button
+input.switch:empty {
+  margin-left: -999px;
+}
+input.switch:empty ~ label {
+  position: relative;
+  float: left;
+  line-height: 25.6px;
+  text-indent: 64px;
+  margin: 3.2px 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-size: 16px !important;
+}
+input.switch:empty ~ label:before,
+input.switch:empty ~ label:after {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: ' ';
+  width: 3.6em;
+  background-color: $green;
+  border-radius: 30px;
+  -webkit-transition: all 100ms ease-in;
+  transition: all 100ms ease-in;
+}
+input.switch:empty ~ label:after {
+  width: 22.4px;
+  top: 1.6px;
+  bottom: 1.6px;
+  margin-left: 1.6px;
+  background-color: #fff;
+  border-radius: 50%;
+}
+input.switch:checked ~ label:before {
+  background-color: $grey-light;
+}
+input.switch:checked ~ label:after {
+  margin-left: 33.6px;
+}
+
+// end of toggle button
+
 
 
 // google fonts

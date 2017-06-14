@@ -15,11 +15,14 @@
       <div class="field">
         <div class="map-container">
           <span class="map-marker"></span>
-          <%# using buckingham palace as base coords%>
+
           <div class="" id="map" data-lat="<%= post.lat %>" data-lng="<%= post.lng %>"></div>
         </div>
-        <input class="input" id="three-words-location" type="text" name="location" value="">
+        <input class="input three-words-location" type="text" name="location" value="">
         <hr>
+        <%# the toggle switch%>
+        <input type="checkbox" id="toggle-switch" class="switch">
+        <label for="toggle-switch">&nbsp;</label>
         <p>Some buying advice</p>
       </div>
     </div>
@@ -101,6 +104,7 @@
           <section>
             <h4>Add a comment</h4>
             <form method="POST" action="/posts/<%= post.id %>/comments">
+
               <textarea class="input" name="content" id="content" placeholder="Comment"></textarea>
               <button class="button is-success">Add a comment</button>
             </form>

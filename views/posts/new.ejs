@@ -11,15 +11,21 @@
   <div class="tile is-4 is-parent is-vertical">
     <h1 class="title">Map</h1>
     <hr>
+
     <%# creating the map%>
     <div class="tile is-child">
-
       <div class="map-container">
         <span class="map-marker"></span>
         <%# using buckingham palace as base coords%>
         <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
       </div>
+      <input class="input three-words-location" type="text" name="location" value="">
+      <hr>
+      <%# the toggle switch%>
+      <input type="checkbox" id="toggle-switch" class="switch">
+      <label for="toggle-switch">&nbsp;</label>
     </div>
+
 
   </div>
 
@@ -107,15 +113,7 @@
             </p>
           </div>
 
-          <%# rating%>
-          <div class="field">
-            <label  for="stars">Rating</label>
-          </div>
 
-          <div class="field">
-            <%# set uppper and lower limit for number of stars%>
-            <input class="input" type="number" name="stars" id="stars" min="1" max="5" required>
-          </div>
 
 
           <%# location/map%>
@@ -133,7 +131,7 @@
 
             <p class="control has-icons-left">
 
-              <input class="input" id="three-words-location" type="text" name="location">
+              <input class="input three-words-location" type="text" name="location">
               <span class="icon is-small is-left">
                 <i class="fa fa-location-arrow"></i>
               </span>
@@ -145,6 +143,8 @@
             </p>
 
           </div>
+
+
 
           <%# user contact information/email%>
           <div class="field">

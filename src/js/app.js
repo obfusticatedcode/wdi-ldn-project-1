@@ -8,9 +8,10 @@ $(() => {
   //testing JS works
   console.log(`JS is working fine`);
 
-  const $threeWordsLocation = $('#three-words-location');
+  const $threeWordsLocation = $('.three-words-location');
   const $country = $('#country');
-
+  const $mapMarker = $('.map-marker');
+  const $toggleSwitch = $('#toggle-switch');
 
   const $lat = $('#lat');
   const $lng = $('#lng');
@@ -269,6 +270,11 @@ $(() => {
 
   chooseCategory();
 
+// remove the marker on toggle switch
+  $toggleSwitch.on('click', () => {
+    $mapMarker.toggle();
+    console.log(`click marker`);
+  });
 
 
 });//end of JS load

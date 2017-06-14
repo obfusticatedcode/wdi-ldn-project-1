@@ -3,27 +3,20 @@
 
 <div class="columns is-multiline">
 
-
   <% posts.forEach((post) => { %>
   <div class="column is-4">
     <a href="/posts/<%= post.id %>">
     <img src="<%= post.imageSRC %>" alt="<%=  %>">
     </a>
-    
+
     <h3><%= post.title %></h3>
     <h3><%= post.description %></h3>
     <h3>Location: <%= post.location %></h3>
 
-
     <p>
-
       <% while(post.stars--) { %> &star; <% } %>
     </p>
-    <form method="POST" action="/posts/<%= post.id %>">
-      <a href="/posts/<%= post.id %>/edit" class="button is-warning">Edit</a>
-      <input type="hidden" name="_method" value="DELETE">
-      <button class="button is-danger">Delete</button>
-    </form>
+
   </div>
 
   <% }) %>
