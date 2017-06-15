@@ -175,7 +175,7 @@ $(() => {
   //geocode the lat lng and make ajax call to countries API to get country name
   function geocodeCountry(lat, lng) {
     $.ajax({
-      url: `http://ws.geonames.org/countryCodeJSON?lat=${lat}&lng=${lng}&username=obfusticatedcode`,
+      url: `/country?lat=${lat}&lng=${lng}`,
       method: 'GET'
     })
     .done((response) => {
@@ -223,6 +223,7 @@ $(() => {
       method: 'GET'
     })
     .done((response) => {
+      console.log(response);
       exchangeRates = response.quotes;
     });
   }

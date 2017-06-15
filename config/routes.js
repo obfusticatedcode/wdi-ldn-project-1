@@ -7,13 +7,18 @@ const oauth = require('../controllers/oauth');
 const secureRoute = require('../lib/secureRoute');
 const upload = require('../lib/upload');
 
+//proxies
 const currencyController = require('../controllers/currency');
+const countryController = require('../controllers/countryNames');
 
 //index
 router.get('/', (req, res) => res.render('statics/index'));
 
-//currency testing
+//currency
 router.get('/currency', currencyController.proxy);
+
+//country testing
+router.get('/country', countryController.proxy);
 
 //users routes
 router.route('/users/:id')
