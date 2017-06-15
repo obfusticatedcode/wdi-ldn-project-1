@@ -52,7 +52,7 @@ function github(req, res, next) {
 
 //instagram
 function instagram (req, res, next) {
-  console.log('query', req.query);
+
   return rp({
     method: 'POST',
     url: config.instagram.accessTokenUrl,

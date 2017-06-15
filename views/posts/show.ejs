@@ -84,7 +84,6 @@
 
     <p>
       <h4><%= post.createdBy.username %></h4>
-      <% while(post.stars--) { %> &star; <% } %>
     </p>
 
     <%# if the user isAuthenticated and the post has been created by the user allow editing and deleting%>
@@ -105,9 +104,11 @@
       <div class="columns">
         <div class="column">
           <section>
+
+
+
             <h4>Add a comment</h4>
             <form method="POST" action="/posts/<%= post.id %>/comments">
-
               <textarea class="input" name="content" id="content" placeholder="Comment"></textarea>
               <button class="button is-success">Add a comment</button>
             </form>

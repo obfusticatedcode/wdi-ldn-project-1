@@ -2,7 +2,7 @@ const rp = require('request-promise');
 const { countryNamesAPI } = require('../config/environment');
 
 function countryProxy(req, res) {
-  console.log(req.query);
+
   rp({
     url: `http://ws.geonames.org/countryCodeJSON?lat=${req.query.lat}&lng=${req.query.lng}&username=${countryNamesAPI}`,
     method: 'GET',
