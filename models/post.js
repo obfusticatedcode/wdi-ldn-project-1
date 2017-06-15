@@ -5,7 +5,6 @@ const s3 = require('../lib/s3');
 //adding some comments using an array to accommodate any amount of comments
 const commentSchema = new mongoose.Schema({
   content: { type: String, required: true },
-  stars: {type: Number},
   createdBy: { type: mongoose.Schema.ObjectId, ref: 'User', required: true }
 }, {
   timestamps: true
@@ -17,7 +16,7 @@ commentSchema.methods.belongsTo = function commentBelongsTo(user) {
 };
 
 //create a categorySchema
-
+//TODO
 
 //create the post model
 const postSchema = new mongoose.Schema({
