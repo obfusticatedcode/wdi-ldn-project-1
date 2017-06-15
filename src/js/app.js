@@ -5,6 +5,7 @@ $(() => {
   //let's validate all forms nicely
   $('form').validate();
 
+
   //testing JS works
   console.log(`JS is working fine`);
 

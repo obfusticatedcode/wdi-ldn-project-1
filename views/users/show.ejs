@@ -1,27 +1,27 @@
 <div class="tile is-ancestor">
 
-<div class="tile is-4 is-parent">
-<%# this empty div is a placeholder used as offset%>
-</div>
-
-<div class="tile is-4 is-parent is-vertical">
-
-  <div class="tile is-child">
-    <h1 class="title">Your Profile</h1>
+  <div class="tile is-4 is-parent">
+    <%# this empty div is a placeholder used as offset%>
   </div>
 
-  <div class="tile is-child">
-    <% if (user.image) { %>
-      <img src="<%= user.imageSRC %>" alt="<%= user.username %>">
-    <% } %>
-    <h1 ><%= user.username %></h1>
-    <form method="POST" action="/users/<%= user.id %>">
-      <a href="/users/<%= user.id %>/edit" class="button is-warning">Edit Account</a>
-      <input type="hidden" name="_method" value="DELETE">
-      <button class="button is-danger">Delete Account</button>
-    </form>
+  <div class="tile is-4 is-parent is-vertical">
+
+    <div class="tile is-child">
+      <h1 class="title">Your Profile</h1>
+    </div>
+
+    <div class="tile is-child">
+      <% if (user.image) { %>
+        <img src="<%= user.imageSRC %>" alt="<%= user.username %>">
+        <% } %>
+        <h1 ><%= user.username %></h1>
+        <form method="POST" action="/users/<%= user.id %>">
+          <a href="/users/<%= user.id %>/edit" class="button is-warning">Edit Account</a>
+          <input type="hidden" name="_method" value="DELETE">
+          <button class="button is-danger">Delete Account</button>
+        </form>
+      </div>
+      
+
+    </div>
   </div>
-
-
-</div>
-</div>

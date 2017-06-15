@@ -1,8 +1,36 @@
 
-<div class="column has-text-centered">
-  <% if (locals.isAuthenticated) { %>
-    <h1 class="title">Trade Space</h1>
-  <% } else { %>
-    <h1 class="title"><a href="/login">Login</a> or <a href="/register">Register</a></h1>
-  <% }  %>
+
+<div class="columns">
+
+  <div class="column is-offset-4 is-4">
+    <div class="column has-text-centered">
+      <% if (locals.isAuthenticated) { %>
+        <h1 class="title">Trade Space</h1>
+      <% } else { %>
+        <h1 class="title"><a href="/login">Login</a> or <a href="/register">Register</a></h1>
+      <% }  %>
+    </div>
+  </div>
+</div>
+
+<div class="columns">
+  <div class="column is-3">
+    <img src="assets/images/girl-shopper-with-cup.jpg" alt="">
+
+  </div>
+  <div class="column is-3">
+    <img src="/assets/images/mac-and-wallet.jpg" alt="">
+  </div>
+  <div class="column is-3">
+    <img src="" alt="">
+  </div>
+  <div class="column is-3">
+    <img src="" alt="">
+  </div>
+</div>
+<div class="columns">
+  <p>test</p>
+</div>
+<div class="columns">
+  <p>test</p>
 </div>
