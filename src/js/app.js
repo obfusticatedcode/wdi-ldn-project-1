@@ -179,6 +179,7 @@ $(() => {
       method: 'GET'
     })
     .done((response) => {
+      console.log(response);
       const country = response.countryCode;
       getCurrency(country);
       getCountryName(country);
