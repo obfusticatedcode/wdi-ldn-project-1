@@ -8,18 +8,18 @@
       <img src="<%= post.imageSRC %>" alt="<%=  %>">
       </a>
 
-      <h3 class="main-title"><%= post.title %></h3>
-      <h3><%= post.description %></h3>
+      <h4 class="main-title"><%= post.title %></h4>
+      <h4><%= post.description %></h4>
       <div class="field has-addons">
         <p class="control">
-          <%# perhaps use a forEach loop to feed a dropdown for currencies%>
+  
           <h4 id="item-currency"><%= post.currency %></h4>
         </p>
         <p class="control">
           <h4 id="item-price"><%= post.price %></h4>
         </p>
       </div>
-      <h3>Location: <%= post.location %></h3>
+      <h4>Location: <%= post.location %></h4>
 
     </div>
 
