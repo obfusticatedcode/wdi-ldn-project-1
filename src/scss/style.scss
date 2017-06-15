@@ -43,6 +43,14 @@ body {
     margin-bottom: 1px;
     color: $black;
   }
+
+  span{
+
+    i {
+      margin-left: 2px;
+      margin-right: 5px;
+    }
+  }
 }
 
 
@@ -89,6 +97,11 @@ transition: 		    all 0.3s ease;
 
 }
 
+#brand-logo {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
 .map-container {
   position: relative;
   overflow: hidden;
@@ -119,7 +132,7 @@ transition: 		    all 0.3s ease;
 }
 
 .button {
-    
+
     margin-left: 0px;
     margin-right: 10px;
   }
