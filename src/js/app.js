@@ -188,6 +188,7 @@ $(() => {
 
   //make api call to get currency based on country name then currency
   function getCurrency(country) {
+    console.log(country);
     $.ajax({
       url: `https://restcountries.eu/rest/v2/alpha/${country}`,
       method: 'GET'
