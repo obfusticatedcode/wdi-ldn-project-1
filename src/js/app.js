@@ -219,7 +219,7 @@ $(() => {
   //get the current exchange rate and map it to the Country name
   function getExchangeRate() {
     $.ajax({
-      url: 'http://www.apilayer.net/api/live?access_key=9349182f47c0d493c3853badcdce3cfc',
+      url: '/currency',
       method: 'GET'
     })
     .done((response) => {
