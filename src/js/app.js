@@ -12,7 +12,7 @@ $(() => {
   const $country = $('#country');
   const $mapMarker = $('.map-marker');
   const $toggleSwitch = $('#toggle-switch');
-
+  const $directionsPanel = $('#directions-panel');
   const $lat = $('#lat');
   const $lng = $('#lng');
   const $currency = $('#currency');
@@ -52,12 +52,12 @@ $(() => {
     //mapping route
     function generateRoute(){
       //add eventListener to the item location
-      $('#item-location').on('click', (event) => {
-        const lat1 = userLocation.lat;
-        const lng1 = userLocation.lng;
+      //one time action
+      $('#item-location').one('click', () => {
+        const latUser = userLocation.lat;
+        const lngUser = userLocation.lng;
         const origin = (`${lat},${lng}`);
-        const destination = (`${lat1},${lng1}`);
-        $(event.target).mouseover().css('background-color', 'yellow');
+        const destination = (`${latUser},${lngUser}`);
         displayRoute(directionsService, origin, destination);
       });
     }
@@ -75,12 +75,16 @@ $(() => {
         if (status === 'OK') {
           directionsDisplay.setDirections(response);
           const route = response.routes[0];
-          const summaryPanel = $('#directions-panel');
+          const summaryPanel = $directionsPanel;
           // For each route, display summary information.
           for (let i = 0; i < route.legs.length; i++) {
             const travelDistance = (route.legs[i].distance.text);
             const startAddress = (route.legs[i].start_address);
+
+            // Appending it only once
             summaryPanel.append(`<p>${travelDistance} away at ${startAddress}</p>`);
+
+
           }
         } else {
           console.log('Directions request failed due to ' + status);
@@ -246,12 +250,7 @@ $(() => {
   //getting the exchangeRates from the currencylayer API
   getExchangeRate();
 
-  //searching
-  $('#search').typeahead({
-    name: 'typeahead',
-    remote: 'http://localhost:3000/search?key=%QUERY',
-    limit: 10
-  });
+
 
 //using select 2 for the categories dropdown
   function chooseCategory(){
@@ -263,9 +262,7 @@ $(() => {
       placeholder: 'Choose a category',
       allowClear: true,
       data: categories
-
     });
-
   }
 
   chooseCategory();

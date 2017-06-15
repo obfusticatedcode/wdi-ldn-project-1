@@ -19,6 +19,8 @@ $turquoise	:hsl(171, 100%, 41%);
 
 $blue	:hsl(217, 71%, 53%);
 
+$anotherBlue: hsl(195,100%,34%);
+
 $purple	:hsl(271, 100%, 71%);
 
 $red	:hsl(348, 100%, 61%);
@@ -35,6 +37,12 @@ body {
   font-weight: bold;
 
 
+
+  h4 {
+    margin-top: 1px;
+    margin-bottom: 1px;
+    color: $black;
+  }
 }
 
 
@@ -67,6 +75,20 @@ body {
   margin-left: 10px;
 }
 
+#item-location {
+cursor:pointer;
+-webkit-transition: all 0.3s ease;
+-moz-transition:  	all 0.3s ease;
+-o-transition:  	  all 0.3s ease;
+transition: 		    all 0.3s ease;
+}
+
+#item-location:hover {
+  color: $white;
+  background-color: $turquoise;
+
+}
+
 .map-container {
   position: relative;
   overflow: hidden;
@@ -87,6 +109,20 @@ body {
   color: $red;
   font-family: 'Raleway', sans-serif;
 }
+
+.main-title {
+  font-weight: bold;
+  font-size: 20px;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+
+.button {
+    
+    margin-left: 0px;
+    margin-right: 10px;
+  }
 
 // the toggle button
 input.switch:empty {
