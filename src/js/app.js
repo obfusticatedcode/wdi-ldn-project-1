@@ -41,6 +41,7 @@ $(() => {
 
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
+      scrollWheel: false,
       center: latLng
     });
 
@@ -49,19 +50,20 @@ $(() => {
 
 
     //mapping route
-    //add eventListener to the item location
-    $('#item-location').on('click', (event) => {
-      const lat1 = userLocation.lat;
-      const lng1 = userLocation.lng;
-      const origin = (`${lat},${lng}`);
-      console.log(origin);
-      const destination = (`${lat1},${lng1}`);
-      console.log(destination);
-      //testing
-      console.log(`clicking works on the item-location`);
-      $(event.target).mouseover().css('background-color', 'yellow');
-      displayRoute(directionsService, origin, destination);
-    });
+    function generateRoute(){
+      //add eventListener to the item location
+      $('#item-location').on('click', (event) => {
+        const lat1 = userLocation.lat;
+        const lng1 = userLocation.lng;
+        const origin = (`${lat},${lng}`);
+        const destination = (`${lat1},${lng1}`);
+        $(event.target).mouseover().css('background-color', 'yellow');
+        displayRoute(directionsService, origin, destination);
+      });
+    }
+
+    // calling the generateRoute()
+    generateRoute();
 
     function displayRoute(directionsService, origin, destination){
       //mapping route
@@ -70,7 +72,6 @@ $(() => {
         destination: destination,
         travelMode: 'DRIVING'
       }, function(response, status) {
-        console.log(response);
         if (status === 'OK') {
           directionsDisplay.setDirections(response);
           const route = response.routes[0];
@@ -107,7 +108,7 @@ $(() => {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-
+        //current userLocation
         userLocation = pos;
 
         infoWindow.setPosition(pos);
@@ -211,8 +212,6 @@ $(() => {
   }
 
 
-
-
   //get the current exchange rate and map it to the Country name
   function getExchangeRate() {
     $.ajax({
@@ -257,7 +256,8 @@ $(() => {
 //using select 2 for the categories dropdown
   function chooseCategory(){
     $('select').select2();
-    const categories = [{ id: 'Electronics', text: 'Electronics'}, { id: 'Food', text: 'Food' }, { id: 'Furniture', text: 'Furniture' }, { id: 'Hardware', text: 'Hardware' }, { id: 'Health and beauty', text: 'Health and beauty' }];
+    const categories = [{ id: 'Electronics', text: 'Electronics'}, { id: 'Food', text: 'Food' }, { id: 'Furniture', text: 'Furniture' }, { id: 'Hardware', text: 'Hardware' }, { id: 'Health and beauty', text: 'Health and beauty' },
+    { id: 'Other', text: 'Other'}];
 
     $('#category').select2({
       placeholder: 'Choose a category',
@@ -270,11 +270,19 @@ $(() => {
 
   chooseCategory();
 
-// remove the marker on toggle switch
-  $toggleSwitch.on('click', () => {
-    $mapMarker.toggle();
-    console.log(`click marker`);
-  });
+  // remove the marker on toggle switch
+  function removeMarker(){
+    $toggleSwitch.on('click', () => {
+      $mapMarker.toggle();
+    });
+  }
+
+  //calling the removeMarker()
+  removeMarker();
+
+
+
+
 
 
 });//end of JS load

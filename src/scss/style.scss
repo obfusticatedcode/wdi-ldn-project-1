@@ -23,14 +23,20 @@ $purple	:hsl(271, 100%, 71%);
 
 $red	:hsl(348, 100%, 61%);
 
+$heading:hsl(0,100%,40%);
+
+$white :hsl(228,26%,96%);
+
 
 
 body {
-  background-color: $grey-light;
+  background-color: $white;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
 
+
 }
+
 
 
 //sticky footer
@@ -129,7 +135,6 @@ input.switch:checked ~ label:after {
 }
 
 // end of toggle button
-
 
 
 // google fonts
