@@ -3,7 +3,7 @@
 $(() => {
 
   //let's validate all forms nicely
-  $('form').validate();
+  // $('form').validate();
 
 
   //testing JS works
