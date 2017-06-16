@@ -259,8 +259,16 @@ $(() => {
 //using select 2 for the categories dropdown
   function chooseCategory(){
     $('select').select2();
-    const categories = [{ id: 'Electronics', text: 'Electronics'}, { id: 'Food', text: 'Food' }, { id: 'Furniture', text: 'Furniture' }, { id: 'Hardware', text: 'Hardware' }, { id: 'Health and beauty', text: 'Health and beauty' },
-    { id: 'Other', text: 'Other'}];
+    const categories = [{ id: 'Electronics', text: 'Electronics'},
+                        { id: 'Food', text: 'Food' },
+                        { id: 'Furniture', text: 'Furniture' },
+                        { id: 'Hardware', text: 'Hardware' },
+                        { id: 'Health and beauty', text: 'Health and beauty' },
+                        { id: 'Clothes', text: 'Clothes' },
+                        { id: 'Cars', text: 'Cars' },
+                        { id: 'Books', text: 'Books' },
+                        { id: 'Property', text: 'Property' },
+                        { id: 'Other', text: 'Other'}];
 
     $('#category').select2({
       placeholder: 'Choose a category',

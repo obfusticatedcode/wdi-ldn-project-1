@@ -114,6 +114,10 @@ transition: 		    all 0.3s ease;
 
 }
 
+#brand-logo:hover {
+  text-shadow: 0 0 5px $heading;
+}
+
 #intro-message {
   color: $black;
 
@@ -160,7 +164,14 @@ transition: 		    all 0.3s ease;
     margin-right: 10px;
   }
 
+.main-heading {
+  font-weight: bolder;
+  text-transform: uppercase;
+}
 
+.main-heading:hover {
+  text-shadow: 0 0 5px $heading;
+}
 
 // the toggle button
 input.switch:empty {
@@ -220,4 +231,3 @@ input.switch:checked ~ label:after {
 // font-family: 'Raleway', sans-serif;
 // font-family: 'Source Sans Pro', sans-serif;
 // font-family: 'Yanone Kaffeesatz', sans-serif;
-// font-family: 'Roboto', sans-serif;
