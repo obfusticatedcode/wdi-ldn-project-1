@@ -5,7 +5,9 @@ $(() => {
   //let's validate all forms nicely
   // $('form').validate();
 
-
+  // testing form validate
+  $('form').validate();
+  $('form').removeAttr('novalidate');
   //testing JS works
   console.log(`JS is working fine`);
 
