@@ -125,6 +125,10 @@ transition: 		    all 0.3s ease;
   letter-spacing: 1px;
 }
 
+#safety-advice {
+  font-size: 12px;
+}
+
 .map-container {
   position: relative;
   overflow: hidden;
@@ -139,6 +143,15 @@ transition: 		    all 0.3s ease;
     width: 15px;
     z-index: 10;
   }
+}
+
+.safety-advice-heading {
+  font-size: 13px;
+  font-weight: bolder;
+  text-transform: uppercase;
+}
+.safety-advice-heading:hover {
+  text-shadow: 0 0 5px $heading;
 }
 
 .error {
