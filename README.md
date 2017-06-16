@@ -12,7 +12,7 @@ Download or clone the repo
 > `npm i -g gulp-cli`
 
 #### Description
-Bringing together all the different technologies to create an online adspace.
+Bringing together all the different technologies to create an online adspace. Node.js and express
 
 Here is free online space for you to trade, linked with what3words; a simple way to talk about location for the 75% of countries without formal addresses. W3W divided the world into a grid of 3m x 3m squares and assigned each one a unique 3 word address. Anyone can accurately find any location and share it quickly and easily. Buying and selling online is now for everyone.
 
