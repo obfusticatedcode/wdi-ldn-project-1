@@ -13,8 +13,8 @@
     <div class="tile is-child">
       <%# adding in the map to take the 3 words location and show it on the map%>
       <div class="field">
-        <div class="map-container">
-          <span class="map-marker"></span>
+        <div class="map-container ">
+          <span class="map-marker bounce"></span>
 
           <div class="" id="map" data-lat="<%= post.lat %>" data-lng="<%= post.lng %>"></div>
         </div>
@@ -109,7 +109,7 @@
             <form method="POST" action="/posts/<%= post.id %>/comments">
 
               <textarea class="input" name="content" id="content" placeholder="Comment"></textarea>
-              <button class="button is-success">Add a comment</button>
+              <button class="button is-primary">Add a comment</button>
             </form>
           </section>
         </div>

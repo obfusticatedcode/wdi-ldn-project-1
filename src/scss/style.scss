@@ -51,7 +51,7 @@ body {
 
     i {
       margin-left: 2px;
-      margin-right: 5px;
+      margin-right: 3px;
     }
   }
 }
@@ -68,6 +68,11 @@ body {
 .site-content {
   flex: 1;
 }
+
+.reduce-gap {
+  margin-left: 0px;
+  margin-right: 0px;
+}
 //end sticky footer
 
 
@@ -80,10 +85,15 @@ body {
 
 #item-price {
   margin-left: 10px;
+  font-weight: 600;
 }
 
 #converted-price-display {
   margin-left: 10px;
+}
+
+#what3words-location {
+  color: $heading;
 }
 
 #item-location {
@@ -101,8 +111,14 @@ transition: 		    all 0.3s ease;
 }
 
 #brand-logo {
-  font-weight: bold;
-  text-transform: capitalize;
+
+}
+
+#intro-message {
+  color: $black;
+
+  font-size: 14px;
+  letter-spacing: 1px;
 }
 
 .map-container {
@@ -113,7 +129,7 @@ transition: 		    all 0.3s ease;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: $red;
+    background-color: $heading;
     border-radius: 50%;
     height: 15px;
     width: 15px;
@@ -134,11 +150,17 @@ transition: 		    all 0.3s ease;
   margin-top: 5px;
 }
 
+.nav-bar {
+
+}
+
 .button {
 
     margin-left: 0px;
     margin-right: 10px;
   }
+
+
 
 // the toggle button
 input.switch:empty {
@@ -187,6 +209,9 @@ input.switch:checked ~ label:after {
 }
 
 // end of toggle button
+
+
+
 
 
 // google fonts

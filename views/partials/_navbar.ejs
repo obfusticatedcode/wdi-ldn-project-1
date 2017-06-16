@@ -1,4 +1,4 @@
-<nav class="nav has-shadow">
+<nav class="nav nav-bar has-shadow">
   <div class="nav-left">
     <a href="/" class="nav-item">
       <span id="brand-logo" >Trade Space</span>
@@ -7,34 +7,41 @@
 
       <li class="nav-item">
         <a href="/posts/new">
-        <span><i class="fa fa-camera fa-3x" ></i>Add a post</span>
+        <span><i class="fa fa-pencil fa-2x" ></i>Add a post</span>
         </a>
       </li>
       <li class="nav-item">
         <a href="/posts">
-        <span><i class="fa fa-shopping-basket fa-3x" ></i>Posts</span>
+        <span><i class="fa fa-th fa-2x" ></i>Posts</span>
         </a>
       </li>
     </ul>
   </div>
 
+  <%# burger icon%>
+  <span class="nav-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+
   <div class="nav-right nav-menu">
     <% if(locals.isAuthenticated) { %>
     <a class="nav-item" href="/users/<%= currentUser.id %>">
-    <span><i class="fa fa-user-circle"></i> Profile </span>
+    <span class="nav-item"><i class="fa fa-user-circle"></i> Profile </span>
 
     </a>
     <a class="nav-item" href="/logout">
-    <span><i class="fa fa-mail-reply"></i> Logout </span>
+    <span class="nav-item"><i class="fa fa-mail-reply"></i> Logout </span>
 
     </a>
     <% } else { %>
-      <a class="nav-item" href="/register">
-      <span><i class="fa fa-user"></i>  </span>
+      <a class="nav-item is-tab" href="/register">
+      <span class="nav-item"><i class="fa fa-user"></i>  </span>
         Register
       </a>
-      <a class="nav-item" href="/login">
-      <span><i class="fa fa-mail-forward"></i>  </span>
+      <a class="nav-item is-tab" href="/login">
+      <span class="nav-item"><i class="fa fa-mail-forward"></i>  </span>
         Login
       </a>
       <% } %>
