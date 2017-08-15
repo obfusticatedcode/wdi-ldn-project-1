@@ -50,8 +50,7 @@ Going forward, I'd like to implement the following:
 2. Have AI and allow the computer to make clever suggestions based on what the user likes.
 3. Login with facebook as the majority of people use it.
 4. Have in app messaging which is more secure
-5. Could do more styling to make the game have a smoother feel.
-6. Have a gallery for images posted
+5. Have a gallery for images posted
 
 
 [GitHub](https://github.com/obfusticatedcode)
