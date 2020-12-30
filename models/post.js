@@ -36,7 +36,7 @@ const postSchema = new mongoose.Schema({
   createdBy: {type: mongoose.Schema.ObjectId, ref: 'User', required: true},
 //adding the comments into the postSchema/model
   comments: [commentSchema]
-});
+}); 
 
 postSchema
   .virtual('imageSRC')

@@ -44,7 +44,7 @@ $(() => {
 
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
-      scrollWheel: false,
+      scrollwheel: false,
       center: latLng
     });
 
@@ -86,14 +86,11 @@ $(() => {
 
             // Appending it only once
             summaryPanel.append(`<p>${travelDistance} away at ${startAddress}</p>`);
-
-
           }
         } else {
           console.log('Directions request failed due to ' + status);
         }
       });
-
     }
 
 
@@ -141,7 +138,6 @@ $(() => {
       position: latLng,
       map: map
     });
-
 
   }//end of initMap()
 
