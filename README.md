@@ -64,7 +64,3 @@ In the future, I hope to make the app even better by:
 3. Allowing users to log in with their Facebook accounts since many people use Facebook.
 4. Improving the in-app messaging system for better security.
 5. Adding a gallery for users to upload images of the products they're selling.
-
-For more information and to get involved in the project, visit our [GitHub repository](https://github.com/obfusticatedcode).
-
-Feel free to adjust this README to fit your project's specific details and style.
