@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "outDir": "./public/js",
+    "strict": true, 
+    "types": ["node", "googlemaps"], 
+  },
+  "include": ["src/**/*.ts", "index.d.ts"]
+}
