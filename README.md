@@ -1,66 +1,67 @@
 # What3Words Trading App
 
-This is a trading app built in JavaScript that helps people buy and sell products in areas where there are no formal addresses, like many third-world countries.
+This trading app, built using JavaScript, helps buying and selling products in regions without formal addresses, typically found in developing countries.
 
-## How to Use
+## Overview
 
-To use the app, follow these steps:
+The app integrates the What3Words (W3W) system, which segments the world into small squares, each identified by a unique three-word address. This enables easy location sharing, even in places without street names or traditional addresses. Our platform makes online trading feasible for those in regions with limited addressing capabilities.
 
-1. Download or copy the code from this repository.
-2. Install the required software by running a command: `yarn`.
-3. Start the app by running another command: `gulp`.
+### Screenshots
 
-> **Note:** You'll need to have a program called `gulp-cli` installed on your computer. You can get it by running `npm i -g gulp-cli`.
+- ![Home Page](http://i.imgur.com/DrP1xfw.png)
+- ![Posts Page](http://i.imgur.com/qYNhkrN.png)
+- ![Profile Page](http://i.imgur.com/LVyiRrf.png)
+- ![Login Page](http://i.imgur.com/iG0rbo1.png)
+- ![Show Page with Comments](http://i.imgur.com/kclQCgb.png)
 
-## What This App Does
+### Live Demo
 
-This project brings together various technologies to create an online marketplace. It's powered by Node.js and Express. One unique feature is its integration with What3Words (W3W), a system that helps people describe locations in areas without traditional addresses.
+Experience the app firsthand by visiting: [Demo Link](https://polar-springs-29447.herokuapp.com/).
 
-W3W divides the world into small squares and gives each square a unique three-word address. This way, anyone can easily find and share locations, even in places without street names.
+## Getting Started
 
-With this app, people can trade products online, making it possible for those in areas with limited addresses to buy and sell things over the internet.
+### Prerequisites
 
-## What It Looks Like
+- Node.js & Yarn package manager
 
-Here are some pictures of the app:
+### Installation & Usage
 
-- [Home Page](http://i.imgur.com/DrP1xfw.png)
-- [Posts Page](http://i.imgur.com/qYNhkrN.png)
-- [Profile Page](http://i.imgur.com/LVyiRrf.png)
-- [Login Page](http://i.imgur.com/iG0rbo1.png)
-- [Show Page with Comments](http://i.imgur.com/kclQCgb.png)
+1. Clone the repository to your local machine.
+2. Navigate to the project directory and run:
 
-## Try It Out
+    ```terminal
+    yarn install
+    ```
 
-You can see how the app works by visiting this link: [Demo](https://polar-springs-29447.herokuapp.com/).
+3. Start the app with:
 
-## Technology Used
+    ```terminal
+    yarn start
+    ```
 
-This app is made with several technologies, including:
+## Built With
 
-- HTML 5
-- SCSS (a type of CSS)
-- JavaScript ES6 (a version of JavaScript)
-- jQuery 3.10 (a JavaScript library)
-- Gulp (a tool for automating tasks)
-- Yarn (a package manager like npm)
-- Git & GitHub (for code storage and collaboration)
-- Heroku (a platform for hosting web apps)
+- **HTML 5** - Markup language
+- **SCSS** - CSS preprocessor
+- **JavaScript ES6** - Programming language
+- **jQuery 3.10** - JavaScript library
+- **Yarn** - Dependency management
+- **Git & GitHub** - Version control
+- **Heroku** - Hosting platform
 
-## Challenges We Faced
+## Challenges Encountered
 
-While building this app, we ran into some challenges, such as:
+- Limited access to certain online services and APIs.
+- Recognizing the need for meticulous planning prior to coding.
+- Optimizing the app for minimal data usage, catering to areas with restricted internet connectivity.
 
-- Dealing with limited access to certain online services (APIs) and figuring out how to use them effectively.
-- Learning the importance of careful planning and thinking through the code before writing it.
-- Making the app use as little internet data as possible, especially since it's meant for use in areas with limited internet access.
+## Roadmap
 
-## Future Plans
+Planned enhancements include:
 
-In the future, I hope to make the app even better by:
+1. Incorporating product categories and sub-categories.
+2. Implementing AI-driven product suggestions.
+3. Introducing Facebook login capability.
+4. Enhancing the in-app messaging system for improved security.
+5. Adding an image gallery for product listings.
 
-1. Adding categories and sub-categories to make it easier to find products.
-2. Using artificial intelligence (AI) to suggest products to users based on their interests.
-3. Allowing users to log in with their Facebook accounts since many people use Facebook.
-4. Improving the in-app messaging system for better security.
-5. Adding a gallery for users to upload images of the products they're selling.
