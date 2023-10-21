@@ -1,33 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>WDI project-2</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trade Space</title>
+    <!-- Stylesheets -->
     <%- include partials/_stylesheets %>
+    <!-- Scripts -->
     <%- include partials/_scripts %>
   </head>
 
   <body class="site">
+    <!-- Navbar -->
     <%- include partials/_navbar %>
+    <!-- Search -->
     <%- include partials/_search %>
-
     <main class="site-content">
       <div class="section">
         <%- include partials/_messages %>
-        <div >
-          <%- body %>
-        </div>
+        <div><%- body %></div>
       </div>
-
-
-
     </main>
 
     <div class="tile is-ancestor">
-      <%# the footer%>
-        <%- include partials/_footer %>
+      <%# the footer%> <%- include partials/_footer %>
     </div>
-
-
   </body>
 </html>
