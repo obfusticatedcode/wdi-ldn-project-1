@@ -1,3 +1,4 @@
+const request = require("request");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const morgan = require("morgan");
@@ -5,7 +6,6 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const flash = require("express-flash");
 const methodOverride = require("method-override");
-const bodyParser = require("body-parser");
 const { port, env, dbURI, sessionSecret } = require("./config/environment");
 const errorHandler = require("./lib/errorHandler");
 const routes = require("./config/routes");
@@ -55,8 +55,11 @@ mongoose.connection.on("disconnected", () =>
 );
 
 // set up our middleware
-if (env !== "test") app.use(morgan("dev"));
-app.use(bodyParser.urlencoded({ extended: true }));
+if (env !== "test") {
+  app.use(morgan("dev"));
+}
+app.use(express.urlencoded({ extended: true }));
+
 app.use(
   methodOverride((req) => {
     if (req.body && typeof req.body === "object" && "_method" in req.body) {

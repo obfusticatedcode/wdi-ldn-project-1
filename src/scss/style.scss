@@ -1,4 +1,3 @@
-// VARIABLES
 $black: hsl(0, 0%, 4%);
 
 $grey-darker: hsl(0, 0%, 21%);
@@ -56,9 +55,6 @@ body {
   }
 }
 
-
-
-//sticky footer
 .site {
   display: flex;
   min-height: 100vh;
@@ -172,7 +168,6 @@ transition: 		    all 0.3s ease;
 }
 
 .button {
-
     margin-left: 0px;
     margin-right: 10px;
   }
