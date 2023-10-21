@@ -28,7 +28,7 @@
     "@aws-sdk/client-s3": "^3.433.0",
     "@types/select2": "^4.0.60",
     "assert": "^2.1.0",
-    "aws-sdk": "^2.67.0",
+    "aws-sdk": "^2.1478.0",
     "bcrypt": "^5.0.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.19.0",
