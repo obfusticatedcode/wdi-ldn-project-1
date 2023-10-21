@@ -11,6 +11,8 @@ const errorHandler = require("./lib/errorHandler");
 const routes = require("./config/routes");
 const customResponses = require("./lib/customResponses");
 const authentication = require("./lib/authentication");
+const dotenv = require("dotenv");
+dotenv.config();
 
 //create an express app
 const app = express();
