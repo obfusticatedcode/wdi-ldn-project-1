@@ -2,7 +2,7 @@
 /// <reference types="@types/google.maps" />
 
 import * as $ from "jquery";
-import * as google from "googlemaps";
+import "googlemaps";
 
 import "select2";
 import "jquery-validation";
@@ -17,7 +17,7 @@ interface UserLocation {
 }
 
 $(() => {
-  $("form").validate();
+  // $("form").validate();
   $("form").removeAttr("novalidate");
   console.log(`JS is working fine`);
 
@@ -53,8 +53,11 @@ $(() => {
     //find the destination where the item is posted.
 
     const latLng = { lat: parseFloat(lat), lng: parseFloat(lng) };
-
-    map = new google.maps.Map(document.getElementById("map"), {
+    const mapElement = document.getElementById("map");
+    if (!mapElement) {
+      return;
+    }
+    map = new google.maps.Map(mapElement, {
       zoom: 14,
       scrollwheel: false,
       center: latLng,
@@ -88,22 +91,27 @@ $(() => {
         {
           origin: origin,
           destination: destination,
-          travelMode: "DRIVING",
+          travelMode: google.maps.TravelMode.DRIVING,
         },
-        function (response: { routes: any[] }, status: string) {
+        function (
+          response: google.maps.DirectionsResult | null,
+          status: google.maps.DirectionsStatus
+        ) {
           if (status === "OK") {
             directionsDisplay.setDirections(response);
-            const route = response.routes[0];
+            const route = response?.routes[0];
             const summaryPanel = $directionsPanel;
             // For each route, display summary information.
-            for (let i = 0; i < route.legs.length; i++) {
-              const travelDistance = route.legs[i].distance.text;
-              const startAddress = route.legs[i].start_address;
+            if (route) {
+              for (let i = 0; i < route.legs.length; i++) {
+                const travelDistance = route.legs[i].distance?.text;
+                const startAddress = route.legs[i].start_address;
 
-              // Appending it only once
-              summaryPanel.append(
-                `<p>${travelDistance} away at ${startAddress}</p>`
-              );
+                // Appending it only once
+                summaryPanel.append(
+                  `<p>${travelDistance} away at ${startAddress}</p>`
+                );
+              }
             }
           } else {
             console.log("Directions request failed due to " + status);
@@ -116,10 +124,20 @@ $(() => {
     infoWindow = new google.maps.InfoWindow();
 
     google.maps.event.addListener(map, "dragend", function () {
-      newLat = map.getCenter().lat();
-      newLng = map.getCenter().lng();
-      getThreeWords(newLat, newLng);
-      geocodeCountry(newLat, newLng);
+      if (infoWindow) {
+        infoWindow.close();
+      }
+
+      if (map) {
+        newLat = map.getCenter()?.lat();
+        newLng = map.getCenter()?.lng();
+        if (newLat && newLng) {
+          getThreeWords(newLat, newLng);
+          geocodeCountry(newLat, newLng);
+        } else {
+          console.log("Error: newLat and newLng are undefined");
+        }
+      }
     });
 
     // Try HTML5 geolocation.
@@ -133,10 +151,15 @@ $(() => {
           //current userLocation
           userLocation = pos;
 
-          infoWindow.setPosition(pos);
-          infoWindow.setContent("Your current location.");
-          infoWindow.open(map);
-          map.setCenter(pos);
+          if (infoWindow) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent("Your current location.");
+            infoWindow.open(map);
+          }
+
+          if (map) {
+            map.setCenter(pos);
+          }
 
           //update the three words based on lat lng
           getThreeWords(pos.lat, pos.lng);
@@ -144,7 +167,9 @@ $(() => {
           geocodeCountry(pos.lat, pos.lng);
         },
         function () {
-          handleLocationError(true, infoWindow, map.getCenter());
+          if (infoWindow && map) {
+            handleLocationError(true, infoWindow, map.getCenter());
+          }
         }
       );
     } else {

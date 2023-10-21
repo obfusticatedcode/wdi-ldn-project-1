@@ -171,7 +171,7 @@
 
 "@types/google.maps@^3.54.4":
   version "3.54.4"
-  resolved "https://registry.npmjs.org/@types/google.maps/-/google.maps-3.54.4.tgz"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.54.4.tgz#f9e457c06fccbd6b67b96df89eb277280ab9c2fd"
   integrity sha512-cUX4SOo5eN1Fotpcm6cH3//F8/UgXrs6/3OUkLYDkAizGo0AaecjBGCJMmY/n5XcMKogRFrqN/69JNKwCjBskg==
 
 "@types/googlemaps@^3.43.3":
@@ -1838,6 +1838,11 @@ dns-packet@^5.2.2:
   integrity sha512-l4gcSouhcgIKRvyy99RNVOgxXiicE+2jZoNmaNmZ6JXiGajBOJAesk1OBlJuM5k2c+eudGdLxDqXuPCKIj6kpw==
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
+
+dotenv@^16.3.1:
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
+  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
 
 easy-extender@^2.3.4:
   version "2.3.4"

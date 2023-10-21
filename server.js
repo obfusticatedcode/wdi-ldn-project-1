@@ -11,6 +11,8 @@ const errorHandler = require("./lib/errorHandler");
 const routes = require("./config/routes");
 const customResponses = require("./lib/customResponses");
 const authentication = require("./lib/authentication");
+const dotenv = require("dotenv");
+dotenv.config();
 
 //create an express app
 const app = express();
@@ -41,7 +43,16 @@ app.use(expressLayouts);
 app.use(express.static(`${__dirname}/public`));
 
 //connect to the database
-mongoose.connect(dbURI);
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// Handle MongoDB events
+mongoose.connection.on("connected", () => console.log("MongoDB connected!"));
+mongoose.connection.on("error", (err) =>
+  console.error(`MongoDB error: ${err}`)
+);
+mongoose.connection.on("disconnected", () =>
+  console.log("MongoDB disconnected.")
+);
 
 // set up our middleware
 if (env !== "test") app.use(morgan("dev"));

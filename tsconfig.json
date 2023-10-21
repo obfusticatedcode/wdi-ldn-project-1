@@ -5,6 +5,10 @@
     "outDir": "./public/js",
     "strict": true, 
     "types": ["node", "googlemaps"], 
+    "skipLibCheck": true,
+    "typeRoots": [
+      "node_modules/@types",
+  ],
   },
   "include": ["src/**/*.ts", "index.d.ts"]
 }
