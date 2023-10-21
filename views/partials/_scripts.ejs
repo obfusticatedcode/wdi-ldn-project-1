@@ -11,7 +11,8 @@
 ></script>
 
 <%# google maps%>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq2gwncbQrc3O1Jlsu_RtGY3MxXwZA0hE"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.GOOGLE_MAPS_API_KEY %>"></script>
+
 <%# select 2 cdn%>
 <link
   href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"
