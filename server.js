@@ -45,6 +45,15 @@ app.use(express.static(`${__dirname}/public`));
 //connect to the database
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+// Handle MongoDB events
+mongoose.connection.on("connected", () => console.log("MongoDB connected!"));
+mongoose.connection.on("error", (err) =>
+  console.error(`MongoDB error: ${err}`)
+);
+mongoose.connection.on("disconnected", () =>
+  console.log("MongoDB disconnected.")
+);
+
 // set up our middleware
 if (env !== "test") app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
