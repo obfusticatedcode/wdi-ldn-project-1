@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const s3 = require("../lib/s3").default;
+const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const s3 = require("../lib/s3");
 
 const userSchema = new mongoose.Schema({
   firstname: { type: String },
@@ -25,18 +26,21 @@ userSchema.virtual("imageSRC").get(function getImageSRC() {
   return `https://s3-eu-west-2.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${this.image}`;
 });
 
-userSchema.pre("remove", function removeImage(next) {
+userSchema.pre("deleteOne", { document: true }, async function(next) {
   if (!this.image) return next();
-  s3.deleteObject({ Key: this.image }, next);
+  try {
+    await s3.send(new DeleteObjectCommand({ Bucket: process.env.AWS_BUCKET_NAME, Key: this.image }));
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
-//pre remove hook
-userSchema.pre("remove", function removeUserPosts(next) {
-  this.model("Post").remove({ createdBy: this.id }, next);
+userSchema.pre("deleteOne", { document: true }, async function(next) {
+  await this.model("Post").deleteMany({ createdBy: this.id });
+  next();
 });
 
-// lifecycle hook - mongoose middleware
-//github and instagram
 userSchema.pre("validate", function checkPassword(next) {
   if (!this.password && !this.githubId && !this.password && !this.instagramId) {
     this.invalidate("password", "required");
