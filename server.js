@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const morgan = require("morgan");
@@ -11,34 +13,22 @@ const errorHandler = require("./lib/errorHandler");
 const routes = require("./config/routes");
 const customResponses = require("./lib/customResponses");
 const authentication = require("./lib/authentication");
-const dotenv = require("dotenv");
-dotenv.config();
 
 const app = express();
 
 app.locals.googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
-//setup template engine
 app.set("view engine", "ejs");
 app.set("views", `${__dirname}/views`);
 app.use(expressLayouts);
 
-//setup static files folder
 app.use(express.static(`${__dirname}/public`));
 
-//connect to the database
 mongoose.connect(dbURI);
-
-// Handle MongoDB events
 mongoose.connection.on("connected", () => console.log("MongoDB connected!"));
-mongoose.connection.on("error", (err) =>
-  console.error(`MongoDB error: ${err}`)
-);
-mongoose.connection.on("disconnected", () =>
-  console.log("MongoDB disconnected.")
-);
+mongoose.connection.on("error", (err) => console.error(`MongoDB error: ${err}`));
+mongoose.connection.on("disconnected", () => console.log("MongoDB disconnected."));
 
-// set up our middleware
 if (env !== "test") app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
@@ -46,30 +36,16 @@ app.use(
     if (req.body && typeof req.body === "object" && "_method" in req.body) {
       const method = req.body._method;
       delete req.body._method;
-
       return method;
     }
   })
 );
 
-// set up sessions
-app.use(
-  session({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-// set up flash messages AFTER sessions
+app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false }));
 app.use(flash());
-
-// set up custom middleware
 app.use(customResponses);
 app.use(authentication);
-// set up our routes - just before the error handler
 app.use(routes);
-// set up error handler - the LAST piece of middleware
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Express is listening on port ${port}`));

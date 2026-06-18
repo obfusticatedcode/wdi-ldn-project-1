@@ -8,16 +8,26 @@ function github(req, res, next) {
       client_id: config.github.clientId,
       client_secret: config.github.clientSecret,
       code: req.query.code
-    }
+    },
+    headers: { Accept: 'application/json' }
   })
   .then((tokenRes) => {
+    const token = tokenRes.data;
+
+    if (token.error) {
+      return next(new Error(`GitHub OAuth error: ${token.error_description || token.error}`));
+    }
+
     return axios.get(config.github.profileURL, {
-      params: tokenRes.data,
-      headers: { 'User-Agent': 'TradeSpace' }
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+        'User-Agent': 'TradeSpace'
+      }
     });
   })
   .then((profileRes) => {
     const profile = profileRes.data;
+
     return User
       .findOne({ $or: [{ email: profile.email }, { githubId: profile.id }] })
       .then((user) => {

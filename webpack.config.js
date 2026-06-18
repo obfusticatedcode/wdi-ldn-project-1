@@ -1,8 +1,9 @@
 const path = require("path");
-const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.ts", // Path to your entry point. From this file Webpack will begin its work
+  entry: "./src/index.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "public/js"),
@@ -11,9 +12,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/, // Match TypeScript files
-        use: "ts-loader", // Use the ts-loader for TypeScript compilation
+        test: /\.tsx?$/,
+        use: "ts-loader",
         exclude: /node_modules/,
+      },
+      {
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
     ],
   },
@@ -33,8 +38,12 @@ module.exports = {
       fs: false,
     },
   },
-  devServer: {
-    hot: true,
-  },
-  plugins: [new webpack.HotModuleReplacementPlugin()],
+  plugins: [
+    new MiniCssExtractPlugin({ filename: "../css/style.css" }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "src/assets", to: path.resolve(__dirname, "public/assets") },
+      ],
+    }),
+  ],
 };

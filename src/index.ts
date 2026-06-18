@@ -3,6 +3,7 @@
 
 import $ from "jquery";
 import { OpenLocationCode } from "open-location-code";
+import "./scss/style.scss";
 import "select2";
 import "jquery-validation";
 
