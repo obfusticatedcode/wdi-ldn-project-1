@@ -1,114 +1,278 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <a href="/posts" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+    <i class="fa-solid fa-arrow-left text-xs"></i> Back to listings
+  </a>
 
-<%# this empty div is used for off-setting%>
-<div class="tile is-ancestor">
-  <div class="tile is-2 is-parent">
-    <div class="tile is-child">
-      <h1 class="title"><%= post.category %></h1>
-    </div>
-  </div>
+  <%# Top section: image + details side by side %>
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
 
-  <div class="tile is-4 is-parent is-vertical">
-    <h1 class="title">Map</h1>
-    <hr>
-    <div class="tile is-child">
-      <div class="field">
-        <div class="map-container">
-          <span class="map-marker bounce"></span>
-          <div class="" id="map" data-lat="<%= post.lat %>" data-lng="<%= post.lng %>"></div>
-        </div>
-        <input class="input plus-code-location" type="text" name="location" value="" readonly>
-        <hr>
-        <input type="checkbox" id="toggle-switch" class="switch">
-        <label for="toggle-switch">&nbsp;</label>
-      </div>
-    </div>
-  </div>
+    <%# Image carousel %>
+    <div class="lg:col-span-3">
+      <% const images = post.imagesSRC; %>
+      <% if (images.length > 0) { %>
+        <div class="relative rounded-2xl overflow-hidden bg-gray-100 shadow-card aspect-[4/3] group" id="carousel">
+          <%# Slides %>
+          <% images.forEach((src, i) => { %>
+            <div class="carousel-slide absolute inset-0 transition-opacity duration-500 <%= i === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' %>" data-index="<%= i %>">
+              <img src="<%= src %>" alt="<%= post.title %> photo <%= i + 1 %>" class="w-full h-full object-cover" loading="<%= i === 0 ? 'eager' : 'lazy' %>">
+            </div>
+          <% }) %>
 
-  <div class="tile is-4 is-parent is-vertical">
-    <h1 class="title">Details</h1>
-    <hr>
-    <div class="tile is-child">
-      <figure class="image">
-        <img src="<%= post.imageSRC %>" alt="<%= post.title %>">
-      </figure>
+          <% if (images.length > 1) { %>
+            <%# Prev/next arrows %>
+            <button onclick="carouselPrev()" class="carousel-btn absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 bg-white/90 backdrop-blur rounded-full shadow-md flex items-center justify-center text-gray-700 hover:bg-white transition-all opacity-0 group-hover:opacity-100">
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button onclick="carouselNext()" class="carousel-btn absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 bg-white/90 backdrop-blur rounded-full shadow-md flex items-center justify-center text-gray-700 hover:bg-white transition-all opacity-0 group-hover:opacity-100">
+              <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
 
-      <h4 class="main-title"><%= post.title %></h4>
-      <h4><%= post.description %></h4>
+            <%# Dot indicators %>
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+              <% images.forEach((_, i) => { %>
+                <button onclick="carouselGoTo(<%= i %>)" class="carousel-dot w-2 h-2 rounded-full transition-all <%= i === 0 ? 'bg-white scale-110' : 'bg-white/50' %>"></button>
+              <% }) %>
+            </div>
 
-      <p>
-        <h4 class="button" id="item-location"><%= post.location %></h4>
-        <div id="directions-panel"></div>
-      </p>
-
-      <div class="field has-addons">
-        <p class="control">
-          <h4 id="item-currency"><%= post.currency %></h4>
-        </p>
-        <p class="control">
-          <h4 id="item-price"><%= post.price %></h4>
-        </p>
-      </div>
-
-      <div class="field has-addons">
-        <p class="control">
-          <h4 type="text" name="currency" id="currency-label"></h4>
-        </p>
-        <p class="control">
-          <h4 id="converted-price-display"></h4>
-        </p>
-      </div>
-
-      <p class="has-icons-left">
-        <a href="mailto:<%= post.email %>?subject=Hi%21%20<%= post.createdBy.username %>%20I'm%20Interested%20in%20your%20<%= post.title %>%20advert">
-          <h4 class="button email-link">Send the seller, <%= post.createdBy.username %>, an email.</h4>
-          <span class="icon is-small is-left">
-            <i class="fa fa-paper-plane"></i>
-          </span>
-        </a>
-      </p>
-
-      <p>
-        <h4><%= post.createdBy.username %></h4>
-      </p>
-
-      <% if(locals.isAuthenticated && post.belongsTo(currentUser)) { %>
-        <form method="POST" action="/posts/<%= post.id %>">
-          <a href="/posts/<%= post.id %>/edit" class="button is-warning">Edit</a>
-          <input type="hidden" name="_method" value="DELETE">
-          <button class="button is-danger">Delete</button>
-        </form>
-      <% } %>
-    </div>
-
-    <div class="tile is-child">
-      <% if(locals.isAuthenticated) { %>
-        <div class="columns">
-          <div class="column">
-            <section>
-              <h4>Add a comment</h4>
-              <form method="POST" action="/posts/<%= post.id %>/comments">
-                <textarea class="input" name="content" id="content" placeholder="Comment"></textarea>
-                <button class="button is-primary">Add a comment</button>
-              </form>
-            </section>
-          </div>
-        </div>
-      <% } %>
-
-      <section>
-        <h4>Comments</h4>
-        <% post.comments.forEach((comment) => { %>
-          <p><%= comment.content %></p>
-          <small><%= comment.createdBy.username %></small>
-
-          <% if(locals.isAuthenticated && comment.belongsTo(currentUser)) { %>
-            <form method="POST" action="/posts/<%= post.id %>/comments/<%= comment.id %>">
-              <input type="hidden" name="_method" value="DELETE">
-              <button class="button is-danger">Delete</button>
-            </form>
+            <%# Image counter %>
+            <div class="absolute top-3 right-3 z-20 bg-black/50 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+              <span id="carousel-current">1</span> / <%= images.length %>
+            </div>
           <% } %>
-        <% }) %>
-      </section>
+        </div>
+
+        <%# Thumbnail strip (if more than 1 image) %>
+        <% if (images.length > 1) { %>
+          <div class="flex gap-2 mt-3 overflow-x-auto pb-1">
+            <% images.forEach((src, i) => { %>
+              <button onclick="carouselGoTo(<%= i %>)"
+                class="carousel-thumb flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all <%= i === 0 ? 'border-brand-500' : 'border-transparent opacity-60 hover:opacity-100' %>">
+                <img src="<%= src %>" class="w-full h-full object-cover" loading="lazy" alt="">
+              </button>
+            <% }) %>
+          </div>
+        <% } %>
+
+      <% } else { %>
+        <div class="aspect-[4/3] rounded-2xl bg-gray-100 flex items-center justify-center shadow-card">
+          <i class="fa-solid fa-image text-5xl text-gray-300"></i>
+        </div>
+      <% } %>
     </div>
+
+    <%# Details panel %>
+    <div class="lg:col-span-2 flex flex-col gap-5">
+      <div>
+        <span class="inline-block bg-brand-100 text-brand-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+          <%= post.category %>
+        </span>
+        <h1 class="text-2xl font-bold text-gray-900 mb-3"><%= post.title %></h1>
+        <p class="text-3xl font-black text-gray-900">
+          <span class="text-base font-medium text-gray-400 mr-1"><%= post.currency %></span><%= post.price %>
+        </p>
+      </div>
+
+      <%# Live conversion %>
+      <div id="currency-conversion" class="bg-brand-50 border border-brand-100 rounded-xl px-4 py-3 hidden">
+        <p class="text-xs text-brand-600 font-medium mb-0.5">In your local currency (estimated)</p>
+        <p class="text-lg font-bold text-brand-700">
+          <span id="currency-label"></span>&nbsp;<span id="converted-price-display"></span>
+        </p>
+      </div>
+
+      <p class="text-gray-600 leading-relaxed text-sm flex-1"><%= post.description %></p>
+
+      <%# Seller card %>
+      <div class="bg-gray-50 rounded-xl p-4 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden bg-brand-100 flex items-center justify-center flex-shrink-0">
+          <% if (post.createdBy.image) { %>
+            <img src="<%= post.createdBy.imageSRC %>" class="w-full h-full object-cover" alt="">
+          <% } else { %>
+            <i class="fa-solid fa-user text-brand-500 text-sm"></i>
+          <% } %>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400">Listed by</p>
+          <p class="font-semibold text-gray-900 text-sm"><%= post.createdBy.username %></p>
+        </div>
+      </div>
+
+      <a href="mailto:<%= post.email %>?subject=Interested in your <%= post.title %> on Trade Space"
+         class="flex items-center justify-center gap-2 w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors text-sm">
+        <i class="fa-solid fa-envelope"></i> Contact seller
+      </a>
+
+      <% if (locals.isAuthenticated && post.belongsTo(currentUser)) { %>
+        <div class="flex gap-3">
+          <a href="/posts/<%= post.id %>/edit"
+             class="flex-1 text-center py-2.5 px-4 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+            <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+          </a>
+          <form method="POST" action="/posts/<%= post.id %>" class="flex-1" onsubmit="return confirm('Delete this listing?')">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-red-50 border border-red-100 text-sm font-semibold text-red-600 hover:bg-red-100 transition-colors">
+              <i class="fa-solid fa-trash mr-1"></i> Delete
+            </button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <%# Full-width map — hero section %>
+  <div class="bg-white rounded-3xl shadow-card overflow-hidden mb-8">
+
+    <%# Map header %>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 border-b border-gray-100">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center flex-shrink-0">
+          <i class="fa-solid fa-map-location-dot text-white text-sm"></i>
+        </div>
+        <div>
+          <h2 class="font-bold text-gray-900">Item location</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Drag to explore. Click directions for a route from your location.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <span class="inline-flex items-center gap-2 bg-brand-600 text-white font-mono font-bold text-sm px-4 py-2 rounded-xl shadow-sm">
+          <i class="fa-solid fa-location-dot text-brand-200 text-xs"></i>
+          <%= post.location %>
+        </span>
+      </div>
+    </div>
+
+    <%# Map container %>
+    <div class="relative" id="map-wrapper">
+      <div id="map"
+           data-lat="<%= post.lat %>"
+           data-lng="<%= post.lng %>"
+           data-price="<%= post.price %>"
+           data-currency="<%= post.currency %>"
+           class="w-full"
+           style="height: clamp(340px, 55vw, 580px);">
+      </div>
+
+      <%# Overlay controls — bottom left %>
+      <div class="absolute bottom-4 left-4 flex flex-col gap-2">
+        <button id="item-location"
+          class="flex items-center gap-2 bg-white/95 backdrop-blur-sm shadow-lg border border-gray-100 text-gray-800 font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all duration-200 group">
+          <i class="fa-solid fa-route text-brand-500 group-hover:text-white transition-colors"></i>
+          <span>Directions from me</span>
+        </button>
+      </div>
+
+      <input type="checkbox" id="toggle-switch" class="switch hidden">
+    </div>
+
+    <%# Directions result %>
+    <div id="directions-panel" class="empty:hidden px-6 py-4 border-t border-brand-100 text-sm text-brand-800 bg-brand-50 space-y-1 font-medium"></div>
+  </div>
+
+  <%# Comments section %>
+  <div class="bg-white rounded-2xl shadow-card p-6">
+    <h3 class="font-bold text-gray-900 mb-5 flex items-center gap-2">
+      <i class="fa-regular fa-comment text-brand-500"></i>
+      Comments
+      <span class="ml-1 bg-gray-100 text-gray-500 text-xs font-semibold px-2 py-0.5 rounded-full"><%= post.comments.length %></span>
+    </h3>
+
+    <% if (post.comments.length > 0) { %>
+      <div class="space-y-3 mb-5">
+        <% post.comments.forEach((comment) => { %>
+          <div class="bg-gray-50 rounded-xl p-4">
+            <div class="flex items-start justify-between gap-2 mb-1.5">
+              <span class="text-xs font-bold text-gray-700"><%= comment.createdBy.username %></span>
+              <% if (locals.isAuthenticated && comment.belongsTo(currentUser)) { %>
+                <form method="POST" action="/posts/<%= post.id %>/comments/<%= comment.id %>">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="submit" class="text-xs text-gray-300 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </form>
+              <% } %>
+            </div>
+            <p class="text-sm text-gray-600 leading-relaxed"><%= comment.content %></p>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="text-sm text-gray-400 mb-5">No comments yet. Be the first.</p>
+    <% } %>
+
+    <% if (locals.isAuthenticated) { %>
+      <form method="POST" action="/posts/<%= post.id %>/comments" class="flex gap-2">
+        <input
+          type="text" name="content" required
+          placeholder="Add a comment..."
+          class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+        >
+        <button type="submit" class="px-5 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors flex-shrink-0">
+          Post
+        </button>
+      </form>
+    <% } else { %>
+      <p class="text-sm text-gray-400">
+        <a href="/login" class="text-brand-600 hover:underline font-semibold">Log in</a> to leave a comment.
+      </p>
+    <% } %>
   </div>
 </div>
+
+<script>
+  // Carousel logic
+  let carouselIndex = 0;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots   = document.querySelectorAll('.carousel-dot');
+  const thumbs = document.querySelectorAll('.carousel-thumb');
+  const counter = document.getElementById('carousel-current');
+
+  function carouselGoTo(n) {
+    slides[carouselIndex]?.classList.replace('opacity-100','opacity-0');
+    slides[carouselIndex]?.classList.replace('z-10','z-0');
+    dots[carouselIndex]?.classList.replace('bg-white','bg-white/50');
+    dots[carouselIndex]?.classList.remove('scale-110');
+    thumbs[carouselIndex]?.classList.replace('border-brand-500','border-transparent');
+    thumbs[carouselIndex]?.classList.add('opacity-60');
+
+    carouselIndex = (n + slides.length) % slides.length;
+
+    slides[carouselIndex]?.classList.replace('opacity-0','opacity-100');
+    slides[carouselIndex]?.classList.replace('z-0','z-10');
+    dots[carouselIndex]?.classList.replace('bg-white/50','bg-white');
+    dots[carouselIndex]?.classList.add('scale-110');
+    thumbs[carouselIndex]?.classList.replace('border-transparent','border-brand-500');
+    thumbs[carouselIndex]?.classList.remove('opacity-60');
+    if (counter) counter.textContent = carouselIndex + 1;
+  }
+  function carouselNext() { carouselGoTo(carouselIndex + 1); }
+  function carouselPrev() { carouselGoTo(carouselIndex - 1); }
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') carouselNext();
+    if (e.key === 'ArrowLeft')  carouselPrev();
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const conversion = document.getElementById('currency-conversion');
+    const display = document.getElementById('converted-price-display');
+    if (display) {
+      new MutationObserver(function() {
+        if (display.textContent.trim()) conversion.classList.remove('hidden');
+      }).observe(display, { childList: true, characterData: true, subtree: true });
+    }
+
+    // Style the directions button on hover properly
+    const btn = document.getElementById('item-location');
+    if (btn) {
+      btn.addEventListener('mouseenter', function() {
+        btn.querySelector('i').classList.remove('text-brand-600');
+        btn.querySelector('i').classList.add('text-white');
+      });
+      btn.addEventListener('mouseleave', function() {
+        btn.querySelector('i').classList.add('text-brand-600');
+        btn.querySelector('i').classList.remove('text-white');
+      });
+    }
+  });
+</script>

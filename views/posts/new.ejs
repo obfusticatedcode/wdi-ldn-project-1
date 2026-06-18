@@ -1,108 +1,139 @@
-
-<div class="tile is-ancestor">
-
-  <%# offset div %>
-  <div class="tile is-2 is-parent">
-    <div class="tile is-child"></div>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900">Post a listing</h1>
+    <p class="text-gray-500 mt-1">Fill in the details below. Your item will be live instantly.</p>
   </div>
 
-  <div class="tile is-4 is-parent is-vertical">
-    <h1 class="title">Map</h1>
-    <hr>
+  <form method="POST" action="/posts" enctype="multipart/form-data">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
 
-    <div class="tile is-child">
-      <div class="map-container">
-        <span class="map-marker"></span>
-        <div class="" id="map" data-lat="51.501476" data-lng="-0.140634"></div>
-      </div>
-      <label for="plus-code-location">Your Plus Code location (drag the map to update)</label>
-      <input class="input plus-code-location" type="text" id="plus-code-location" readonly>
-      <hr>
-      <input type="checkbox" id="toggle-switch" class="switch">
-      <label for="toggle-switch">&nbsp;</label>
-    </div>
-  </div>
+      <%# Left: form fields %>
+      <div class="lg:col-span-3 space-y-6">
 
-  <div class="tile is-4 is-parent is-vertical">
-    <h1 class="title">Add a post</h1>
-    <hr>
-    <form method="POST" action="/posts" enctype="multipart/form-data">
-      <div>
+        <div class="bg-white rounded-2xl shadow-card p-6 space-y-4">
+          <h2 class="font-semibold text-gray-900 flex items-center gap-2">
+            <span class="w-6 h-6 bg-brand-600 text-white rounded-full text-xs flex items-center justify-center font-bold">1</span>
+            Item details
+          </h2>
 
-        <div class="field">
-          <p class="control">
-            <label for="category">Category</label>
-            <select class="input" name="category" id="category">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+            <select name="category" id="category" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white">
             </select>
-          </p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
+            <input type="text" name="title" required placeholder="e.g. iPhone 12, Leather sofa, Fresh tomatoes"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+            <textarea name="description" required rows="4" placeholder="Describe the condition, size, age, or anything else buyers should know"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none"></textarea>
+          </div>
         </div>
 
-        <div class="field">
-          <label for="title">Title</label>
-        </div>
-        <div class="field">
-          <p class="control">
-            <input class="input" type="text" name="title" id="post-title" required>
-          </p>
+        <div class="bg-white rounded-2xl shadow-card p-6 space-y-4">
+          <h2 class="font-semibold text-gray-900 flex items-center gap-2">
+            <span class="w-6 h-6 bg-brand-600 text-white rounded-full text-xs flex items-center justify-center font-bold">2</span>
+            Pricing
+          </h2>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Price</label>
+              <input type="number" name="price" required min="0" step="0.01" placeholder="0.00"
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">Currency</label>
+              <input type="text" name="currency" id="currency" placeholder="GBP" maxlength="3"
+                class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent uppercase">
+            </div>
+          </div>
         </div>
 
-        <div class="field">
-          <label for="price">Price</label>
-        </div>
-        <div class="field">
-          <p class="control">
-            <input class="input" type="number" name="price" id="post-price" required>
-          </p>
-        </div>
-
-        <div class="field">
-          <label for="currency">Currency</label>
-        </div>
-        <div class="field">
-          <p class="control">
-            <input class="input" type="text" name="currency" id="currency" required>
-          </p>
+        <div class="bg-white rounded-2xl shadow-card p-6 space-y-4">
+          <h2 class="font-semibold text-gray-900 flex items-center gap-2">
+            <span class="w-6 h-6 bg-brand-600 text-white rounded-full text-xs flex items-center justify-center font-bold">3</span>
+            Photo
+          </h2>
+          <label class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50 transition-colors">
+            <i class="fa-solid fa-images text-3xl text-gray-300 mb-2"></i>
+            <span class="text-sm text-gray-500 font-medium">Click to upload photos</span>
+            <span class="text-xs text-gray-400 mt-1">Up to 5 images. PNG, JPG or GIF.</span>
+            <input type="file" name="images" id="images" accept="image/*" multiple class="hidden" required>
+          </label>
+          <div id="image-preview" class="flex gap-2 flex-wrap mt-2"></div>
         </div>
 
-        <div class="field">
-          <label for="description">Description</label>
-        </div>
-        <div class="field">
-          <p class="control">
-            <textarea class="input" id="post-description" name="description" placeholder="Add as much information as possible" required></textarea>
-          </p>
-        </div>
-
-        <div class="field">
-          <label class="label" for="image">Add Picture</label>
-          <label class="button is-primary" for="image">Choose file</label>
-        </div>
-        <div class="field">
-          <input type="file" name="image" id="image" required hidden>
+        <div class="bg-white rounded-2xl shadow-card p-6 space-y-4">
+          <h2 class="font-semibold text-gray-900 flex items-center gap-2">
+            <span class="w-6 h-6 bg-brand-600 text-white rounded-full text-xs flex items-center justify-center font-bold">4</span>
+            Contact
+          </h2>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Your email address</label>
+            <input type="email" name="email" required placeholder="buyers will contact you here"
+              class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+          </div>
         </div>
 
         <input type="hidden" name="lat" id="lat">
         <input type="hidden" name="lng" id="lng">
         <input type="hidden" name="location" id="location-hidden">
 
-        <div class="field">
-          <label for="contact-email">Contact email</label>
-          <p class="control has-icons-left">
-            <input class="input" type="email" name="email" placeholder="Your contact email" required>
-            <span class="icon is-small is-left">
-              <i class="fa fa-envelope"></i>
-            </span>
-          </p>
-        </div>
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 px-6 rounded-xl transition-colors text-base">
+          <i class="fa-solid fa-plus mr-2"></i>Post listing
+        </button>
+      </div>
 
-        <hr>
+      <%# Right: map %>
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-2xl shadow-card p-6 lg:sticky lg:top-20">
+          <h2 class="font-semibold text-gray-900 mb-1 flex items-center gap-2">
+            <span class="w-6 h-6 bg-brand-600 text-white rounded-full text-xs flex items-center justify-center font-bold">5</span>
+            Your location
+          </h2>
+          <p class="text-xs text-gray-500 mb-4">Drag the map to set your precise location. Your Plus Code is generated automatically.</p>
 
-        <div class="field">
-          <p class="control">
-            <button class="button is-primary">Post</button>
-          </p>
+          <div class="relative rounded-xl overflow-hidden mb-3">
+            <div id="map" data-lat="51.501476" data-lng="-0.140634" class="w-full rounded-xl" style="height: clamp(240px, 40vw, 360px);"></div>
+            <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div class="w-4 h-4 bg-brand-600 rounded-full border-2 border-white shadow-lg ring-4 ring-brand-600/20"></div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1.5">
+              <i class="fa-solid fa-location-dot text-brand-500 mr-1"></i>Plus Code (auto-filled from map)
+            </label>
+            <input type="text" class="plus-code-location w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm font-mono text-gray-600" readonly placeholder="Drag map to generate...">
+          </div>
+
+          <div class="mt-3 flex items-center gap-2 text-xs text-gray-400">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Allow location access for best accuracy.</span>
+          </div>
         </div>
       </div>
-    </form>
-  </div>
+
+    </div>
+  </form>
 </div>
+
+<script>
+  document.getElementById('images')?.addEventListener('change', function() {
+    const preview = document.getElementById('image-preview');
+    preview.innerHTML = '';
+    [...this.files].slice(0, 5).forEach(file => {
+      const url = URL.createObjectURL(file);
+      const div = document.createElement('div');
+      div.className = 'w-16 h-16 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0';
+      div.innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
+      preview.appendChild(div);
+    });
+  });
+</script>

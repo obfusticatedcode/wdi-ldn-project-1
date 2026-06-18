@@ -5,136 +5,186 @@ const Post = require("./models/post");
 
 const dbURI = process.env.MONGODB_URI || "mongodb://localhost/trade-space";
 
+// Lorem Picsum — free, no API key, consistent images per seed string
+const img = (seed, w = 800, h = 600) =>
+  `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}.jpg`;
+
+// Realistic Plus Code locations around the world
+const locations = [
+  { location: "9C3XGV9G+FW", lat: 51.5014, lng: -0.1419, city: "London, UK" },
+  { location: "9C3XGV9G+3Q", lat: 51.4993, lng: -0.1366, city: "London, UK" },
+  { location: "6GCRPR7J+29", lat: 5.6037, lng: -0.1870, city: "Accra, Ghana" },
+  { location: "6GCRPR7J+87", lat: 5.6137, lng: -0.1870, city: "Accra, Ghana" },
+  { location: "6GCSMHXX+V4", lat: 5.7737, lng: -0.2270, city: "Kumasi, Ghana" },
+  { location: "6FX2P36W+W3", lat: 6.3702, lng: 2.3912, city: "Cotonou, Benin" },
+  { location: "6G5X2WPM+87", lat: 9.0574, lng: 7.4898, city: "Abuja, Nigeria" },
+  { location: "6G5X2WPM+22", lat: 9.0474, lng: 7.4798, city: "Abuja, Nigeria" },
+  { location: "6GQH2GH3+WQ", lat: 6.5244, lng: 3.3792, city: "Lagos, Nigeria" },
+  { location: "6GQH2GH3+33", lat: 6.5144, lng: 3.3892, city: "Lagos, Nigeria" },
+  { location: "4CPPQHFF+MG", lat: -1.2920, lng: 36.8219, city: "Nairobi, Kenya" },
+  { location: "4CPPQHFF+44", lat: -1.3020, lng: 36.8119, city: "Nairobi, Kenya" },
+  { location: "5FVJF594+XQ", lat: -26.2041, lng: 28.0473, city: "Johannesburg, SA" },
+  { location: "5FVJF594+22", lat: -26.1941, lng: 28.0573, city: "Johannesburg, SA" },
+  { location: "7P7X82F3+HJ", lat: 14.6928, lng: -17.4467, city: "Dakar, Senegal" },
+  { location: "7P7X82F3+99", lat: 14.7028, lng: -17.4367, city: "Dakar, Senegal" },
+  { location: "8FX72MQP+88", lat: 48.8566, lng: 2.3522, city: "Paris, France" },
+  { location: "6EQJ2G4H+G3", lat: -23.5505, lng: -46.6333, city: "Sao Paulo, Brazil" },
+  { location: "7MWW2H3X+F8", lat: 28.6139, lng: 77.2090, city: "New Delhi, India" },
+  { location: "7P28QPQ7+3G", lat: 3.8480, lng: 11.5021, city: "Yaounde, Cameroon" },
+];
+
+const loc = (i) => locations[i % locations.length];
+
 async function seed() {
   await mongoose.connect(dbURI);
-  console.log("MongoDB connected");
+  console.log("Connected to MongoDB");
 
   await Post.deleteMany({});
   await User.deleteMany({});
-  console.log("Cleared existing data");
+  console.log("Cleared old data");
 
-  const [alice, bob, chisomo] = await User.create([
-    {
-      username: "alice",
-      email: "alice@test.com",
-      password: "password123",
-      passwordConfirmation: "password123",
-      image: "/assets/images/iphone-being-held.jpg"
-    },
-    {
-      username: "bob",
-      email: "bob@test.com",
-      password: "password123",
-      passwordConfirmation: "password123",
-      image: "/assets/images/shopping-cart.jpg"
-    },
-    {
-      username: "chisomo",
-      email: "chisomo@test.com",
-      password: "password123",
-      passwordConfirmation: "password123",
-      image: "/assets/images/cheese.jpg"
-    }
+  const [alice, bob, chisomo, amara, kofi, fatima] = await User.create([
+    { username: "alice_trades",   email: "alice@test.com",   password: "password123", passwordConfirmation: "password123" },
+    { username: "bob_sells",      email: "bob@test.com",     password: "password123", passwordConfirmation: "password123" },
+    { username: "chisomo",        email: "chisomo@test.com", password: "password123", passwordConfirmation: "password123" },
+    { username: "amara_market",   email: "amara@test.com",   password: "password123", passwordConfirmation: "password123" },
+    { username: "kofi_accra",     email: "kofi@test.com",    password: "password123", passwordConfirmation: "password123" },
+    { username: "fatima_dakar",   email: "fatima@test.com",  password: "password123", passwordConfirmation: "password123" },
   ]);
+  const users = [alice, bob, chisomo, amara, kofi, fatima];
+  console.log("Created 6 users");
 
-  console.log("Created users: alice, bob, chisomo (password: password123)");
+  const posts = [
+    // Electronics
+    { title: "iPhone 15 Pro Max, 256GB", category: "Electronics", price: 850, currency: "GBP", description: "6 months old, natural titanium. No scratches. Face ID works perfectly. Comes with original box, two cases, and MagSafe charger.", images: [img("iphone smartphone"), img("smartphone apple")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "Samsung Galaxy S24 Ultra", category: "Electronics", price: 700, currency: "GBP", description: "Titanium black, 256GB, fully unlocked. Used for 4 months. S Pen included. Battery health 96%. Minor scuff on the back, barely visible.", images: [img("samsung galaxy phone"), img("android smartphone")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "MacBook Air M3, 15 inch", category: "Electronics", price: 950, currency: "GBP", description: "8GB RAM, 512GB SSD. Starlight colour. Bought new in January 2024. Used lightly for work. No scratches, no dents. Charger and box included.", images: [img("macbook laptop apple"), img("laptop desk")], ...loc(2), email: "alice@test.com", createdBy: alice._id },
+    { title: "AirPods Pro 2nd Gen", category: "Electronics", price: 160, currency: "GBP", description: "Active noise cancellation. Adaptive transparency. USB-C case. 8 months old, all tips included. Sounds as good as new. Box included.", images: [img("airpods earbuds apple"), img("wireless earphones")], ...loc(3), email: "bob@test.com", createdBy: bob._id },
+    { title: "Sony WH-1000XM5 Headphones", category: "Electronics", price: 200, currency: "GBP", description: "Best noise-cancelling headphones on the market. 10 months old, perfect condition. Hard case, cables, and adapters all included.", images: [img("sony headphones"), img("wireless headphones")], ...loc(4), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "iPad Pro M4, 11 inch", category: "Electronics", price: 720, currency: "GBP", description: "256GB, Space Black, WiFi. Used for 5 months. OLED display is pristine. Includes Apple Pencil Pro and folio case.", images: [img("ipad tablet apple"), img("tablet drawing")], ...loc(5), email: "alice@test.com", createdBy: alice._id },
+    { title: "Dyson V15 Detect Cordless Vacuum", category: "Electronics", price: 230, currency: "GBP", description: "Laser dust detection and HEPA filtration. 2 years old, serviced recently. All attachments present. Moving abroad, collection only.", images: [img("dyson vacuum cleaner"), img("vacuum cleaning")], ...loc(6), email: "bob@test.com", createdBy: bob._id },
+    { title: "Nintendo Switch OLED, White", category: "Electronics", price: 240, currency: "GBP", description: "Console, dock, Joy-Cons, and grip. OLED screen has no scratches. Comes with 4 games: Zelda, Mario Kart, Splatoon 3, and Pokemon.", images: [img("nintendo switch gaming"), img("gaming console")], ...loc(7), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "GoPro Hero 12 Black", category: "Electronics", price: 280, currency: "GBP", description: "Used on 3 trips. HyperSmooth stabilisation. Waterproof to 10m. Comes with 2 batteries, 128GB SD card, chest mount, and head strap.", images: [img("gopro action camera"), img("action camera outdoor")], ...loc(8), email: "alice@test.com", createdBy: alice._id },
+    { title: "Kindle Paperwhite 2023", category: "Electronics", price: 90, currency: "GBP", description: "16GB, adjustable warm light. Used for a year. No scratches on screen. Includes cover case. Great for reading in any light.", images: [img("kindle ebook reader"), img("reading ebook")], ...loc(9), email: "bob@test.com", createdBy: bob._id },
 
-  await Post.create([
-    {
-      title: "iPhone 7 — Good condition",
-      category: "Electronics",
-      price: 120,
-      currency: "USD",
-      description: "Used iPhone 7, 128GB, space grey. Minor scratches on the back, screen is perfect. Comes with charger.",
-      location: "8FVC9G8F+6W",
-      lat: 51.5014,
-      lng: -0.1419,
-      email: "alice@test.com",
-      image: "/assets/images/iPhone7.jpg",
-      createdBy: alice._id
-    },
-    {
-      title: "MacBook Pro 2015",
-      category: "Electronics",
-      price: 450,
-      currency: "USD",
-      description: "MacBook Pro 13-inch 2015. 8GB RAM, 256GB SSD. Works perfectly, battery holds 4 hours.",
-      location: "8FVC9G8F+3Q",
-      lat: 51.4993,
-      lng: -0.1366,
-      email: "alice@test.com",
-      image: "/assets/images/MacBook-Pro-2015-Design_thumb800.jpg",
-      createdBy: alice._id
-    },
-    {
-      title: "Leather Armchair",
-      category: "Furniture",
-      price: 85,
-      currency: "GBP",
-      description: "Brown leather scroll wing armchair. Very comfortable, slight wear on the armrests. Collection only.",
-      location: "8FVC9G8F+9V",
-      lat: 51.5074,
-      lng: -0.1278,
-      email: "bob@test.com",
-      image: "/assets/images/scroll-wing-chair-leather.jpg",
-      createdBy: bob._id
-    },
-    {
-      title: "Galaxy S8 — Unlocked",
-      category: "Electronics",
-      price: 95,
-      currency: "GBP",
-      description: "Samsung Galaxy S8, midnight black, fully unlocked. Screen has a small crack in the bottom corner but works perfectly.",
-      location: "8FVC9G8F+2H",
-      lat: 51.5033,
-      lng: -0.1195,
-      email: "bob@test.com",
-      image: "/assets/images/galaxy-s8.jpg",
-      createdBy: bob._id
-    },
-    {
-      title: "Fresh goat cheese — weekly market",
-      category: "Food",
-      price: 8,
-      currency: "GBP",
-      description: "Homemade goat cheese, available every Saturday morning. Soft and hard varieties. Order in advance for larger quantities.",
-      location: "8FVC9G8F+5M",
-      lat: 51.5045,
-      lng: -0.1256,
-      email: "chisomo@test.com",
-      image: "/assets/images/cheese.jpg",
-      createdBy: chisomo._id,
-      comments: [
-        { content: "Is this still available?", createdBy: alice._id },
-        { content: "Yes! I'll be at the market this Saturday.", createdBy: chisomo._id }
-      ]
-    },
-    {
-      title: "Phone cases bundle — various models",
-      category: "Electronics",
-      price: 15,
-      currency: "GBP",
-      description: "Bundle of 10 mixed phone cases, various brands and sizes. Great for resale. Some new, some used.",
-      location: "8FVC9G8F+4J",
-      lat: 51.5062,
-      lng: -0.1387,
-      email: "chisomo@test.com",
-      image: "/assets/images/phoneCovers.jpg",
-      createdBy: chisomo._id
-    }
-  ]);
+    // Phones (Africa-focused)
+    { title: "Tecno Phantom X2 Pro", category: "Electronics", price: 1200, currency: "GHS", description: "Top-end Tecno flagship. 50MP triple camera, 4500mAh battery. 3 months old, excellent condition. All accessories included.", images: [img("tecno smartphone africa"), img("android phone camera")], ...loc(2), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "Infinix Note 40 Pro", category: "Electronics", price: 1800, currency: "NGN", description: "AMOLED display, 108MP camera, 45W fast charging. Used for 2 months. Includes original charger and earphones.", images: [img("infinix phone"), img("android phone slim")], ...loc(9), email: "amara@test.com", createdBy: amara._id },
+    { title: "Samsung Galaxy A55", category: "Electronics", price: 850, currency: "GHS", description: "6 months old, 256GB, excellent condition. Great camera for the price. Glass protector applied from day one. Includes charger and box.", images: [img("samsung phone mid-range"), img("smartphone camera")], ...loc(3), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "iPhone 13, 128GB, Unlocked", category: "Electronics", price: 280000, currency: "NGN", description: "Midnight blue, fully unlocked, dual SIM. Battery replaced 2 months ago at Apple service centre. In excellent condition.", images: [img("iphone 13 smartphone"), img("apple smartphone")], ...loc(8), email: "amara@test.com", createdBy: amara._id },
+    { title: "Redmi Note 13 Pro Plus", category: "Electronics", price: 95000, currency: "XOF", description: "200MP main camera, 5000mAh battery. 1 month old, pristine. All original accessories. Works on all networks.", images: [img("redmi xiaomi phone"), img("smartphone budget")], ...loc(14), email: "fatima@test.com", createdBy: fatima._id },
 
-  console.log("Created 6 posts");
-  console.log("\nTest accounts:");
-  console.log("  alice@test.com   / password123");
-  console.log("  bob@test.com     / password123");
-  console.log("  chisomo@test.com / password123");
+    // Furniture
+    { title: "Chesterfield Leather Sofa, 3-seater", category: "Furniture", price: 600, currency: "GBP", description: "Deep brown genuine leather. Very solid frame. Some light wear on armrests. Professionally cleaned 3 months ago. Collection only, SW London.", images: [img("chesterfield leather sofa"), img("living room sofa brown")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "IKEA BILLY Bookcase, White", category: "Furniture", price: 45, currency: "GBP", description: "Standard size with 5 shelves. Minor marks on the back panel. All screws included. Collection only, comes flat-packed as already disassembled.", images: [img("ikea bookcase white"), img("bookshelf living room")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "Mid-Century Teak Dining Table", category: "Furniture", price: 320, currency: "GBP", description: "Solid teak, extends from 150cm to 200cm. Seats 6-8. 1960s design, restored recently. Small repair on one leg, invisible when in use.", images: [img("teak dining table wood"), img("mid century modern dining")], ...loc(4), email: "chisomo@true.com", createdBy: chisomo._id },
+    { title: "Herman Miller Aeron Chair, Size B", category: "Furniture", price: 450, currency: "GBP", description: "Fully adjustable. PostureFit SL lumbar support. 3 years old, no tears or sagging. Remastered edition in graphite. Collection only.", images: [img("herman miller office chair"), img("ergonomic chair office")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "King Size Bed Frame, Oak", category: "Furniture", price: 180, currency: "GBP", description: "Solid oak. Includes slats. No mattress. 4 years old, excellent condition. Light scratches on headboard. Disassembled, fits in a van.", images: [img("oak bed frame king"), img("bedroom furniture wood")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "Standing Desk, Motorised", category: "Furniture", price: 280, currency: "GBP", description: "Flexispot E7. 140cm x 70cm walnut top. Electric height adjustment. Holds up to 100kg. 18 months old, perfect working order.", images: [img("standing desk motorised office"), img("home office desk")], ...loc(0), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Rattan Garden Set, 4-piece", category: "Furniture", price: 140, currency: "GBP", description: "2-seater sofa, 2 chairs, and a table. All-weather rattan. Cushions included and in good condition. Light fading on cushion covers.", images: [img("rattan garden furniture outdoor"), img("garden patio furniture")], ...loc(4), email: "alice@test.com", createdBy: alice._id },
+
+    // Clothes
+    { title: "Nike Air Jordan 1 Retro High, UK 10", category: "Clothes", price: 180, currency: "GBP", description: "Chicago colourway. Worn twice. Soles perfectly clean. Original box and lace bags included. Purchased from Nike directly.", images: [img("jordan 1 sneakers chicago"), img("nike air jordan shoes")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Comme des Garcons PLAY Hoodie, L", category: "Clothes", price: 120, currency: "GBP", description: "Black, large heart logo. Size Large. Worn 5-6 times and washed on cold. No pilling, no fading. Retail was 220. Tags no longer present.", images: [img("comme des garcons hoodie"), img("designer hoodie streetwear")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+    { title: "Arc'teryx Beta LT Jacket, Medium", category: "Clothes", price: 350, currency: "GBP", description: "Black, men's medium. GORE-TEX Pro. Fully waterproof. 2 years old, DWR still working perfectly. A few small marks on the hem.", images: [img("arcteryx jacket waterproof"), img("outdoor hiking jacket")], ...loc(2), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Adidas Samba OG, UK 9", category: "Clothes", price: 70, currency: "GBP", description: "Core Black/Cloud White. Worn 10 times. Cleaned after each use. Minor crease in toe box. Box included.", images: [img("adidas samba sneakers"), img("adidas trainers white")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Kente Cloth Shirt, XL", category: "Clothes", price: 180, currency: "GHS", description: "Handwoven kente. Rich gold and blue pattern. Traditional Ghanaian craftsmanship. Worn once for a ceremony. Dry-clean only.", images: [img("kente cloth ghana fabric"), img("african print shirt fashion")], ...loc(2), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "Ankara Print Dress, Size 12", category: "Clothes", price: 8500, currency: "NGN", description: "Vibrant red and gold Ankara print. A-line silhouette, knee length. Worn once. Made by a local tailor in Lagos. Fits true to size.", images: [img("ankara dress african print"), img("african fashion dress women")], ...loc(9), email: "amara@test.com", createdBy: amara._id },
+    { title: "Levi's 501 Original Jeans, W32 L32", category: "Clothes", price: 55, currency: "GBP", description: "Medium stonewash. Classic straight fit. Worn around 15 times. No damage. A wardrobe staple in great condition.", images: [img("levis 501 jeans denim"), img("denim jeans blue")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+    { title: "Boubou Grand Bazin, XXL", category: "Clothes", price: 25000, currency: "XOF", description: "Elegant embroidered grand bazin boubou in royal blue. Perfect for ceremonies and celebrations. Made by a local artisan in Dakar.", images: [img("boubou bazin senegal fashion"), img("west african formal wear")], ...loc(15), email: "fatima@test.com", createdBy: fatima._id },
+
+    // Food
+    { title: "Fresh Suya Spice Pack, 500g", category: "Food", price: 2500, currency: "NGN", description: "Ground groundnut, ginger, paprika, and secret spices. Ready to marinate and grill. Made fresh each weekend. Collection from Abuja.", images: [img("suya spice beef"), img("african spices seasoning")], ...loc(6), email: "amara@test.com", createdBy: amara._id },
+    { title: "Homemade Shito (Chili Sauce), 250ml", category: "Food", price: 35, currency: "GHS", description: "Dark Ghanaian pepper sauce with fish, prawns, and onions. Medium heat. Made in small batches. Keeps for 6 months refrigerated.", images: [img("shito ghana pepper sauce"), img("chili sauce bottle spicy")], ...loc(2), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "Organic Raw Honey, 1kg", category: "Food", price: 25, currency: "GBP", description: "Cold-pressed wildflower honey from local Surrey hives. No additives. Slightly crystallised which is normal and indicates purity.", images: [img("raw honey jar organic"), img("honey bees farm")], ...loc(4), email: "alice@test.com", createdBy: alice._id },
+    { title: "Jollof Rice Spice Kit", category: "Food", price: 1800, currency: "NGN", description: "Everything you need for the perfect Nigerian jollof: tomato paste, bay leaves, curry powder, thyme, and my secret blended pepper mix.", images: [img("jollof rice nigeria food"), img("west african food rice")], ...loc(8), email: "amara@test.com", createdBy: amara._id },
+    { title: "Baobab Powder, 300g", category: "Food", price: 12000, currency: "XOF", description: "Wild-harvested baobab fruit powder. Rich in vitamin C and fibre. Great in smoothies or yoghurt. No additives or preservatives.", images: [img("baobab fruit powder africa"), img("superfood powder health")], ...loc(14), email: "fatima@test.com", createdBy: fatima._id },
+    { title: "Sourdough Bread Subscription (weekly)", category: "Food", price: 8, currency: "GBP", description: "Two sourdough loaves baked every Friday. 72-hour cold ferment. Artisan style. Collection only, East London. Message to subscribe.", images: [img("sourdough bread artisan loaf"), img("bread baking fresh")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "Moringa Leaf Tea, 100g", category: "Food", price: 15000, currency: "XOF", description: "Freshly dried moringa leaves, hand-picked and sun-dried. Natural energy booster and immunity support. 50 servings per pack.", images: [img("moringa tea leaves green"), img("herbal tea healthy")], ...loc(15), email: "fatima@test.com", createdBy: fatima._id },
+
+    // Cars
+    { title: "Toyota Corolla 2019, 1.2T Manual", category: "Cars", price: 12500, currency: "GBP", description: "46,000 miles. Full service history. New tyres fitted in March. Bluetooth, reverse camera. One previous owner. MOT until Oct 2025.", images: [img("toyota corolla 2019 silver"), img("car sedan road")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "Suzuki Alto 2021, 1.0L Petrol", category: "Cars", price: 7200, currency: "GBP", description: "22,000 miles. Perfect first car. Reliable and cheap to insure. Full dealer service history. No damage, clean inside and out.", images: [img("suzuki alto small car"), img("small hatchback city car")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "Toyota Corolla 2015, Nairobi reg", category: "Cars", price: 1850000, currency: "KES", description: "Kenya plate, 88,000km. Automatic. Regularly serviced. AC working well. New battery and brakes last month. Available for inspection.", images: [img("toyota corolla kenya africa"), img("sedan car nairobi")], ...loc(10), email: "amara@test.com", createdBy: amara._id },
+    { title: "Bajaj Boxer Motorcycle, 150cc", category: "Cars", price: 280000, currency: "NGN", description: "2022 model. Used as a delivery bike for 18 months. Serviced every 3 months. Engine in great shape. Minor cosmetic marks.", images: [img("bajaj boxer motorcycle nigeria"), img("motorbike africa road")], ...loc(7), email: "amara@test.com", createdBy: amara._id },
+    { title: "Hero Splendor Plus, 2023", category: "Cars", price: 95000, currency: "INR", description: "6,000km only. Single owner. Full service record at Hero showroom. No falls, no damage. Ideal for daily commute.", images: [img("hero splendor motorcycle india"), img("motorbike commute india")], ...loc(17), email: "fatima@test.com", createdBy: fatima._id },
+
+    // Books
+    { title: "Atomic Habits by James Clear", category: "Books", price: 9, currency: "GBP", description: "Hardback. Read once. No markings or dog-ears. Mint condition. Life-changing book, passing it on.", images: [img("atomic habits book james clear"), img("self help book reading")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "Things Fall Apart by Chinua Achebe", category: "Books", price: 6, currency: "GBP", description: "Paperback Penguin edition. Good condition, light spine crease. A classic of African literature. Perfect for schools or personal reading.", images: [img("things fall apart achebe book"), img("african literature book")], ...loc(1), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "Purple Hibiscus by Chimamanda Ngozi Adichie", category: "Books", price: 7, currency: "GBP", description: "Paperback. Read once. No writing inside. Beautiful story. Great condition.", images: [img("chimamanda adichie nigeria book"), img("literary fiction book")], ...loc(4), email: "amara@test.com", createdBy: amara._id },
+    { title: "The Psychology of Money, Morgan Housel", category: "Books", price: 10, currency: "GBP", description: "Hardback. Perfect condition, unread. Bought two copies by mistake. A great read on wealth and behaviour.", images: [img("psychology money finance book"), img("finance book wealth")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Piranesi by Susanna Clarke", category: "Books", price: 7, currency: "GBP", description: "Paperback. Read once carefully. No damage. Unusual, beautiful, unforgettable novel. Highly recommend.", images: [img("piranesi fantasy novel book"), img("fantasy book reading")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+    { title: "Learn Python the Hard Way, 5th Ed", category: "Books", price: 20, currency: "GBP", description: "Paperback textbook. Some pencil notes but mostly clean. Great for absolute beginners to coding.", images: [img("python programming book coding"), img("coding book computer")], ...loc(2), email: "chisomo@test.com", createdBy: chisomo._id },
+
+    // Property (rentals and land)
+    { title: "1-Bed Flat to Rent, Peckham", category: "Property", price: 1400, currency: "GBP", description: "Furnished. Modern kitchen, large living room, private bathroom. 2 min walk from Peckham Rye station. Bills not included. Available Jan 2025.", images: [img("london apartment flat modern"), img("bedroom flat interior london")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "Land for Sale, 500sqm, Tema", category: "Property", price: 180000, currency: "GHS", description: "Registered land with documentation. Residential zone. Close to Tema motorway junction. Quiet area with good road access. Fencing in progress.", images: [img("land ghana plot sale"), img("ghana real estate property")], ...loc(2), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "3-Bedroom House for Rent, Lekki", category: "Property", price: 2500000, currency: "NGN", description: "Furnished. 24hr security. Constant water supply. 2 parking spaces. Generator included. Swimming pool shared with 3 other residents.", images: [img("lagos lekki house nigeria modern"), img("nigeria house property garden")], ...loc(9), email: "amara@test.com", createdBy: amara._id },
+    { title: "Studio Apartment, Westlands Nairobi", category: "Property", price: 35000, currency: "KES", description: "Furnished studio. Fast WiFi included. 24hr security. Kitchenette, en-suite shower room. Good for young professionals. Available immediately.", images: [img("nairobi apartment studio modern"), img("kenya flat interior furnished")], ...loc(10), email: "fatima@test.com", createdBy: fatima._id },
+    { title: "Office Space for Rent, Accra CBD", category: "Property", price: 4500, currency: "GHS", description: "Open plan office, 80sqm. Fibre internet ready. Central location, 5 min from Circle. Parking for 3 cars. Short-term leases available.", images: [img("accra ghana office space modern"), img("open plan office workspace")], ...loc(3), email: "kofi@test.com", createdBy: kofi._id },
+
+    // Health and Beauty
+    { title: "Theragun Prime Massage Gun", category: "Health and Beauty", price: 140, currency: "GBP", description: "4 attachments included. 5 speed settings. Battery holds full charge. Used occasionally over 18 months. Quietforce technology works great.", images: [img("theragun massage gun recovery"), img("massage gun muscle recovery")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Black Soap Bundle, 3 bars", category: "Health and Beauty", price: 1200, currency: "GHS", description: "Handmade Ghanaian black soap with shea butter, plantain skin, and cocoa pod. Natural, unscented. Great for eczema and sensitive skin.", images: [img("african black soap ghana natural"), img("natural soap handmade bar")], ...loc(2), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "Shea Butter, Raw Unrefined, 500g", category: "Health and Beauty", price: 8000, currency: "NGN", description: "Pure unrefined shea butter from northern Nigeria. Rich and yellow. Great for skin, hair, and dry scalp. No additives.", images: [img("shea butter raw africa natural"), img("natural shea butter skin")], ...loc(6), email: "amara@test.com", createdBy: amara._id },
+    { title: "Huda Beauty Foundation Set", category: "Health and Beauty", price: 45, currency: "GBP", description: "Shade 240W. 3 products: foundation, concealer, and setting powder. All used a handful of times, near full. Good condition.", images: [img("huda beauty makeup foundation"), img("makeup cosmetics beauty")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+    { title: "Shiseido SPF50 Sunscreen, 2-pack", category: "Health and Beauty", price: 35, currency: "GBP", description: "Anessa Perfect UV Sunscreen. 60ml each. One unopened, one 80% full. Bought two by mistake. Lightweight and non-greasy.", images: [img("sunscreen spf skincare"), img("spf sunscreen skin protection")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "Wooden Comb and Brush Set", category: "Health and Beauty", price: 5000, currency: "XOF", description: "Natural bamboo. 3 combs and 1 paddle brush. Gentle on scalp. Great for natural hair. Small batch, made locally.", images: [img("wooden comb natural hair"), img("bamboo hair care tools")], ...loc(14), email: "fatima@test.com", createdBy: fatima._id },
+
+    // Hardware
+    { title: "Makita 18V Drill Driver", category: "Hardware", price: 80, currency: "GBP", description: "Two batteries and charger included. All bits and driver tips included. Used on a bathroom renovation. Works perfectly.", images: [img("makita drill power tool"), img("cordless drill construction")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "Solar Panel Kit, 200W", category: "Hardware", price: 95000, currency: "NGN", description: "200W panel, charge controller, battery clamps and cables. Powers lights and phone charging. Perfect for areas with unreliable grid.", images: [img("solar panel kit africa energy"), img("solar energy renewable")], ...loc(7), email: "amara@test.com", createdBy: amara._id },
+    { title: "Water Pump, 1.5HP Submersible", category: "Hardware", price: 45000, currency: "GHS", description: "Japanese brand, barely used. Pumps from 15m depth. Ideal for boreholes and wells. Comes with 10m of pipe.", images: [img("water pump borehole africa"), img("submersible pump water")], ...loc(2), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "Dewalt Circular Saw, Corded", category: "Hardware", price: 95, currency: "GBP", description: "1200W. 190mm blade. Very little use — bought for one job. Extra blade included. No carrying case.", images: [img("dewalt circular saw power tool"), img("woodworking saw carpentry")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Generator, 3KVA Petrol", category: "Hardware", price: 350000, currency: "NGN", description: "Sumec Firman brand. 1 year old, well maintained. Runs quietly. Perfect for powering a medium apartment. Includes starter cable.", images: [img("petrol generator nigeria power"), img("generator electricity backup")], ...loc(8), email: "amara@test.com", createdBy: amara._id },
+    { title: "Bosch Laser Level Set", category: "Hardware", price: 120, currency: "GBP", description: "Self-levelling laser. Tripod and carry case included. Used professionally for 6 months. All functions working perfectly.", images: [img("laser level bosch tool"), img("construction laser measuring")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+
+    // Sports / Outdoor
+    { title: "Trek Marlin 7 Mountain Bike, Medium", category: "Other", price: 580, currency: "GBP", description: "2022 model. Hydraulic disc brakes, 29-inch wheels. 380km on the clock. New chain and cassette fitted last month. Mint condition.", images: [img("trek mountain bike bicycle"), img("mountain biking trail")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "Peloton Bike Plus", category: "Other", price: 950, currency: "GBP", description: "Touchscreen model. Delivery and setup can be arranged. In excellent condition. Includes shoes, weights, and 6 months Peloton subscription.", images: [img("peloton exercise bike gym"), img("indoor cycling exercise")], ...loc(4), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Patagonia Nano Puff Jacket, Medium", category: "Clothes", price: 90, currency: "GBP", description: "Black. Very light and packable. Used on one ski trip. No damage, DWR intact. Packs into its own pocket.", images: [img("patagonia jacket outdoor puffer"), img("outdoor packable jacket")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+    { title: "Salomon Speedcross 6, UK 9", category: "Clothes", price: 75, currency: "GBP", description: "Trail running shoes. Used for 3 months, around 120km. Tread still excellent. Washed clean. Great for muddy trails.", images: [img("salomon trail running shoes"), img("running shoes trail outdoor")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Camping Tent, 4-person, Vango", category: "Other", price: 85, currency: "GBP", description: "3-season tent. Used 5 times. Waterproof. Easy pitch. All pegs and poles present. Packed back into original bag. Great condition.", images: [img("camping tent 4 person outdoor"), img("tent camping nature")], ...loc(4), email: "alice@test.com", createdBy: alice._id },
+
+    // Music
+    { title: "Fender Player Stratocaster, Sunburst", category: "Other", price: 450, currency: "GBP", description: "3-colour sunburst, maple neck. 2 years old. Plays beautifully. Minor buckle rash on the back. Includes gig bag and strap.", images: [img("fender stratocaster electric guitar"), img("guitar music electric")], ...loc(0), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Yamaha P-145 Digital Piano", category: "Other", price: 280, currency: "GBP", description: "88 weighted keys, graded hammer action. 6 months old. Sounds fantastic. Includes sustain pedal, stand, and bench.", images: [img("yamaha digital piano keyboard"), img("piano keyboard music")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+    { title: "Audio-Technica AT2020 Microphone", category: "Other", price: 65, currency: "GBP", description: "Condenser mic. XLR connection. Used for podcast recording. Great for home studios. Shock mount and pop filter included.", images: [img("studio microphone podcast recording"), img("condenser mic audio")], ...loc(2), email: "bob@test.com", createdBy: bob._id },
+    { title: "Djembe Drum, Carved Mahogany", category: "Other", price: 18000, currency: "GHS", description: "Hand-carved from a single piece of mahogany. Goat skin head, hand-tuned. 55cm tall. Rich deep tone. Made by a master craftsman in Kumasi.", images: [img("djembe drum ghana african"), img("african drum music percussion")], ...loc(4), email: "kofi@test.com", createdBy: kofi._id },
+    { title: "Roland TR-8S Drum Machine", category: "Other", price: 380, currency: "GBP", description: "Classic ACB engine. 11 voices. Individual outputs. Used in home studio for a year. Perfect working condition. Includes power supply.", images: [img("roland drum machine electronic music"), img("music production equipment")], ...loc(0), email: "chisomo@test.com", createdBy: chisomo._id },
+
+    // More Electronics
+    { title: "ASUS 4K Monitor, 27 inch", category: "Electronics", price: 220, currency: "GBP", description: "ProArt PA279CV. 4K UHD, 60Hz, USB-C 65W PD. Colour-accurate IPS panel. 1.5 years old, no dead pixels or backlight bleed.", images: [img("asus 4k monitor display"), img("desk monitor ultrawide")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Raspberry Pi 5, 8GB", category: "Electronics", price: 85, currency: "GBP", description: "Includes official case, active cooler, power supply, and 64GB SD card with Raspberry Pi OS. Never used in production. Ideal for projects.", images: [img("raspberry pi computer project"), img("single board computer electronics")], ...loc(1), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Canon EOS R50 Mirrorless Camera", category: "Electronics", price: 580, currency: "GBP", description: "18-45mm kit lens. 1,500 shutter actuations. Perfect for content creation or learning photography. Includes 2 batteries and 256GB card.", images: [img("canon mirrorless camera photography"), img("camera lens photography")], ...loc(2), email: "alice@test.com", createdBy: alice._id },
+    { title: "DJI Mini 4 Pro Drone", category: "Electronics", price: 680, currency: "GBP", description: "Fly More Combo. 3 batteries, charging hub, ND filters. 5 hours flight time total. No accidents. 4K/60fps footage. Always flown within legal limits.", images: [img("dji drone mini aerial"), img("drone aerial photography")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Apple Watch Series 9, 45mm", category: "Electronics", price: 280, currency: "GBP", description: "Midnight aluminium with black sport band. 1 year old. No scratches on screen. Battery lasts all day. All original packaging.", images: [img("apple watch smartwatch"), img("smartwatch fitness tracker")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+
+    // More diverse categories
+    { title: "KitchenAid Stand Mixer, 4.8L", category: "Other", price: 250, currency: "GBP", description: "Matte grey. 10-speed. Dough hook, flat beater, wire whip. 3 years old. Used weekly but in perfect condition. A baking essential.", images: [img("kitchenaid stand mixer baking"), img("kitchen mixer cooking")], ...loc(0), email: "alice@test.com", createdBy: alice._id },
+    { title: "Nespresso Vertuo Next Machine", category: "Other", price: 60, currency: "GBP", description: "Coffee machine with milk frother. 1.5 years old. Cleaned and descaled recently. Makes barista-quality coffee at home. Includes 20 pods.", images: [img("nespresso coffee machine espresso"), img("coffee maker home barista")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "Lego Technic Bugatti Chiron", category: "Other", price: 120, currency: "GBP", description: "Set 42083. Fully built and displayed. Complete, all pieces present. No missing parts, no damage. Box included in fair condition.", images: [img("lego technic bugatti car model"), img("lego architecture model")], ...loc(4), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Wicker Market Baskets, set of 3", category: "Other", price: 12000, currency: "XOF", description: "Hand-woven locally. Sturdy, lightweight, and beautiful. Small, medium, and large. Great for shopping, storage, or decor. Very durable.", images: [img("wicker basket woven africa market"), img("handmade basket crafts")], ...loc(14), email: "fatima@test.com", createdBy: fatima._id },
+    { title: "Adire Indigo Fabric, 6 yards", category: "Other", price: 9500, currency: "NGN", description: "Hand-dyed adire fabric from Abeokuta. Deep indigo with traditional patterns. 6 yards in one piece. Perfect for fashion or home decor.", images: [img("adire fabric indigo nigeria"), img("african textile fabric pattern")], ...loc(8), email: "amara@test.com", createdBy: amara._id },
+    { title: "Handmade Pottery Bowl Set", category: "Other", price: 55, currency: "GBP", description: "Set of 4 stoneware bowls. Hand-thrown in a local studio. Each one unique. Dishwasher safe. Beautiful earthy glaze.", images: [img("handmade pottery ceramic bowl"), img("artisan ceramics pottery")], ...loc(4), email: "alice@test.com", createdBy: alice._id },
+    { title: "Oil Painting, Original, 60x80cm", category: "Other", price: 180, currency: "GBP", description: "Oil on canvas. Abstract landscape in warm ochres and deep blues. Signed by the artist. Framed, ready to hang.", images: [img("oil painting abstract art canvas"), img("original painting artwork")], ...loc(0), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Mountain Honey from Cameroon, 500ml", category: "Food", price: 5000, currency: "XAF", description: "Wild mountain honey from the Bamenda highlands. Dark amber, intense flavour. Raw and unfiltered. No heating, no processing.", images: [img("cameroon honey jar natural"), img("honey raw natural organic")], ...loc(19), email: "fatima@test.com", createdBy: fatima._id },
+    { title: "Secondhand Sewing Machine, Singer", category: "Other", price: 75, currency: "GBP", description: "Singer Heavy Duty 4411. 20 stitch patterns. Used for 2 years, in good working order. New needles included. Ideal for beginners.", images: [img("singer sewing machine textiles"), img("sewing machine craft fashion")], ...loc(1), email: "bob@test.com", createdBy: bob._id },
+    { title: "Handwoven Tuareg Leather Bag", category: "Other", price: 35000, currency: "XOF", description: "Genuine leather, hand-stitched and dyed. Traditional Tuareg craftsmanship from Dakar artisans. Shoulder strap, one interior pocket.", images: [img("tuareg leather bag africa craft"), img("handmade leather bag market")], ...loc(15), email: "fatima@test.com", createdBy: fatima._id },
+    { title: "Refurbished MacBook Pro 2022 M2", category: "Electronics", price: 780, currency: "GBP", description: "Professionally refurbished. 8GB RAM, 256GB SSD. Grade A condition. 12 months warranty from refurbisher. New battery, perfect screen.", images: [img("refurbished macbook pro m2"), img("laptop apple refurbished")], ...loc(13), email: "chisomo@test.com", createdBy: chisomo._id },
+    { title: "Traditional Kanga, 2-piece set", category: "Clothes", price: 1500, currency: "KES", description: "Authentic kanga from the coast. Rich print with Swahili proverb border. Soft cotton. Versatile: wear as a dress, wrap, or headscarf.", images: [img("kanga fabric kenya swahili"), img("african wrap cloth colourful")], ...loc(11), email: "amara@test.com", createdBy: amara._id },
+    { title: "Used Office Chairs, set of 4", category: "Furniture", price: 120, currency: "GBP", description: "4 matching mesh office chairs. Adjustable height. Light wear on armrests. Collection only. Great for a home office or startup.", images: [img("office chairs mesh ergonomic"), img("office furniture workspace")], ...loc(0), email: "bob@test.com", createdBy: bob._id },
+    { title: "Baby Cot with Mattress, Next", category: "Furniture", price: 65, currency: "GBP", description: "White wooden cot. Mattress in excellent condition with new waterproof cover. Converts to toddler bed. All fixings included.", images: [img("baby cot crib white nursery"), img("nursery baby room furniture")], ...loc(1), email: "alice@test.com", createdBy: alice._id },
+  ];
+
+  await Post.create(posts);
+  console.log(`Created ${posts.length} posts across 9 categories`);
+  console.log("\nTest accounts (all password: password123):");
+  ["alice@test.com","bob@test.com","chisomo@test.com","amara@test.com","kofi@test.com","fatima@test.com"].forEach(e => console.log(" ", e));
 
   await mongoose.disconnect();
   console.log("\nDone.");
 }
 
-seed().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+seed().catch(err => { console.error(err); process.exit(1); });

@@ -1,11 +1,19 @@
 <%# google maps - key loaded from environment variable %>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsApiKey %>&loading=async"></script>
-
 <%# view port meta tag %>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<%# bundled app js %>
+<%# bundled app js — loaded before Maps so $ is available when Maps callback fires %>
 <script src="/js/bundle.js" charset="utf-8"></script>
+
+<%# Google Maps — callback triggers map init after the API is ready %>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsApiKey %>&loading=async&callback=initTradeSpaceMap" async defer></script>
+<script>
+  window.initTradeSpaceMap = function() {
+    // Signal to the bundle that Maps is ready
+    window._mapsReady = true;
+    document.dispatchEvent(new Event('mapsready'));
+  };
+</script>
 
 <%# mobile nav toggle %>
 <script>

@@ -1,246 +1,129 @@
-// VARIABLES
-$black: hsl(0, 0%, 4%);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-$grey-darker: hsl(0, 0%, 21%);
-
-$grey-dark: hsl(0, 0%, 29%);
-
-$grey:	hsl(0, 0%, 48%);
-
-$grey-light:	hsl(0, 0%, 71%);
-
-$orange	:hsl(14, 100%, 53%);
-
-$yellow	:hsl(48, 100%, 67%);
-
-$green	:hsl(141, 71%, 48%);
-
-$turquoise	:hsl(171, 100%, 41%);
-
-$blue	:hsl(217, 71%, 53%);
-
-$anotherBlue: hsl(195,100%,34%);
-
-$purple	:hsl(271, 100%, 71%);
-
-$red	:hsl(348, 100%, 61%);
-
-$heading:hsl(0,100%,40%);
-
-$white :hsl(228,26%,96%);
-
-
-
-body {
-  background-color: $white;
-  font-family: 'Raleway', sans-serif;
-  font-weight: bold;
-
-  img {
-    margin: 20 20px 0 20px ;
-  }
-
-
-  h4 {
-    margin-top: 1px;
-    margin-bottom: 1px;
-    color: $black;
-  }
-
-  span{
-
-    i {
-      margin-left: 2px;
-      margin-right: 3px;
-    }
-  }
-}
-
-
-
-//sticky footer
-.site {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.site-content {
-  flex: 1;
-}
-
-.reduce-gap {
-  margin-left: 0px;
-  margin-right: 0px;
-}
-//end sticky footer
-
-
-// ids
+// Map container
 #map {
-  background-color: grey;
-  height: 400px;
   width: 100%;
+  min-height: 200px;
+  background-color: #e5e7eb;
 }
 
-#item-price {
-  margin-left: 10px;
-  font-weight: 600;
-}
-
-#converted-price-display {
-  margin-left: 10px;
-}
-
-#plus-code-location {
-  color: $heading;
-}
-
-#item-location {
-cursor:pointer;
--webkit-transition: all 0.3s ease;
--moz-transition:  	all 0.3s ease;
--o-transition:  	  all 0.3s ease;
-transition: 		    all 0.3s ease;
-}
-
-#item-location:hover {
-  color: $white;
-  background-color: $turquoise;
-
-}
-
-#brand-logo {
-
-}
-
-#brand-logo:hover {
-  text-shadow: 0 0 5px $heading;
-}
-
-#intro-message {
-  color: $black;
-
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
-#safety-advice {
-  font-size: 12px;
-}
-
-.map-container {
-  position: relative;
+// Line clamp for card descriptions (Tailwind CDN doesn't always include this)
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  .map-marker {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: $heading;
+}
+
+// Toggle switch (map marker toggle)
+input.switch { display: none; }
+
+// Price bubble marker (show page)
+.price-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.30));
+  transition: transform 0.15s ease;
+
+  &:hover { transform: scale(1.06); }
+
+  &__label {
+    background: #0d9488;
+    color: #fff;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 7px 14px;
+    border-radius: 22px;
+    white-space: nowrap;
+    display: block;
+    letter-spacing: -0.02em;
+    border: 2.5px solid rgba(255,255,255,0.35);
+  }
+
+  &__arrow {
+    display: block;
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #0d9488;
+    margin-top: -1px;
+  }
+
+  &__dot {
+    display: block;
+    width: 16px; height: 16px;
+    background: #0d9488;
     border-radius: 50%;
-    height: 15px;
-    width: 15px;
-    z-index: 10;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
 }
 
-.safety-advice-heading {
-  font-size: 13px;
-  font-weight: bolder;
-  text-transform: uppercase;
-}
-.safety-advice-heading:hover {
-  text-shadow: 0 0 5px $heading;
-}
-
-.error {
-  color: $red;
-  font-family: 'Raleway', sans-serif;
-}
-
-.main-title {
-  font-weight: bold;
-  font-size: 20px;
-  text-transform: capitalize;
-  letter-spacing: 1px;
-  margin-top: 5px;
-}
-
-.nav-bar {
-
-}
-
-.button {
-
-    margin-left: 0px;
-    margin-right: 10px;
-  }
-
-.main-heading {
-  font-weight: bolder;
-  text-transform: uppercase;
-}
-
-.main-heading:hover {
-  text-shadow: 0 0 5px $heading;
-}
-
-// the toggle button
-input.switch:empty {
-  margin-left: -999px;
-}
-input.switch:empty ~ label {
-  position: relative;
-  float: left;
-  line-height: 25.6px;
-  text-indent: 64px;
-  margin: 3.2px 0;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  font-size: 16px !important;
-}
-input.switch:empty ~ label:before,
-input.switch:empty ~ label:after {
-  position: absolute;
-  display: block;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  content: ' ';
-  width: 3.6em;
-  background-color: $green;
-  border-radius: 30px;
-  -webkit-transition: all 100ms ease-in;
-  transition: all 100ms ease-in;
-}
-input.switch:empty ~ label:after {
-  width: 22.4px;
-  top: 1.6px;
-  bottom: 1.6px;
-  margin-left: 1.6px;
-  background-color: #fff;
+// Pulsing dot marker (new post form)
+.map-pin-dot {
+  width: 20px; height: 20px;
+  background: #0d9488;
   border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 12px rgba(13,148,136,0.5);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: rgba(13, 148, 136, 0.18);
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: rgba(13, 148, 136, 0.3);
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite 0.4s;
+  }
 }
-input.switch:checked ~ label:before {
-  background-color: $grey-light;
+
+@keyframes ping {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
 }
-input.switch:checked ~ label:after {
-  margin-left: 33.6px;
+
+// Hide Google Maps default UI chrome for a cleaner look
+// (keep zoom controls, hide street view pegman and map type)
+.gm-style .gm-bundled-control-on-bottom { bottom: 60px !important; }
+
+
+// Select2 overrides to match our design
+.select2-container--default .select2-selection--single {
+  border-radius: 0.75rem;
+  border-color: #e5e7eb;
+  height: 42px;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-// end of toggle button
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  top: 8px;
+}
 
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #0d9488;
+}
 
-
-
-
-// google fonts
-// font-family: 'Poiret One', cursive;
-// font-family: 'Roboto', sans-serif;
-// font-family: 'Raleway', sans-serif;
-// font-family: 'Source Sans Pro', sans-serif;
-// font-family: 'Yanone Kaffeesatz', sans-serif;
+.select2-dropdown {
+  border-radius: 0.75rem;
+  border-color: #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  overflow: hidden;
+}

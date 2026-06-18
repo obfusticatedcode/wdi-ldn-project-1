@@ -1,13 +1,26 @@
-<div class="columns">
-  <div class="column">
-    <% if (Object.keys(locals.messages).length !== 0) { %>
-      <div class="notification is-primary">
-        <% for(const type in messages) { %>
-          <div>
-            <h5><%= messages[type] %></h5>
-          </div>
-        <% } %>
+<% if (locals.messages && Object.keys(locals.messages).length > 0) { %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+    <% for (const type in messages) { %>
+      <%
+        const styles = {
+          success: 'bg-green-50 border-green-200 text-green-800',
+          info:    'bg-brand-50 border-brand-200 text-brand-800',
+          alert:   'bg-red-50 border-red-200 text-red-800',
+          warning: 'bg-amber-50 border-amber-200 text-amber-800',
+        };
+        const icons = {
+          success: 'fa-circle-check',
+          info:    'fa-circle-info',
+          alert:   'fa-circle-exclamation',
+          warning: 'fa-triangle-exclamation',
+        };
+        const style = styles[type] || styles.info;
+        const icon  = icons[type]  || icons.info;
+      %>
+      <div class="flex items-center gap-3 px-4 py-3 rounded-xl border <%= style %> mb-3">
+        <i class="fa-solid <%= icon %> flex-shrink-0"></i>
+        <p class="text-sm font-medium"><%= messages[type] %></p>
       </div>
     <% } %>
   </div>
-</div>
+<% } %>

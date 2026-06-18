@@ -1,28 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" class="h-full overflow-x-hidden">
   <head>
     <meta charset="utf-8">
-    <title>Trade Space</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trade Space: Buy &amp; Sell Locally, Anywhere</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="shortcut icon" href="/favicon.svg">
     <%- include('partials/_stylesheets') %>
     <%- include('partials/_scripts') %>
   </head>
-
-  <body class="site">
+  <body class="h-full bg-gray-50 font-sans text-gray-900 flex flex-col min-h-screen overflow-x-hidden">
     <%- include('partials/_navbar') %>
-    <%- include('partials/_search') %>
-
-    <main class="site-content">
-      <div class="section">
-        <%- include('partials/_messages') %>
-        <div>
-          <%- body %>
-        </div>
-      </div>
+    <%- include('partials/_messages') %>
+    <main class="flex-1">
+      <%- body %>
     </main>
-
-    <div class="tile is-ancestor">
-      <%- include('partials/_footer') %>
-    </div>
-
+    <%- include('partials/_footer') %>
   </body>
 </html>

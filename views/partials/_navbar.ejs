@@ -1,49 +1,70 @@
-<nav class="nav nav-bar has-shadow">
-  <div class="nav-left">
-    <a href="/" class="nav-item">
-      <span id="brand-logo" >Trade Space</span>
-    </a>
-    <ul class="nav-item">
+<nav class="bg-white border-b border-gray-100 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
 
-      <li class="nav-item">
-        <a href="/posts/new">
-        <span><i class="fa fa-pencil fa-2x" ></i>Add a post</span>
+      <div class="flex items-center gap-8">
+        <a href="/" class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
+            <i class="fa-solid fa-shop text-white text-sm"></i>
+          </div>
+          <span class="font-bold text-gray-900 text-lg tracking-tight">Trade Space</span>
         </a>
-      </li>
-      <li class="nav-item">
-        <a href="/posts">
-        <span><i class="fa fa-th fa-2x" ></i>Posts</span>
-        </a>
-      </li>
-    </ul>
+        <div class="hidden md:flex items-center gap-1">
+          <a href="/posts" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+            Browse
+          </a>
+          <% if (locals.isAuthenticated) { %>
+            <a href="/posts/new" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+              Sell something
+            </a>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-3">
+        <% if (locals.isAuthenticated) { %>
+          <a href="/users/<%= currentUser.id %>" class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+            <% if (currentUser.image) { %>
+              <img src="<%= currentUser.imageSRC %>" class="w-6 h-6 rounded-full object-cover" alt="">
+            <% } else { %>
+              <i class="fa-solid fa-circle-user text-gray-400"></i>
+            <% } %>
+            <%= currentUser.username %>
+          </a>
+          <a href="/logout" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+            Log out
+          </a>
+        <% } else { %>
+          <a href="/login" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors">
+            Log in
+          </a>
+          <a href="/register" class="px-4 py-2 rounded-lg text-sm font-semibold bg-brand-600 text-white hover:bg-brand-700 transition-colors">
+            Sign up free
+          </a>
+        <% } %>
+      </div>
+
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
   </div>
 
-  <%# burger icon%>
-  <span class="nav-toggle">
-    <span></span>
-    <span></span>
-    <span></span>
-  </span>
-
-  <div class="nav-right nav-menu">
-    <% if(locals.isAuthenticated) { %>
-    <a class="nav-item" href="/users/<%= currentUser.id %>">
-    <span class="nav-item"><i class="fa fa-user-circle"></i> Profile </span>
-
-    </a>
-    <a class="nav-item" href="/logout">
-    <span class="nav-item"><i class="fa fa-mail-reply"></i> Logout </span>
-
-    </a>
+  <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
+    <a href="/posts" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Browse</a>
+    <% if (locals.isAuthenticated) { %>
+      <a href="/posts/new" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Sell something</a>
+      <a href="/users/<%= currentUser.id %>" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Profile</a>
+      <a href="/logout" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Log out</a>
     <% } else { %>
-      <a class="nav-item is-tab" href="/register">
-      <span class="nav-item"><i class="fa fa-user"></i>  </span>
-        Register
-      </a>
-      <a class="nav-item is-tab" href="/login">
-      <span class="nav-item"><i class="fa fa-mail-forward"></i>  </span>
-        Login
-      </a>
-      <% } %>
+      <a href="/login" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Log in</a>
+      <a href="/register" class="block px-3 py-2 rounded-lg text-sm font-semibold text-brand-600 hover:bg-gray-100">Sign up free</a>
+    <% } %>
   </div>
 </nav>
+
+<script>
+  document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>

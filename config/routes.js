@@ -26,6 +26,7 @@ router.route('/users/:id')
   .post(secureRoute, upload.single('image'), users.update)
   .delete(secureRoute, users.delete);
 
+
 router.route('/users/:id/edit')
   .get(secureRoute, users.edit);
 
@@ -49,14 +50,14 @@ router.route('/oauth/github')
 //posts routes
 router.route('/posts')
   .get(postsController.index)
-  .post(secureRoute,upload.single('image'), postsController.create);
+  .post(secureRoute, upload.array('images', 5), postsController.create);
 
 router.route('/posts/new')
   .get(secureRoute, postsController.new);
 
 router.route('/posts/:id')
   .get(postsController.show)
-  .post(secureRoute, upload.single('image'), postsController.update)
+  .post(secureRoute, upload.array('images', 5), postsController.update)
   .delete(secureRoute, postsController.delete);
 
 router.route('/posts/:id/edit')

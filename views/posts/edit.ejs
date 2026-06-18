@@ -1,54 +1,55 @@
-<div class="tile is-parent is-vertical">
-  <div class="tile is-child">
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="mb-8">
+    <a href="/posts/<%= post.id %>" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-4 transition-colors">
+      <i class="fa-solid fa-arrow-left text-xs"></i> Back to listing
+    </a>
+    <h1 class="text-2xl font-bold text-gray-900">Edit listing</h1>
+  </div>
 
+  <form method="POST" action="/posts/<%= post.id %>" enctype="multipart/form-data" class="space-y-6">
 
-    <div class="columns">
-      <div class="column is-offset-4 is-4">
-            <h1 class="title">Update your post</h1>
+    <div class="bg-white rounded-2xl shadow-card p-6 space-y-4">
+      <h2 class="font-semibold text-gray-900">Item details</h2>
 
-        <form method="POST" action="/posts/<%= post.id %>" enctype="multipart/form-data">
-            <div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
+        <input type="text" name="title" value="<%= post.title %>" required
+          class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+      </div>
 
-              <div class="field">
-                <label  for="title">Title</label>
-              </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+        <input type="text" name="category" value="<%= post.category %>"
+          class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+      </div>
 
-              <div class="field">
-                <input class="input" type="text" name="title" id="post-title" value="<%= post.title %>" required>
-              </div>
-
-              <div class="field">
-                <label  for="category">Category</label>
-              </div>
-              <div class="field">
-                <input class="input" type="text" name="category" id="post-category" value="<%= post.category %>" required>
-              </div>
-
-              <div class="field">
-                <label  for="description">Description</label>
-              </div>
-
-              <div class="field">
-                <p class="control">
-                  <textarea class="input" id="post-description" type="text" name="description" placeholder="Add as much information as possible" value="<%= post.description %>" required></textarea>
-                </p>
-              </div>
-
-              <div class="field">
-                <label class="button is-primary" for="image">Choose file</label>
-              </div>
-
-              <div class="field">
-                <input type="file" name="image" id="image" required hidden>
-              </div>
-
-              <button class="button is-warning">Update</button>
-
-            </div>
-        </form>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+        <textarea name="description" rows="4" required
+          class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none"><%= post.description %></textarea>
       </div>
     </div>
 
-  </div>
+    <div class="bg-white rounded-2xl shadow-card p-6 space-y-4">
+      <h2 class="font-semibold text-gray-900">Photo</h2>
+      <% if (post.imageSRC) { %>
+        <img src="<%= post.imageSRC %>" class="w-32 h-32 object-cover rounded-xl border border-gray-200" alt="">
+        <p class="text-xs text-gray-500">Upload a new photo to replace the current one.</p>
+      <% } %>
+      <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer hover:border-brand-400 hover:bg-brand-50 transition-colors">
+        <i class="fa-solid fa-cloud-arrow-up text-2xl text-gray-300 mb-1.5"></i>
+        <span class="text-sm text-gray-500">Click to upload</span>
+        <input type="file" name="image" accept="image/*" class="hidden">
+      </label>
+    </div>
 
+    <div class="flex gap-3">
+      <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-6 rounded-xl transition-colors">
+        Save changes
+      </button>
+      <a href="/posts/<%= post.id %>" class="px-6 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
+        Cancel
+      </a>
+    </div>
+  </form>
 </div>

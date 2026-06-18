@@ -1,17 +1,24 @@
-//grabbing the post model
 const Post = require('../models/post');
+const filter = require('leo-profanity');
+
+function containsProfanity(...fields) {
+  return fields.some(f => f && filter.check(String(f)));
+}
 
 const categories = [
   'Electronics', 'Food', 'Furniture', 'Hardware',
   'Health and Beauty', 'Clothes', 'Cars', 'Books', 'Property', 'Other'
 ];
 
-//create route
 function createRoute(req, res, next) {
-  //adding user to the post createRoute controller
-  req.body.createdBy = req.user;
+  if (containsProfanity(req.body.title, req.body.description)) {
+    return res.badRequest('/posts/new', 'Your listing contains inappropriate language. Please review and resubmit.');
+  }
 
-  if(req.file) req.body.image = req.file.key;
+  req.body.createdBy = req.user;
+  if (req.files?.length) {
+    req.body.images = req.files.map(f => f.key || f.filename);
+  }
 
   Post
     .create(req.body)
@@ -33,7 +40,7 @@ function indexRoute(req, res, next) {
     .find(categoryQuery)
     .populate('createdBy')
     .exec()
-    .then((posts) => res.render('posts/index', { posts }))
+    .then((posts) => res.render('posts/index', { posts, query: req.query.q || '' }))
     .catch(next);
 }
 
@@ -74,9 +81,14 @@ function editRoute(req, res, next) {
     .catch(next);
 }
 
-//update route
 function updateRoute(req, res, next) {
-  if(req.file) req.body.image = req.file.key;
+  if (containsProfanity(req.body.title, req.body.description)) {
+    return res.badRequest(`/posts/${req.params.id}/edit`, 'Your listing contains inappropriate language. Please review and resubmit.');
+  }
+
+  if (req.files?.length) {
+    req.body.images = req.files.map(f => f.key || f.filename);
+  }
 
   Post
     .findById(req.params.id)
@@ -113,9 +125,11 @@ function deleteRoute(req, res, next) {
     .catch(next);
 }
 
-//adding in the comments controller since it's embedded and not a separate resource
 function createCommentRoute(req, res, next) {
-  //adding in the logged in user to the body via req.body
+  if (containsProfanity(req.body.content)) {
+    return res.badRequest(`/posts/${req.params.id}`, 'Your comment contains inappropriate language.');
+  }
+
   req.body.createdBy = req.user;
 
   Post

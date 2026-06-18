@@ -2,7 +2,8 @@
 /// <reference types="@types/google.maps" />
 
 import $ from "jquery";
-import { OpenLocationCode } from "open-location-code";
+import { OpenLocationCode as OLCClass } from "open-location-code";
+const olc = new OLCClass();
 import "./scss/style.scss";
 import "select2";
 import "jquery-validation";
@@ -30,12 +31,16 @@ $(() => {
   let map: google.maps.Map | undefined;
   let infoWindow: google.maps.InfoWindow | undefined;
 
-  if ($("#map").length > 0) initMap();
+  if ($("#map").length > 0) {
+    // Wait for Maps API to be ready before initialising
+    if ((window as any)._mapsReady) {
+      initMap();
+    } else {
+      document.addEventListener('mapsready', initMap);
+    }
+  }
 
-  function initMap() {
-    const directionsService = new google.maps.DirectionsService();
-    const directionsDisplay = new google.maps.DirectionsRenderer();
-
+  async function initMap() {
     const center = {
       lat: isNaN(postLat) ? 51.501476 : postLat,
       lng: isNaN(postLng) ? -0.140634 : postLng,
@@ -44,20 +49,30 @@ $(() => {
     const mapElement = document.getElementById("map");
     if (!mapElement) return;
 
+    const isShowPage = !isNaN(postLat) && !isNaN(postLng);
+
     map = new google.maps.Map(mapElement, {
-      zoom: 14,
+      zoom: isShowPage ? 15 : 13,
       center,
+      mapId: "DEMO_MAP_ID",
+      mapTypeControl: isShowPage,
+      mapTypeControlOptions: {
+        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+        position: google.maps.ControlPosition.TOP_RIGHT,
+        mapTypeIds: ["roadmap", "satellite"],
+      },
+      fullscreenControl: isShowPage,
+      fullscreenControlOptions: { position: google.maps.ControlPosition.TOP_RIGHT },
+      streetViewControl: false,
+      zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
     });
 
-    directionsDisplay.setMap(map);
     infoWindow = new google.maps.InfoWindow();
 
     // Show route from item location to viewer's location on show page
     $("#item-location").one("click", () => {
       if (!userLocation) return;
       displayRoute(
-        directionsService,
-        directionsDisplay,
         `${postLat},${postLng}`,
         `${userLocation.lat},${userLocation.lng}`
       );
@@ -98,18 +113,38 @@ $(() => {
       );
     }
 
-    // Drop a marker on the post location (show page)
+    const { AdvancedMarkerElement } = (await google.maps.importLibrary("marker")) as google.maps.MarkerLibrary;
+
+    // Show page: price bubble marker
     if (!isNaN(postLat) && !isNaN(postLng)) {
-      new google.maps.Marker({ position: center, map });
+      const mapEl = document.getElementById("map");
+      const price    = mapEl?.dataset.price;
+      const currency = mapEl?.dataset.currency;
+
+      const bubble = document.createElement("div");
+      bubble.className = "price-marker";
+      bubble.innerHTML = price
+        ? `<span class="price-marker__label">${currency} ${price}</span><span class="price-marker__arrow"></span>`
+        : `<span class="price-marker__dot"></span>`;
+
+      new AdvancedMarkerElement({ position: center, map, content: bubble });
+    }
+
+    // New post page: pulsing dot marker that follows map centre
+    if (isNaN(postLat) && isNaN(postLng)) {
+      const dot = document.createElement("div");
+      dot.className = "map-pin-dot";
+      const dotMarker = new AdvancedMarkerElement({ position: map.getCenter(), map, content: dot });
+
+      google.maps.event.addListener(map, "center_changed", () => {
+        dotMarker.position = map!.getCenter();
+      });
     }
   }
 
-  function displayRoute(
-    service: google.maps.DirectionsService,
-    display: google.maps.DirectionsRenderer,
-    origin: string,
-    destination: string
-  ) {
+  function displayRoute(origin: string, destination: string) {
+    const service = new google.maps.DirectionsService();
+    const display = new google.maps.DirectionsRenderer({ map });
     service.route(
       { origin, destination, travelMode: google.maps.TravelMode.DRIVING },
       (response, status) => {
@@ -127,7 +162,7 @@ $(() => {
 
   // Encode lat/lng to a Plus Code locally — no API call needed
   function updatePlusCode(lat: number, lng: number) {
-    const code = OpenLocationCode.encode(lat, lng);
+    const code = olc.encode(lat, lng);
     $plusCodeLocation.val(code);
     $locationHidden.val(code);
     $lat.val(lat);

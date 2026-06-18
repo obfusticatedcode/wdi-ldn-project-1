@@ -1,27 +1,45 @@
-<div class="tile is-ancestor">
-
-  <div class="tile is-4 is-parent">
-    <%# this empty div is a placeholder used as offset%>
-  </div>
-
-  <div class="tile is-4 is-parent is-vertical">
-
-    <div class="tile is-child">
-      <h1 class="title">Your Profile</h1>
-    </div>
-
-    <div class="tile is-child">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="bg-white rounded-2xl shadow-card p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-10">
+    <div class="flex-shrink-0">
       <% if (user.image) { %>
-        <img src="<%= user.imageSRC %>" alt="<%= user.username %>">
-        <% } %>
-        <h1 ><%= user.username %></h1>
-        <form method="POST" action="/users/<%= user.id %>">
-          <a href="/users/<%= user.id %>/edit" class="button is-warning">Edit Account</a>
-          <input type="hidden" name="_method" value="DELETE">
-          <button class="button is-danger">Delete Account</button>
-        </form>
-      </div>
-      
-
+        <img src="<%= user.imageSRC %>" alt="<%= user.username %>"
+          class="w-24 h-24 rounded-2xl object-cover border-4 border-white shadow-lg">
+      <% } else { %>
+        <div class="w-24 h-24 rounded-2xl bg-brand-100 flex items-center justify-center border-4 border-white shadow-lg">
+          <i class="fa-solid fa-user text-4xl text-brand-400"></i>
+        </div>
+      <% } %>
+    </div>
+    <div class="flex-1 text-center sm:text-left">
+      <h1 class="text-2xl font-bold text-gray-900 mb-1"><%= user.username %></h1>
+      <p class="text-gray-500 text-sm truncate max-w-xs"><%= user.email %></p>
+      <% if (locals.isAuthenticated && locals.currentUser && currentUser.id === user.id) { %>
+        <div class="flex items-center justify-center sm:justify-start gap-3 mt-4">
+          <a href="/users/<%= user.id %>/edit"
+             class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+            <i class="fa-solid fa-pen-to-square"></i> Edit profile
+          </a>
+          <form method="POST" action="/users/<%= user.id %>" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-50 border border-red-100 text-sm font-semibold text-red-600 hover:bg-red-100 transition-colors">
+              <i class="fa-solid fa-trash"></i> Delete account
+            </button>
+          </form>
+        </div>
+      <% } %>
     </div>
   </div>
+
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-bold text-gray-900">Listings</h2>
+    <% if (locals.isAuthenticated && locals.currentUser && currentUser.id === user.id) { %>
+      <a href="/posts/new" class="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors">
+        <i class="fa-solid fa-plus"></i> Add listing
+      </a>
+    <% } %>
+  </div>
+
+  <p class="text-gray-500 text-sm">
+    <a href="/posts" class="text-brand-600 hover:text-brand-700 font-semibold">Browse all listings</a>
+  </p>
+</div>
