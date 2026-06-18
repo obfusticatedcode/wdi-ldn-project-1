@@ -1,69 +1,64 @@
 
+<div class="column is-offset-4 is-4">
+  <div class="column has-text-centered">
+    <% if (locals.isAuthenticated) { %>
+      <h1 class="title main-heading">Trade Space</h1>
+    <% } else { %>
+      <h1 class="title login-heading"><a href="/login">Login</a> or <a href="/register">Register</a></h1>
+    <% } %>
+  </div>
+</div>
 
+<div class="columns">
+  <div class="column reduce-gap is-offset-3 is-2">
+    <img class="image" src="/assets/images/cabin.jpg" alt="">
+  </div>
+  <div class="column is-2">
+    <img class="image" src="/assets/images/beach-no-address.jpg" alt="">
+  </div>
+  <div class="column is-2">
+    <img class="image" src="/assets/images/favela.jpg" alt="">
+  </div>
+</div>
 
-  <div class="column is-offset-4 is-4">
-    <div class="column has-text-centered">
-      <% if (locals.isAuthenticated) { %>
-        <h1 class="title main-heading">Trade Space</h1>
-      <% } else { %>
-        <h1 class="title login-heading"><a href="/login">Login</a> or <a href="/register">Register</a></h1>
-      <% }  %>
+<div class="columns">
+  <div class="column image is-offset-3 is-4">
+    <p id="intro-message">Trade Space is a free online marketplace that uses <a href="https://maps.google.com/pluscodes/" target="_blank">Google Plus Codes</a> for location — a free, open system that gives every place on earth a short address, even where street names don't exist. Anyone can find and share any location accurately. Buying and selling online, now for everyone.</p>
+  </div>
+  <div class="column is-2">
+    <img class="image" src="/assets/images/shopping-cart.jpg" alt="">
+  </div>
+</div>
+
+<div class="columns">
+  <div class="column is-offset-3 is-2">
+    <img class="image" src="/assets/images/cheese.jpg" alt="">
+  </div>
+  <div class="column is-2">
+    <img class="image" src="/assets/images/iphone-being-held.jpg" alt="">
+  </div>
+  <div class="column is-2">
+    <img class="image" src="/assets/images/euro-coins.jpg" alt="">
+  </div>
+</div>
+
+<div class="columns">
+  <div class="column">
+    <div id="safety-advice">
+      <h3>Some Shopping Safety Advice</h3>
+      <hr>
+      <h4 class="safety-advice-heading">Buyers</h4>
+      <ul>
+        <li>Try to meet in person.</li>
+        <li>Check the item is real.</li>
+        <li>Try to pay cash.</li>
+        <li>Ask for paperwork — especially when buying a car, electronics, or anything of value.</li>
+      </ul>
+      <h4 class="safety-advice-heading">Sellers</h4>
+      <ul>
+        <li>If someone's paying cash, make sure you check the banknotes are real.</li>
+        <li>If a buyer says they've sent too much and asks for money back, it's a scam.</li>
+      </ul>
     </div>
   </div>
-
-  <div class="columns ">
-    <div class="column reduce-gap is-offset-3 is-2">
-      <img class="image" src="/assets/images/cabin.jpg" alt="">
-    </div>
-    <div class="column is-2">
-      <img class="image" src="/assets/images/beach-no-address.jpg" alt="">
-    </div>
-    <div class="column is-2">
-      <img class="image" src="/assets/images/favela.jpg" alt="">
-    </div>
-
-  </div>
-
-  <div class="columns">
-    <div class="column image is-offset-3 is-4">
-      <p id="intro-message">Here is free online space for you to trade, linked with <span><a href="https://what3words.com/">what3words</a></span>; a simple way to talk about location for the 75% of countries without formal addresses. W3W divided the world into a grid of 3m x 3m squares and assigned each one a unique 3 word address. Anyone can accurately find any location and share it quickly and easily. Buying and selling online is now for everyone. </p>
-    </div>
-
-    <div class="column is-2">
-      <img class="image" src="/assets/images/shopping-cart.jpg" alt="">
-    </div>
-  </div>
-
-  <div class="columns">
-    <div class="column is-offset-3 is-2">
-      <img class="image" src="/assets/images/cheese.jpg" alt="">
-    </div>
-    <div class="column is-2">
-      <img class="image" src="/assets/images/iphone-being-held.jpg" alt="">
-    </div>
-    <div class="column is-2">
-      <img class="image" src="/assets/images/euro-coins.jpg" alt="">
-    </div>
-  </div>
-  <div class="columns">
-    <div class="column">
-      <div id="safety-advice">
-        <p >
-          <h3>Some Shopping Safety Advice</h3>
-          <hr>
-          <h4 class="safety-advice-heading">Buyers</h4>
-          <ul>
-            <li>Try to meet in person.</li>
-            <li>Check the item’s real.</li>
-            <li>Try to pay cash. </li>
-            <li>Ask for paperwork. Especially when buying a car, bringing a pet home, or buying electronics. Ask for receipts, certificates or log books.</li>
-          </ul>
-        <h4 class="safety-advice-heading">Sellers</h4>
-          <ul>
-            <li>If someone’s paying cash, make sure you check the banknotes are real.</li>
-            <li>If a buyer says they’ve sent you too much money then asks for the surplus back, it’s probably a scam.</li>
-          </ul>
-        </p>
-      </div>
-    </div>
-  </div>
+</div>

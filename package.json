@@ -50,6 +50,7 @@
     "multer": "^2.2.0",
     "multer-s3": "^3.0.1",
     "net-browserify": "^0.2.4",
+    "open-location-code": "^1.0.3",
     "path-browserify": "^1.0.1",
     "select2": "^4.0.13",
     "stream-browserify": "^3.0.0",

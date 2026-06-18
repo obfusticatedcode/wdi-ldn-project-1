@@ -1,29 +1,26 @@
 
+<div class="columns is-multiline">
 
-  <div class="columns is-multiline">
+  <% posts.forEach((post) => { %>
+  <div class="column is-4">
+    <a href="/posts/<%= post.id %>">
+      <img src="<%= post.imageSRC %>" alt="<%= post.title %>">
+    </a>
 
-    <% posts.forEach((post) => { %>
-    <div class="column is-4">
-      <a href="/posts/<%= post.id %>">
-      <img src="<%= post.imageSRC %>" alt="<%=  %>">
-      </a>
-
-      <h4 class="main-title"><%= post.title %></h4>
-      <h4><%= post.description %></h4>
-      <div class="field has-addons">
-        <p class="control">
-
-          <h4 id="item-currency"><%= post.currency %></h4>
-        </p>
-        <p class="control">
-          <h4 id="item-price"><%= post.price %></h4>
-        </p>
-      </div>
-      <label for="what3words-location">what3words location</label>
-      <h4 id="what3words-location"> <%= post.location %></h4>
-
+    <h4 class="main-title"><%= post.title %></h4>
+    <h4><%= post.description %></h4>
+    <div class="field has-addons">
+      <p class="control">
+        <h4 id="item-currency"><%= post.currency %></h4>
+      </p>
+      <p class="control">
+        <h4 id="item-price"><%= post.price %></h4>
+      </p>
     </div>
+    <label for="plus-code-location">Location (Plus Code)</label>
+    <h4 id="plus-code-location"><%= post.location %></h4>
 
-    <% }) %>
+  </div>
+  <% }) %>
 
 </div>

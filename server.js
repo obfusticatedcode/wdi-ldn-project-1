@@ -6,7 +6,6 @@ const session = require("express-session");
 const flash = require("express-flash");
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
-const axios = require("axios");
 const { port, env, dbURI, sessionSecret } = require("./config/environment");
 const errorHandler = require("./lib/errorHandler");
 const routes = require("./config/routes");
@@ -15,23 +14,9 @@ const authentication = require("./lib/authentication");
 const dotenv = require("dotenv");
 dotenv.config();
 
-//create an express app
 const app = express();
 
-app.get("/getThreeWords", async (req, res) => {
-  const lat = req.query.lat;
-  const lng = req.query.lng;
-  const apiKey = process.env.WHAT3WORDS_API_KEY;
-
-  const apiUrl = `https://api.what3words.com/v2/reverse?coords=${lat},${lng}&display=full&format=json&key=${apiKey}`;
-
-  try {
-    const response = await axios.get(apiUrl);
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch data from What3Words API" });
-  }
-});
+app.locals.googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
 //setup template engine
 app.set("view engine", "ejs");

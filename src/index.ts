@@ -1,15 +1,10 @@
 /* global google:true */
 /// <reference types="@types/google.maps" />
 
-import * as $ from "jquery";
-import "googlemaps";
-
+import $ from "jquery";
+import { OpenLocationCode } from "open-location-code";
 import "select2";
 import "jquery-validation";
-
-interface ExchangeRate {
-  [key: string]: number;
-}
 
 interface UserLocation {
   lat: number;
@@ -17,324 +12,189 @@ interface UserLocation {
 }
 
 $(() => {
-  // $("form").validate();
   $("form").removeAttr("novalidate");
-  console.log(`JS is working fine`);
 
-  const $threeWordsLocation = $(".three-words-location");
-  const $country = $("#country");
-  const $mapMarker = $(".map-marker");
-  const $toggleSwitch = $("#toggle-switch");
+  const $plusCodeLocation = $(".plus-code-location");
+  const $locationHidden  = $("#location-hidden");
+  const $toggleSwitch    = $("#toggle-switch");
   const $directionsPanel = $("#directions-panel");
-  const $lat = $("#lat");
-  const $lng = $("#lng");
-  const $currency = $("#currency");
-  const $currencylabel = $("#currency-label");
-  const lat = $("#map").data("lat"); // lat and lng of current post (show page)
-  const lng = $("#map").data("lng");
+  const $lat             = $("#lat");
+  const $lng             = $("#lng");
+  const $currency        = $("#currency");
+  const $currencyLabel   = $("#currency-label");
+  const postLat = parseFloat(String($("#map").data("lat")));
+  const postLng = parseFloat(String($("#map").data("lng")));
   let userLocation: UserLocation | null = null;
 
-  //setup the map and infoWindow variables
   let map: google.maps.Map | undefined;
   let infoWindow: google.maps.InfoWindow | undefined;
-  let exchangeRates: ExchangeRate | null = null;
-  let newLat,
-    newLng = null;
 
   if ($("#map").length > 0) initMap();
 
-  //google maps initialization
   function initMap() {
-    //mapping route
     const directionsService = new google.maps.DirectionsService();
     const directionsDisplay = new google.maps.DirectionsRenderer();
 
-    //find the current location origin and then
-    //find the destination where the item is posted.
+    const center = {
+      lat: isNaN(postLat) ? 51.501476 : postLat,
+      lng: isNaN(postLng) ? -0.140634 : postLng,
+    };
 
-    const latLng = { lat: parseFloat(lat), lng: parseFloat(lng) };
     const mapElement = document.getElementById("map");
-    if (!mapElement) {
-      return;
-    }
+    if (!mapElement) return;
+
     map = new google.maps.Map(mapElement, {
       zoom: 14,
-      scrollwheel: false,
-      center: latLng,
+      center,
     });
 
-    //mapping route
     directionsDisplay.setMap(map);
-
-    //mapping route
-    function generateRoute() {
-      //add eventListener to the item location
-      //one time action
-      $("#item-location").one("click", () => {
-        const latUser = userLocation?.lat;
-        const lngUser = userLocation?.lng;
-        const origin = `${lat},${lng}`;
-        const destination = `${latUser},${lngUser}`;
-        displayRoute(directionsService, origin, destination);
-      });
-    }
-
-    generateRoute();
-
-    function displayRoute(
-      directionsService: google.maps.DirectionsService,
-      origin: string,
-      destination: string
-    ) {
-      //mapping route
-      directionsService.route(
-        {
-          origin: origin,
-          destination: destination,
-          travelMode: google.maps.TravelMode.DRIVING,
-        },
-        function (
-          response: google.maps.DirectionsResult | null,
-          status: google.maps.DirectionsStatus
-        ) {
-          if (status === "OK") {
-            directionsDisplay.setDirections(response);
-            const route = response?.routes[0];
-            const summaryPanel = $directionsPanel;
-            // For each route, display summary information.
-            if (route) {
-              for (let i = 0; i < route.legs.length; i++) {
-                const travelDistance = route.legs[i].distance?.text;
-                const startAddress = route.legs[i].start_address;
-
-                // Appending it only once
-                summaryPanel.append(
-                  `<p>${travelDistance} away at ${startAddress}</p>`
-                );
-              }
-            }
-          } else {
-            console.log("Directions request failed due to " + status);
-          }
-        }
-      );
-    }
-
-    //infoWindow
     infoWindow = new google.maps.InfoWindow();
 
-    google.maps.event.addListener(map, "dragend", function () {
-      if (infoWindow) {
-        infoWindow.close();
-      }
+    // Show route from item location to viewer's location on show page
+    $("#item-location").one("click", () => {
+      if (!userLocation) return;
+      displayRoute(
+        directionsService,
+        directionsDisplay,
+        `${postLat},${postLng}`,
+        `${userLocation.lat},${userLocation.lng}`
+      );
+    });
 
-      if (map) {
-        newLat = map.getCenter()?.lat();
-        newLng = map.getCenter()?.lng();
-        if (newLat && newLng) {
-          getThreeWords(newLat, newLng);
-          geocodeCountry(newLat, newLng);
-        } else {
-          console.log("Error: newLat and newLng are undefined");
-        }
+    // When the map is dragged, update the Plus Code
+    google.maps.event.addListener(map, "dragend", () => {
+      const center = map!.getCenter();
+      if (center) {
+        const lat = center.lat();
+        const lng = center.lng();
+        updatePlusCode(lat, lng);
+        geocodeCountry(lat, lng);
       }
     });
 
-    // Try HTML5 geolocation.
+    // Try to get the user's real location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        function (position) {
+        (position) => {
           const pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          //current userLocation
           userLocation = pos;
-
-          if (infoWindow) {
-            infoWindow.setPosition(pos);
-            infoWindow.setContent("Your current location.");
-            infoWindow.open(map);
-          }
-
-          if (map) {
-            map.setCenter(pos);
-          }
-
-          //update the three words based on lat lng
-          getThreeWords(pos.lat, pos.lng);
-          //update the currency based on lat lng
+          infoWindow!.setPosition(pos);
+          infoWindow!.setContent("Your current location.");
+          infoWindow!.open(map);
+          map!.setCenter(pos);
+          updatePlusCode(pos.lat, pos.lng);
           geocodeCountry(pos.lat, pos.lng);
         },
-        function () {
-          if (infoWindow && map) {
-            handleLocationError(true, infoWindow, map.getCenter());
-          }
+        () => {
+          infoWindow!.setPosition(map!.getCenter());
+          infoWindow!.setContent("Could not get your location.");
+          infoWindow!.open(map);
         }
       );
-    } else {
-      // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter());
     }
 
-    //create a marker
-    new google.maps.Marker({
-      position: latLng,
-      map: map,
-    });
-  } //end of initMap()
+    // Drop a marker on the post location (show page)
+    if (!isNaN(postLat) && !isNaN(postLng)) {
+      new google.maps.Marker({ position: center, map });
+    }
+  }
 
-  function handleLocationError(
-    browserHasGeolocation: boolean,
-    infoWindow: {
-      setPosition: (arg0: any) => void;
-      setContent: (arg0: string) => void;
-      open: (arg0: any) => void;
-    },
-    pos: any
+  function displayRoute(
+    service: google.maps.DirectionsService,
+    display: google.maps.DirectionsRenderer,
+    origin: string,
+    destination: string
   ) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(
-      browserHasGeolocation
-        ? "Error: The Geolocation service failed."
-        : "Error: Your browser doesn't support geolocation."
+    service.route(
+      { origin, destination, travelMode: google.maps.TravelMode.DRIVING },
+      (response, status) => {
+        if (status === "OK" && response) {
+          display.setDirections(response);
+          response.routes[0]?.legs.forEach((leg) => {
+            $directionsPanel.append(
+              `<p>${leg.distance?.text} away from ${leg.start_address}</p>`
+            );
+          });
+        }
+      }
     );
-    infoWindow.open(map);
-  } //end of handleLocationError()
-
-  // make an ajax request to what3words based on the pos, grab the response, the words, populate the form field using .val()
-  // populate hidden form fields for the lat and lng
-  // using ajax to get the three-words-location/string
-  function getThreeWords(
-    lat:
-      | string
-      | number
-      | string[]
-      | ((this: HTMLElement, index: number, value: string) => string),
-    lng:
-      | string
-      | number
-      | string[]
-      | ((this: HTMLElement, index: number, value: string) => string)
-  ) {
-    $.ajax({
-      url: `/getThreeWords?lat=${lat}&lng=${lng}`,
-      method: "GET",
-    }).done((response) => {
-      //updating the location field
-      $threeWordsLocation.val(response.words);
-      // update the hidden form fields for lat and lng
-      $lat.val(lat);
-      $lng.val(lng);
-    });
   }
 
-  //geocode the lat lng and make ajax call to countries API to get country name
+  // Encode lat/lng to a Plus Code locally — no API call needed
+  function updatePlusCode(lat: number, lng: number) {
+    const code = OpenLocationCode.encode(lat, lng);
+    $plusCodeLocation.val(code);
+    $locationHidden.val(code);
+    $lat.val(lat);
+    $lng.val(lng);
+  }
+
+  // Get the country code for a lat/lng via GeoNames (our backend proxy)
   function geocodeCountry(lat: number, lng: number) {
+    $.ajax({ url: `/country?lat=${lat}&lng=${lng}`, method: "GET" })
+      .done((response) => {
+        const countryCode: string = response.countryCode;
+        if (countryCode) fetchCountryData(countryCode);
+      });
+  }
+
+  // Fetch currency + country name from restcountries.com v3.1
+  function fetchCountryData(countryCode: string) {
     $.ajax({
-      url: `/country?lat=${lat}&lng=${lng}`,
+      url: `https://restcountries.com/v3.1/alpha/${countryCode}?fields=name,currencies`,
       method: "GET",
     }).done((response) => {
-      console.log(response);
-      const country = response.countryCode;
-      getCurrency(country);
-      getCountryName(country);
+      const currencies: Record<string, { name: string; symbol: string }> =
+        response.currencies ?? {};
+      const code = Object.keys(currencies)[0];
+      if (!code) return;
+      $currency.val(code);
+      $currencyLabel.text(`${code}, ${currencies[code].name}`);
+      calculateExchangeRate(code);
     });
   }
 
-  function getCurrency(country: string) {
-    console.log(country);
-    $.ajax({
-      url: `https://restcountries.eu/rest/v2/alpha/${country}`,
-      method: "GET",
-    }).done((response) => {
-      const currency = response.currencies[0].code;
-      const currencyName = response.currencies[0].name;
-      $currency.val(`${currency}`); // This should happen on posts/new page
-      $currencylabel.text(`${currency}, ${currencyName}`); //This should happen on the posts/show page
-
-      calculateExchangeRate(currency); // This should happen on post/show page
-    });
-  }
-
-  function getCountryName(country: string) {
-    $.ajax({
-      url: `https://restcountries.eu/rest/v2/alpha/${country}`,
-      method: "GET",
-    }).done((response) => {
-      const countryName = response.nativeName;
-      $country.val(countryName);
-    });
-  }
-
-  function getExchangeRate() {
-    $.ajax({
-      url: "/currency",
-      method: "GET",
-    }).done((response) => {
-      console.log(response);
-      exchangeRates = response.quotes;
-    });
-  }
-
-  function calculateExchangeRate(currency: string) {
-    const newCurrency = currency; // Currency to convert to
-    // Update the DOM with the currency you're converting to
-    // grab the current
-    // grab the value
-    const currentCurrency = $("#item-currency").text(); // Currency the post was created with
+  // Convert the post price to the viewer's local currency
+  function calculateExchangeRate(targetCurrency: string) {
+    const sourceCurrency = $("#item-currency").text().trim();
     const price = parseFloat($("#item-price").text());
-    const convertedPriceDisplay = $("#converted-price-display");
-    //convert the value into dollars
-    //convert the value into the new currency based on location
-    let conversionRate = 0;
-    if (exchangeRates) {
-      conversionRate = exchangeRates["USD" + currentCurrency];
-      const priceInDollars = price / conversionRate!;
-      const convertedPrice =
-        priceInDollars * exchangeRates["USD" + newCurrency];
-      // Update the DOM with the converted price
-      // update the display
-      convertedPriceDisplay.html(convertedPrice.toFixed(0));
-    } else {
-      console.log("Exchange rates not available");
-    }
-  }
+    if (!sourceCurrency || isNaN(price)) return;
 
-  //getting the exchangeRates from the currencylayer API
-  getExchangeRate();
-
-  //using select 2 for the categories dropdown
-  function chooseCategory() {
-    $("select").select2();
-    const categories = [
-      { id: "Electronics", text: "Electronics" },
-      { id: "Food", text: "Food" },
-      { id: "Furniture", text: "Furniture" },
-      { id: "Hardware", text: "Hardware" },
-      { id: "Health and beauty", text: "Health and beauty" },
-      { id: "Clothes", text: "Clothes" },
-      { id: "Cars", text: "Cars" },
-      { id: "Books", text: "Books" },
-      { id: "Property", text: "Property" },
-      { id: "Other", text: "Other" },
-    ];
-
-    $("#category").select2({
-      placeholder: "Choose a category",
-      allowClear: true,
-      data: categories,
+    $.ajax({ url: "/currency", method: "GET" }).done((response) => {
+      const quotes: Record<string, number> = response.quotes ?? {};
+      const toUSD   = quotes[`USD${sourceCurrency}`];
+      const fromUSD = quotes[`USD${targetCurrency}`];
+      if (toUSD && fromUSD) {
+        $("#converted-price-display").text(
+          ((price / toUSD) * fromUSD).toFixed(2)
+        );
+      }
     });
   }
 
-  chooseCategory();
+  // Category dropdown via select2
+  const categories = [
+    { id: "Electronics",       text: "Electronics" },
+    { id: "Food",              text: "Food" },
+    { id: "Furniture",         text: "Furniture" },
+    { id: "Hardware",          text: "Hardware" },
+    { id: "Health and Beauty", text: "Health and Beauty" },
+    { id: "Clothes",           text: "Clothes" },
+    { id: "Cars",              text: "Cars" },
+    { id: "Books",             text: "Books" },
+    { id: "Property",          text: "Property" },
+    { id: "Other",             text: "Other" },
+  ];
 
-  // remove the marker on toggle switch
-  function removeMarker() {
-    $toggleSwitch.on("click", () => {
-      $mapMarker.toggle();
-    });
-  }
+  ($("#category") as unknown as JQuery).select2({
+    placeholder: "Choose a category",
+    allowClear: true,
+    data: categories,
+  });
 
-  removeMarker();
+  $toggleSwitch.on("click", () => $(".map-marker").toggle());
 });
