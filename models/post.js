@@ -1,8 +1,7 @@
-//get mongoose
 const mongoose = require("mongoose");
-const s3 = require("../lib/s3").default;
+const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const s3 = require("../lib/s3");
 
-//adding some comments using an array to accommodate any amount of comments
 const commentSchema = new mongoose.Schema(
   {
     content: { type: String, required: true },
@@ -19,10 +18,6 @@ commentSchema.methods.belongsTo = function commentBelongsTo(user) {
   return user.id === this.createdBy.toString();
 };
 
-//create a categorySchema
-//TODO
-
-//create the post model
 const postSchema = new mongoose.Schema({
   category: { type: String },
   title: { type: String },
@@ -35,10 +30,7 @@ const postSchema = new mongoose.Schema({
   email: { type: String, required: true },
   caption: { type: String },
   image: { type: String },
-
-  //setting the user id via ObjectId using the ref:
   createdBy: { type: mongoose.Schema.ObjectId, ref: "User", required: true },
-  //adding the comments into the postSchema/model
   comments: [commentSchema],
 });
 
@@ -48,19 +40,20 @@ postSchema.virtual("imageSRC").get(function getImageSRC() {
   return `https://s3-eu-west-1.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${this.image}`;
 });
 
-// this is a helper method for edit and delete buttons to show on page
-//refactored to work whether the there's a createdBy or not
 postSchema.methods.belongsTo = function postBelongsTo(user) {
   if (typeof this.createdBy.id === "string")
     return this.createdBy.id === user.id;
   return user.id === this.createdBy.toString();
 };
 
-//removing the image post
-postSchema.pre("remove", function removeImage(next) {
+postSchema.pre("deleteOne", { document: true }, async function(next) {
   if (!this.image) return next();
-  s3.deleteObject({ Key: this.image }, next);
+  try {
+    await s3.send(new DeleteObjectCommand({ Bucket: process.env.AWS_BUCKET_NAME, Key: this.image }));
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
-//export the model
 module.exports = mongoose.model("Post", postSchema);

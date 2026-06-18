@@ -105,7 +105,7 @@ function deleteRoute(req, res, next) {
     .then((post) => {
       if(!post) return res.notFound();
       if(!post.belongsTo(req.user)) return res.unauthorized(`/posts/${post.id}`, 'You do not have permission to delete that resource');
-      return post.remove();
+      return post.deleteOne();
     })
     .then(() => res.redirect('/posts'))
     .catch(next);
@@ -137,7 +137,7 @@ function deleteCommentRoute(req, res, next) {
       if(!post) return res.notFound();
       // get the embedded record by it's id
       const comment = post.comments.id(req.params.commentId);
-      comment.remove();
+      comment.deleteOne();
 
       return post.save();
     })

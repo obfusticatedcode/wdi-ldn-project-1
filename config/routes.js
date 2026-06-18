@@ -73,6 +73,6 @@ router.route('/posts/:id/comments')
 router.route('/posts/:id/comments/:commentId')
   .delete(secureRoute, postsController.deleteComment);
 
-router.all('*', (req, res) => res.notFound());
+router.all('/{*splat}', (req, res) => res.notFound());
 
 module.exports = router;
