@@ -20,7 +20,7 @@ function showRoute(req, res) {
 
 function deleteRoute(req, res, next) {
   req.user
-    .remove()
+    .deleteOne()
     .then(() => {
       req.session.regenerate(() => res.unauthorized('/', 'Your account has been deleted'));
     })

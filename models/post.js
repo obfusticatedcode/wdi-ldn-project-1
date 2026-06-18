@@ -36,8 +36,11 @@ const postSchema = new mongoose.Schema({
 
 postSchema.virtual("imageSRC").get(function getImageSRC() {
   if (!this.image) return null;
-  if (this.image.match(/^http/)) return this.image;
-  return `https://s3-eu-west-1.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${this.image}`;
+  if (this.image.match(/^(https?:\/\/|\/)/)) return this.image;
+  if (process.env.AWS_BUCKET_NAME) {
+    return `https://s3-eu-west-1.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${this.image}`;
+  }
+  return `/uploads/${this.image}`;
 });
 
 postSchema.methods.belongsTo = function postBelongsTo(user) {

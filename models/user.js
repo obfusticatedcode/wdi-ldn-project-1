@@ -22,8 +22,11 @@ userSchema
 
 userSchema.virtual("imageSRC").get(function getImageSRC() {
   if (!this.image) return null;
-  if (this.image.match(/^http/)) return this.image;
-  return `https://s3-eu-west-2.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${this.image}`;
+  if (this.image.match(/^(https?:\/\/|\/)/)) return this.image;
+  if (process.env.AWS_BUCKET_NAME) {
+    return `https://s3-eu-west-2.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${this.image}`;
+  }
+  return `/uploads/${this.image}`;
 });
 
 userSchema.pre("deleteOne", { document: true }, async function(next) {
@@ -41,8 +44,8 @@ userSchema.pre("deleteOne", { document: true }, async function(next) {
   next();
 });
 
-userSchema.pre("validate", function checkPassword(next) {
-  if (!this.password && !this.githubId && !this.password && !this.instagramId) {
+userSchema.pre("validate", async function checkPassword() {
+  if (!this.password && !this.githubId && !this.instagramId) {
     this.invalidate("password", "required");
   }
   if (
@@ -52,14 +55,12 @@ userSchema.pre("validate", function checkPassword(next) {
   ) {
     this.invalidate("passwordConfirmation", "does not match");
   }
-  next();
 });
 
-userSchema.pre("save", function checkPassword(next) {
+userSchema.pre("save", async function hashPassword() {
   if (this.isModified("password")) {
     this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
   }
-  next();
 });
 
 userSchema.methods.validatePassword = function validatePassword(password) {

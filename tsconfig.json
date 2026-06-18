@@ -2,13 +2,15 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "ESNext",
+    "rootDir": "./src",
     "outDir": "./public/js",
-    "strict": true, 
-    "types": ["node", "googlemaps"], 
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "typeRoots": [
-      "node_modules/@types",
-  ],
+      "node_modules/@types"
+    ]
   },
-  "include": ["src/**/*.ts", "index.d.ts"]
+  "include": ["src/**/*.ts"]
 }
